@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="net.cashadmin.cashadmin.Activities.AccountConnexionActivity">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:text="@string/connexion"
+        android:textColor="@color/primary"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/subtitle"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"
+            android:layout_margin="16dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/linearborder"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"/>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:hint="@string/login"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:singleLine="true"
+            android:lines="1"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:padding="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="16dp"/>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:hint="@string/password"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:singleLine="true"
+            android:lines="1"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:padding="4dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/connexion"
+        style="@style/BaseButton"
+        android:textSize="20dp"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"/>
+
+
+</RelativeLayout>

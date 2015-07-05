@@ -1,9 +1,11 @@
-package net.cashadmin.cashadmin;
+package net.cashadmin.cashadmin.Activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import net.cashadmin.cashadmin.R;
 
 
 public class MainActivity extends ActionBarActivity {
