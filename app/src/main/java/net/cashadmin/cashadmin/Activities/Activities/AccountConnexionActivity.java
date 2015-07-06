@@ -35,7 +35,6 @@ import org.json.JSONObject;
 
 public class AccountConnexionActivity extends ActionBarActivity {
 
-    Toolbar toolbar;
     private boolean checked;
 
     @InjectView(R.id.loginId) EditText mLoginId;
@@ -52,9 +51,6 @@ public class AccountConnexionActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if(mProgressBar.getVisibility() == ProgressBar.VISIBLE){
             mProgressBar.setVisibility(ProgressBar.GONE);
