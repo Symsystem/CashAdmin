@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.cashadmin.cashadmin.Activities.Classes.Utils;
 import net.cashadmin.cashadmin.R;
 
 import butterknife.ButterKnife;
@@ -16,8 +17,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class ForgetPasswordActivity extends ActionBarActivity {
-
-    Toolbar toolbar;
 
     @InjectView(R.id.mail) EditText mMail;
     @InjectView(R.id.sendButton) Button mSendButton;
@@ -28,10 +27,6 @@ public class ForgetPasswordActivity extends ActionBarActivity {
         setContentView(R.layout.activity_forget_password);
 
         ButterKnife.inject(this);
-
-        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @OnClick(R.id.sendButton)
@@ -39,6 +34,9 @@ public class ForgetPasswordActivity extends ActionBarActivity {
         final String mail = mMail.getText().toString().trim();
         if(mail.isEmpty()){
             Toast.makeText(this, R.string.emptyMail, Toast.LENGTH_LONG).show();
+        }
+        else{
+            String URL = Utils.BASE_URL + "/mail/" + mail + ".json";
         }
     }
 }
