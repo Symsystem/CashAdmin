@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
 
@@ -42,6 +43,7 @@ public class AccountConnexionActivity extends ActionBarActivity {
     @InjectView(R.id.rememberCheck) CheckBox mRememberCheck;
     @InjectView(R.id.connexionButton) Button mConnexionButton;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
+    @InjectView(R.id.rememberPassword) TextView mRememberPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,13 @@ public class AccountConnexionActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        if(mProgressBar.getVisibility() == ProgressBar.VISIBLE){
-            mProgressBar.setVisibility(ProgressBar.GONE);
-        }
-
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        if(mProgressBar.getVisibility() == ProgressBar.VISIBLE){
+            mProgressBar.setVisibility(ProgressBar.GONE);
+        }
     }
 
     @OnClick(R.id.connexionButton)
@@ -124,5 +126,11 @@ public class AccountConnexionActivity extends ActionBarActivity {
 
     public void checkBoxClicked(View view){
         checked = ((CheckBox) view).isChecked();
+    }
+
+    @OnClick(R.id.rememberPassword)
+    public void onClickRememberPassword(){
+        Intent intent = new Intent(AccountConnexionActivity.this, ForgetPasswordActivity.class);
+        startActivity(intent);
     }
 }

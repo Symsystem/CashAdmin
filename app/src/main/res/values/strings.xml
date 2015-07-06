@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CashAdmin</string>
     <string name="action_settings">Settings</string>
-
+    <string name="hello_world">Hello world!</string>
 
     <string name="title_activity_account_connexion">Ca$hAdmin</string>
 
@@ -11,4 +11,12 @@
     <string name="forgetPassword">Mot de passe oublié ?</string>
     <string name="rememberMe">Se souvenir de moi</string>
     <string name="emptyField">Il faut remplir tous les champs !</string>
+
+
+    <string name="title_activity_forget_password">ForgetPasswordActivity</string>
+
+    <string name="enterMail">Adresse e-mail</string>
+    <string name="send">Envoyer</string>
+    <string name="passwordExplanation">Un mail va vous être envoyé. Veuillez suivre les instructions contenues dans ce mail pour changer votre mot de passe.</string>
+    <string name="emptyMail">Il faut entrer une adresse mail</string>
 </resources>

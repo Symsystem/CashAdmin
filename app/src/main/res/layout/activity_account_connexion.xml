@@ -31,7 +31,6 @@
         android:textColor="@color/primary"
         android:background="@color/white"
         android:textSize="20dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
@@ -101,13 +100,15 @@
             android:padding="4dp"/>
 
         <TextView
+            android:id="@+id/rememberPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/forgetPassword"
             android:textSize="16dp"
             android:textColor="@color/black"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:clickable="true"/>
 
         <CheckBox
             android:id="@+id/rememberCheck"
@@ -117,6 +118,7 @@
             android:textColor="@color/black"
             android:textSize="18dp"
             android:layout_marginLeft="48dp"
+            android:layout_marginTop="8dp"
             android:onClick="checkBoxClicked"/>
 
     </LinearLayout>
