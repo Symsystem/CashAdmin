@@ -1,4 +1,4 @@
-package net.cashadmin.cashadmin.Activities;
+package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

@@ -2,9 +2,13 @@
     <string name="app_name">CashAdmin</string>
     <string name="action_settings">Settings</string>
 
+
     <string name="title_activity_account_connexion">Ca$hAdmin</string>
 
     <string name="connexion">Connexion</string>
-    <string name="login">Nom d'utilisateur</string>
+    <string name="login">Nom d\'utilisateur</string>
     <string name="password">Mot de passe</string>
+    <string name="forgetPassword">Mot de passe oublié ?</string>
+    <string name="rememberMe">Se souvenir de moi</string>
+    <string name="emptyField">Il faut remplir tous les champs !</string>
 </resources>
