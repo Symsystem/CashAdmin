@@ -19,4 +19,5 @@
     <string name="send">Envoyer</string>
     <string name="passwordExplanation">Un mail va vous être envoyé. Veuillez suivre les instructions contenues dans ce mail pour changer votre mot de passe.</string>
     <string name="emptyMail">Il faut entrer une adresse mail</string>
+    <string name="validationMail">Mail envoyé !</string>
 </resources>
