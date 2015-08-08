@@ -4,7 +4,7 @@ import net.cashadmin.cashadmin.Activities.Model.DBEntity;
 
 public abstract class GenericHandler {
 
-    protected String tableCreator;
+    protected String tableCreator = "";
 
     public String getTableCreator() {
         return tableCreator;

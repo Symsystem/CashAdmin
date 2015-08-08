@@ -22,8 +22,8 @@ public class CategoryHandler extends GenericHandler {
         this.setTableCreator("CREATE TABLE " +
                 TABLE_CATEGORIES + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY, " +
-                COLUMN_LABEL + "VARCHAR(255) NOT NULL, " +
-                COLUMN_COLOR + "VARCHAR(11) NOT NULL)");
+                COLUMN_LABEL + " VARCHAR(255) NOT NULL, " +
+                COLUMN_COLOR + " VARCHAR(11) NOT NULL)");
     }
 
     @Override
@@ -43,6 +43,16 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public boolean update(DBEntity entity) {
+        Category cat = (Category) entity;
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ID, cat.getId());
+        values.put(COLUMN_LABEL, cat.getLabel());
+        values.put(COLUMN_COLOR, cat.getRGBColor());
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+
+        db.update(TABLE_CATEGORIES, values, COLUMN_ID + " = ?", new String[]{String.valueOf(cat.getId())});
+        db.close();
         return true;
     }
 
@@ -54,13 +64,12 @@ public class CategoryHandler extends GenericHandler {
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
-            cursor.close();
             Category category = new Category(
                     Integer.parseInt(cursor.getString(0)),
                     cursor.getString(1),
                     cursor.getString(2)
             );
-
+            cursor.close();
             db.close();
             return category;
         }

@@ -31,15 +31,18 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
 
         handlers.put("category", new CategoryHandler(this));
-        handlers.put("income", new IncomeHandler(this));
-        handlers.put("expense", new ExpenseHandler(this));
+
+        // TODO : create request to create tables (see beneath)
+        //handlers.put("income", new IncomeHandler(this));
+        //handlers.put("expense", new ExpenseHandler(this));
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        for (Iterator it = handlers.entrySet().iterator(); it.hasNext();) {
-            db.execSQL(((GenericHandler)it.next()).getTableCreator());
+        for (Iterator it = handlers.keySet().iterator(); it.hasNext();) {
+            String key = (String)it.next();
+            db.execSQL(((GenericHandler) handlers.get(key)).getTableCreator());
         }
 
 //        db.execSQL(handlers.get("category").getTableCreator());
@@ -59,7 +62,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS categories");
+        onCreate(db);
     }
 
+
+    public GenericHandler getHandler(String key){
+        return handlers.get(key);
+    }
 
 }
