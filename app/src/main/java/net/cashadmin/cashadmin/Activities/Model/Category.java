@@ -2,7 +2,7 @@ package net.cashadmin.cashadmin.Activities.Model;
 
 import android.graphics.Color;
 
-public class Category {
+public class Category implements DBEntity {
 
     /**
      * @var int
@@ -15,19 +15,30 @@ public class Category {
     private String label;
 
     /**
-     * @var Color
+     * @var int
      */
-    private Color color;
+    private int color;
 
     /**
      * @param id
      * @param label
-     * @param color
+     * @param color - Android's color format
      */
-    public Category(int id, String label, Color color){
+    public Category(int id, String label, int color) {
         this.id = id;
         this.label = label;
         this.color = color;
+    }
+
+    /**
+     * @param id
+     * @param label
+     * @param color - RGB format e.g. #FFFF00
+     */
+    public Category(int id, String label, String color) {
+        this.id = id;
+        this.label = label;
+        this.color = Color.parseColor(color);
     }
 
     /**
@@ -54,14 +65,28 @@ public class Category {
     /**
      * @return Color
      */
-    public Color getColor() {
+    public int getColor() {
         return color;
     }
 
     /**
-     * @param color
+     * @return Color
      */
-    public void setColor(Color color) {
+    public String getRGBColor() {
+        return String.format("#%06X", (0xFFFFFF & color));
+    }
+
+    /**
+     * @param color - Android's color format
+     */
+    public void setColor(int color) {
         this.color = color;
+    }
+
+    /**
+     * @param color - RGB format e.g. #FFFF00
+     */
+    public void setColor(String color) {
+        this.color = Color.parseColor(color);
     }
 }
