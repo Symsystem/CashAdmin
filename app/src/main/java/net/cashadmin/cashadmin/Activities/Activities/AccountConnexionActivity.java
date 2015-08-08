@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,11 +19,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import net.cashadmin.cashadmin.Activities.Classes.Utils;
+import net.cashadmin.cashadmin.Activities.Config.Utils;
 import net.cashadmin.cashadmin.Activities.Request.OkHttpStack;
 import net.cashadmin.cashadmin.R;
 
@@ -78,12 +76,7 @@ public class AccountConnexionActivity extends ActionBarActivity {
                                 mProgressBar.setVisibility(ProgressBar.GONE);
                                 startActivity(intent); //A CHANGER \\
                             } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(AccountConnexionActivity.this);
-                                builder.setTitle("Erreur");
-                                builder.setMessage("Mauvais mot de passe ou nom d'utilisateur");
-                                builder.setPositiveButton(android.R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+
                                 mProgressBar.setVisibility(ProgressBar.GONE);
                             }
                         } else {

@@ -4,13 +4,9 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -20,7 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import net.cashadmin.cashadmin.Activities.Classes.Utils;
+import net.cashadmin.cashadmin.Activities.Config.Utils;
 import net.cashadmin.cashadmin.Activities.Request.OkHttpStack;
 import net.cashadmin.cashadmin.R;
 
