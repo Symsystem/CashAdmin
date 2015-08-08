@@ -1,15 +1,10 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
-
-import net.cashadmin.cashadmin.Activities.Storage.ManageDB;
+import net.cashadmin.cashadmin.Activities.Database.DBHandler;
 import net.cashadmin.cashadmin.R;
 
 import butterknife.ButterKnife;
@@ -21,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
 
     @InjectView(R.id.testEdit) EditText mTestEdit;
 
-    private ManageDB mDB;
+    private DBHandler mDBHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +29,6 @@ public class MainActivity extends ActionBarActivity {
 
     @OnClick(R.id.button1)
     public void onClickButton1(){
-
-        mDB.createData(mTestEdit.getText().toString().trim());
 
     }
 
