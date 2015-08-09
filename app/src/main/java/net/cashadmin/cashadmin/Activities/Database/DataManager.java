@@ -77,11 +77,11 @@ public class DataManager {
     }
 
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-
+        return null;
     }
 
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws IllegalTypeException {
-
+        return null;
     }
 
     public boolean isIn(Entity entity) {
@@ -112,7 +112,7 @@ public class DataManager {
     }
 
     public boolean deleteBy(TypeEnum type, String condition) {
-
+        return true;
     }
 
 }

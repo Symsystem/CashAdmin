@@ -1,15 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:background="@color/ColorPrimary"
+                android:background="@color/primary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="net.cashadmin.cashadmin.Activities.Activities.AccountConnexionActivity">
-
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        ></include>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -28,9 +22,8 @@
         android:id="@+id/subtitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
         android:text="@string/connexion"
-        android:textColor="@color/ColorPrimary"
+        android:textColor="@color/primary"
         android:background="@color/White"
         android:textSize="20dp"
         android:layout_marginBottom="8dp"
@@ -150,10 +143,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/connexion"
                 android:textColor="@color/White"
-                style="@style/BaseButton"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_gravity="center_horizontal"
-                android:padding="8dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="48dp"
                 android:layout_marginRight="48dp"/>
