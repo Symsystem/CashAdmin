@@ -1,6 +1,10 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
-import net.cashadmin.cashadmin.Activities.Model.DBEntity;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Model.Entity;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+
+import java.util.List;
 
 public abstract class GenericHandler {
 
@@ -17,25 +21,30 @@ public abstract class GenericHandler {
     /**
      * @param entity
      */
-    public abstract boolean insert(DBEntity entity);
+    public abstract boolean insert(Entity entity);
 
     /**
      * @param entity
      */
-    public abstract boolean update(DBEntity entity);
+    public abstract boolean update(Entity entity);
 
     /**
      * @param id
      */
-    public abstract DBEntity findById(int id);
+    public abstract Entity findById(int id) throws DataNotFoundException;
+
+    /**
+     * @parem type
+     */
+    public abstract List<Entity> getAll(TypeEnum type);
 
     /**
      * @param entity
      */
-    public abstract boolean isIn(DBEntity entity);
+    public abstract boolean isIn(Entity entity);
 
     /**
      * @param entity
      */
-    public abstract boolean delete(DBEntity entity);
+    public abstract boolean delete(Entity entity);
 }

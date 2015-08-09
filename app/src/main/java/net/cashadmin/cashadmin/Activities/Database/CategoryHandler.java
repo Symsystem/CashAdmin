@@ -4,8 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.DBEntity;
+import net.cashadmin.cashadmin.Activities.Model.Entity;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryHandler extends GenericHandler {
 
@@ -27,7 +32,7 @@ public class CategoryHandler extends GenericHandler {
     }
 
     @Override
-    public boolean insert(DBEntity entity) {
+    public boolean insert(Entity entity) {
         Category cat = (Category) entity;
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, cat.getId());
@@ -42,7 +47,7 @@ public class CategoryHandler extends GenericHandler {
     }
 
     @Override
-    public boolean update(DBEntity entity) {
+    public boolean update(Entity entity) {
         Category cat = (Category) entity;
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, cat.getId());
@@ -57,7 +62,7 @@ public class CategoryHandler extends GenericHandler {
     }
 
     @Override
-    public Category findById(int id) {
+    public Category findById(int id) throws DataNotFoundException {
         String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -74,11 +79,33 @@ public class CategoryHandler extends GenericHandler {
             return category;
         }
         db.close();
-        return null;
+        throw new DataNotFoundException("Database.CategoryHandler : findById(int)");
     }
 
     @Override
-    public boolean isIn(DBEntity entity) {
+    public List<Entity> getAll(TypeEnum type) {
+        String query = "SELECT * FROM " + TABLE_CATEGORIES;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        while (!(cursor.isAfterLast())) {
+            Category cat = new Category(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2)
+            );
+            list.add(cat);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    @Override
+    public boolean isIn(Entity entity) {
         String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -95,7 +122,7 @@ public class CategoryHandler extends GenericHandler {
     }
 
     @Override
-    public boolean delete(DBEntity entity) {
+    public boolean delete(Entity entity) {
         boolean result = false;
 
         String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();

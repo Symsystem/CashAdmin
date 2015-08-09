@@ -3,7 +3,7 @@ package net.cashadmin.cashadmin.Activities.Model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public abstract class Transaction implements DBEntity {
+public abstract class Transaction implements Entity {
 
     /**
      * @var int

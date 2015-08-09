@@ -1,14 +1,16 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.cashadmin.cashadmin.Activities.Model.DBEntity;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Model.Entity;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
-import net.cashadmin.cashadmin.Activities.Model.Transaction;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ExpenseHandler extends TransactionHandler {
 
@@ -19,7 +21,7 @@ public class ExpenseHandler extends TransactionHandler {
     }
 
     @Override
-    public DBEntity findById(int id) {
+    public Entity findById(int id) throws DataNotFoundException {
         String query = "SELECT id FROM " + TABLE_EXPENSES + " WHERE " + COLUMN_ID + " = " + id;
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -37,6 +39,29 @@ public class ExpenseHandler extends TransactionHandler {
             return expense;
         }
         db.close();
-        return null;
+        throw new DataNotFoundException("Database.ExpenseHandler : findById(int)");
+    }
+
+    @Override
+    public List<Entity> getAll(TypeEnum type) {
+        String query = "SELECT * FROM " + TABLE_EXPENSES;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        while (!(cursor.isAfterLast())) {
+            Expense expense = new Expense(
+                    Integer.parseInt(cursor.getString(0)),
+                    Float.parseFloat(cursor.getString(1)),
+                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
+                    Integer.parseInt(cursor.getString(3))
+            );
+            list.add(expense);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return list;
     }
 }

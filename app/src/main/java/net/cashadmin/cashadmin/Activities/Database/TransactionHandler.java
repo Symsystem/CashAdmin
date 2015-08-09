@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import net.cashadmin.cashadmin.Activities.Model.DBEntity;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Model.Entity;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TransactionHandler extends GenericHandler {
@@ -37,7 +39,7 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
-    public boolean insert(DBEntity entity) {
+    public boolean insert(Entity entity) {
         Transaction transaction = (Transaction) entity;
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, transaction.getId());
@@ -54,7 +56,7 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
-    public boolean update(DBEntity entity) {
+    public boolean update(Entity entity) {
         Transaction transaction = (Transaction) entity;
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, transaction.getId());
@@ -70,12 +72,17 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
-    public DBEntity findById(int id) {
+    public Entity findById(int id) throws DataNotFoundException {
         return null;
     }
 
     @Override
-    public boolean isIn(DBEntity entity) {
+    public List<Entity> getAll(TypeEnum type) {
+        return null;
+    }
+
+    @Override
+    public boolean isIn(Entity entity) {
         String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + ((Transaction) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -92,7 +99,7 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
-    public boolean delete(DBEntity entity) {
+    public boolean delete(Entity entity) {
         boolean result = false;
 
         String query = "Select id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Transaction) entity).getId();

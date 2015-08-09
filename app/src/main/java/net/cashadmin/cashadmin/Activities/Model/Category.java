@@ -2,7 +2,9 @@ package net.cashadmin.cashadmin.Activities.Model;
 
 import android.graphics.Color;
 
-public class Category implements DBEntity {
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+
+public class Category extends Entity {
 
     /**
      * @var int
@@ -28,6 +30,7 @@ public class Category implements DBEntity {
         this.id = id;
         this.label = label;
         this.color = color;
+        this.mType = TypeEnum.CATEGORY;
     }
 
     /**
