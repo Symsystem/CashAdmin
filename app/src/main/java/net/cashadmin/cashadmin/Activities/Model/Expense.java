@@ -5,10 +5,14 @@ import java.util.Date;
 
 public class Expense extends Transaction {
 
-    public Expense(int id, float total, Date date, Category category){
+    public Expense(int id, float total, Date date, Category category) {
         this.id = id;
         this.total = total;
         this.date = date;
         this.category = category;
+    }
+
+    public Expense(int id, float total, Date date, int category) {
+
     }
 }

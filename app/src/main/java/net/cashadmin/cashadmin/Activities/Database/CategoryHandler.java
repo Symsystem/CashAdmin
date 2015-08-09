@@ -58,7 +58,7 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public Category findById(int id) {
-        String query = "Select * FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
+        String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
