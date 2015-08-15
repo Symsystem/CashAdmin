@@ -10,6 +10,7 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -82,6 +83,16 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
+    public List<Entity> getFromTo(TypeEnum type, int start, int end){
+        return null;
+    }
+
+    @Override
+    public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
+        return null;
+    }
+
+    @Override
     public boolean isIn(Entity entity) {
         String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + ((Transaction) entity).getId();
 
@@ -102,7 +113,7 @@ public class TransactionHandler extends GenericHandler {
     public boolean delete(Entity entity) {
         boolean result = false;
 
-        String query = "Select id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Transaction) entity).getId();
+        String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Transaction) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 

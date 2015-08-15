@@ -76,16 +76,33 @@ public class DataManager {
 
     }
 
-    public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        return null;
+    public List<Entity> getFromTo(TypeEnum type, int start, int end) throws DataNotFoundException {
+        switch (type) {
+            case CATEGORY:
+                return mCategoryHandler.getFromTo(type, start, end);
+            case EXPENSE:
+                return mExpenseHandler.getFromTo(type, start, end);
+            case INCOME:
+                return mIncomeHandler.getFromTo(type, start, end);
+            default:
+                throw new DataNotFoundException("Database.DataManager : getFromTo(TypeEnum, int, int");
+        }
     }
 
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws IllegalTypeException {
-        return null;
+        switch (type) {
+            case EXPENSE:
+                return mExpenseHandler.getByDate(type, startDate, endDate);
+            case INCOME:
+                return mIncomeHandler.getByDate(type, startDate, endDate);
+            default:
+                throw new IllegalTypeException("DataBase.DataManager : getByDate(TypeEnum, Date, Date");
+
+        }
     }
 
     public boolean isIn(Entity entity) {
-        switch(entity.getType()){
+        switch (entity.getType()) {
             case CATEGORY:
                 return mCategoryHandler.isIn(entity);
             case EXPENSE:
@@ -98,7 +115,7 @@ public class DataManager {
     }
 
     public boolean delete(Entity entity) {
-        switch(entity.getType()){
+        switch (entity.getType()) {
             case CATEGORY:
                 return mCategoryHandler.delete(entity);
             case EXPENSE:
@@ -111,8 +128,8 @@ public class DataManager {
 
     }
 
-    public boolean deleteBy(TypeEnum type, String condition) {
-        return true;
-    }
+//    public boolean deleteBy(TypeEnum type, String condition) {
+//        return true;
+//    }
 
 }

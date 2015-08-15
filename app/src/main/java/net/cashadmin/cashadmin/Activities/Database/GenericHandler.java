@@ -4,6 +4,7 @@ import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
+import java.util.Date;
 import java.util.List;
 
 public abstract class GenericHandler {
@@ -34,9 +35,19 @@ public abstract class GenericHandler {
     public abstract Entity findById(int id) throws DataNotFoundException;
 
     /**
-     * @parem type
+     * @param type
      */
-    public abstract List<Entity> getAll(TypeEnum type);
+    public abstract List<Entity> getAll(TypeEnum type) throws DataNotFoundException;
+
+    /**
+     * @param type,start,end
+     */
+    public abstract List<Entity> getFromTo(TypeEnum type, int start, int end) throws DataNotFoundException;
+
+    /**
+     * @param type,startDate,endDate
+     */
+    public abstract List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws DataNotFoundException;
 
     /**
      * @param entity
@@ -47,4 +58,9 @@ public abstract class GenericHandler {
      * @param entity
      */
     public abstract boolean delete(Entity entity);
+
+//    /**
+//     * @param type,condition
+//     */
+//    public abstract boolean deleteBy(TypeEnum type, String condition);
 }

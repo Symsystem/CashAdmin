@@ -32,6 +32,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cashadmin.cashadmin.Activities.Activities.AccountConnexionActivity" />
         </activity>
+        <activity
+            android:name=".Activities.Activities.SelectCategoryActivity"
+            android:label="@string/title_activity_select_category"
+            android:parentActivityName=".Activities.Activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CategoryHandler extends GenericHandler {
@@ -105,6 +106,28 @@ public class CategoryHandler extends GenericHandler {
     }
 
     @Override
+    public List<Entity> getFromTo(TypeEnum type, int start, int end) {
+        String query = "SELECT * FROM " + TABLE_CATEGORIES + " LIMIT " + start + "," + end;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        while (!(cursor.isAfterLast())) {
+            Category cat = new Category(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2)
+            );
+            list.add(cat);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    @Override
     public boolean isIn(Entity entity) {
         String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
 
@@ -138,5 +161,10 @@ public class CategoryHandler extends GenericHandler {
         }
         db.close();
         return result;
+    }
+
+    @Override
+    public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
+        return null;
     }
 }

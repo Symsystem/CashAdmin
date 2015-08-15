@@ -64,4 +64,50 @@ public class ExpenseHandler extends TransactionHandler {
         db.close();
         return list;
     }
+
+    @Override
+    public List<Entity> getFromTo(TypeEnum type, int start, int end){
+        String query = "SELECT * FROM " + TABLE_EXPENSES + " LIMIT " + start + "," + end;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        while(!(cursor.isAfterLast())){
+            Expense expense = new Expense(
+                    Integer.parseInt(cursor.getString(0)),
+                    Float.parseFloat(cursor.getString(1)),
+                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
+                    Integer.parseInt(cursor.getString(3))
+            );
+            list.add(expense);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    @Override
+    public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
+        String query = "SELECT * FROM " + TABLE_EXPENSES + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate + " and " + endDate;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        while (!(cursor.isAfterLast())) {
+            Expense expense = new Expense(
+                    Integer.parseInt(cursor.getString(0)),
+                    Float.parseFloat(cursor.getString(1)),
+                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
+                    Integer.parseInt(cursor.getString(3))
+            );
+            list.add(expense);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
 }
