@@ -1,13 +1,17 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
 import net.cashadmin.cashadmin.Activities.Adapter.ButtonCategoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Model.Entity;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.R;
 
@@ -16,7 +20,8 @@ import butterknife.InjectView;
 
 public class SelectCategoryActivity extends ActionBarActivity {
 
-    @InjectView(R.id.gridView) GridView mGridView;
+    @InjectView(R.id.gridView)
+    GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,5 +37,18 @@ public class SelectCategoryActivity extends ActionBarActivity {
                 dataManager.getAll(TypeEnum.CATEGORY)
         );
         mGridView.setAdapter(adapter);
+        mGridView.setOnClickListener(new AdapterView.OnItemClickListener() {
+                                         @Override
+                                         public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
+                                             // TODO Auto-generated method stub
+
+                                             Button button = (Button) mGridView.getItemAtPosition(position);
+                                             String cat = (String)button.getText();
+                                             Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                                             intent.putExtra("catName", cat);
+                                             startActivity(intent);
+                                         }
+                                     }
+        );
     }
 }
