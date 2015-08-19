@@ -11,9 +11,13 @@ import android.widget.ListAdapter;
 
 import net.cashadmin.cashadmin.Activities.Adapter.ButtonCategoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Model.Category;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,10 +35,15 @@ public class SelectCategoryActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         DataManager dataManager = new DataManager(this);
+        List<Entity> list = null;
+        try{
+            list = dataManager.getAll(TypeEnum.CATEGORY);
+        } catch (DataNotFoundException e) {}
+
         ListAdapter adapter = new ButtonCategoryAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
-                dataManager.getAll(TypeEnum.CATEGORY)
+                list
         );
         mGridView.setAdapter(adapter);
         mGridView.setOnClickListener(new AdapterView.OnItemClickListener() {

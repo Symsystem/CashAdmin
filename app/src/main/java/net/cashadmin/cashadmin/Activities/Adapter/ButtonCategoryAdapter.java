@@ -11,11 +11,11 @@ import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
 
-    public ButtonCategoryAdapter(Context context, int textViewRessourceId, ArrayList<Entity> categories){
+    public ButtonCategoryAdapter(Context context, int textViewRessourceId, List<Entity> categories){
         super(context, textViewRessourceId, categories);
     }
 
