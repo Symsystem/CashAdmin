@@ -16,7 +16,6 @@ import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -46,7 +45,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
                 list
         );
         mGridView.setAdapter(adapter);
-        mGridView.setOnClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                          @Override
                                          public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
                                              // TODO Auto-generated method stub

@@ -40,6 +40,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".Activities.Activities.NewExpenseActivity"
+            android:label="@string/title_activity_new_expense"
+            android:parentActivityName=".Activities.Activities.SelectCategoryActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.cashadmin.cashadmin.Activities.Activities.SelectCategoryActivity" />
+        </activity>
     </application>
 
 </manifest>
