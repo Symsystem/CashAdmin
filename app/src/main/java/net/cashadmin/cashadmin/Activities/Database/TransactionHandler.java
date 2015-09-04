@@ -113,13 +113,32 @@ public class TransactionHandler extends GenericHandler {
     public boolean delete(Entity entity) {
         boolean result = false;
 
-        String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Transaction) entity).getId();
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Transaction) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
+            db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
+            cursor.close();
+            result = true;
+        }
+        db.close();
+        return result;
+    }
+
+    @Override
+    public boolean deleteBy(TypeEnum type, String condition){
+        boolean result = false;
+
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + condition;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(!(cursor.isAfterLast())){
             db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
             cursor.close();
             result = true;

@@ -1,6 +1,7 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Exception.InvalidQueryException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
@@ -47,7 +48,9 @@ public abstract class GenericHandler {
     /**
      * @param type,startDate,endDate
      */
-    public abstract List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws DataNotFoundException;
+    public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws DataNotFoundException{
+        return null;
+    }
 
     /**
      * @param entity
@@ -59,8 +62,10 @@ public abstract class GenericHandler {
      */
     public abstract boolean delete(Entity entity);
 
-//    /**
-//     * @param type,condition
-//     */
-//    public abstract boolean deleteBy(TypeEnum type, String condition);
+    /**
+     * @param type,condition
+     */
+    public boolean deleteBy(TypeEnum type, String condition) throws InvalidQueryException{
+        return true;
+    }
 }

@@ -2,7 +2,7 @@
 
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
         android:color="?attr/colorControlHighlight">
-    <item>
+    <item android:name="general_button">
         <inset xmlns:android="http://schemas.android.com/apk/res/android"
                android:insetBottom="@dimen/button_inset_vertical_material"
                android:insetLeft="@dimen/button_inset_horizontal_material"
@@ -11,6 +11,24 @@
             <shape android:shape="rectangle">
                 <corners android:radius="@dimen/control_corner_material"/>
                 <solid android:color="@color/accent"/>
+                <padding
+                    android:bottom="@dimen/button_padding_vertical_material"
+                    android:left="@dimen/button_padding_horizontal_material"
+                    android:right="@dimen/button_padding_horizontal_material"
+                    android:top="@dimen/button_padding_vertical_material"/>
+            </shape>
+        </inset>
+    </item>
+
+    <item android:name="red_button">
+        <inset xmlns:android="http://schemas.android.com/apk/res/android"
+               android:insetBottom="@dimen/button_inset_vertical_material"
+               android:insetLeft="@dimen/button_inset_horizontal_material"
+               android:insetRight="@dimen/button_inset_horizontal_material"
+               android:insetTop="@dimen/button_inset_vertical_material">
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/control_corner_material"/>
+                <solid android:color="@color/red"/>
                 <padding
                     android:bottom="@dimen/button_padding_vertical_material"
                     android:left="@dimen/button_padding_horizontal_material"

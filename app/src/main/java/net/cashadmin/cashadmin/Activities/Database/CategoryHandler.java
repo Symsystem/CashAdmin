@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Exception.InvalidQueryException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -161,10 +163,5 @@ public class CategoryHandler extends GenericHandler {
         }
         db.close();
         return result;
-    }
-
-    @Override
-    public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
-        return null;
     }
 }

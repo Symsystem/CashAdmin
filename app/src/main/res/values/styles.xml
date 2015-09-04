@@ -24,7 +24,8 @@
     </style>
 
     <style name="RedButton" parent="ButtonStyle">
-        <item name="android:background">@color/red</item>
+        <item name="android:background" parent="@drawable/custom_button">@color/red</item>
     </style>
+
 
 </resources>

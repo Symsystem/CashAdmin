@@ -15,21 +15,21 @@ import java.util.List;
 
 public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
 
-    public ButtonCategoryAdapter(Context context, int textViewRessourceId, List<Entity> categories){
+    public ButtonCategoryAdapter(Context context, int textViewRessourceId, List<Entity> categories) {
         super(context, textViewRessourceId, categories);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        if(v == null){
+        if (v == null) {
             LayoutInflater vi = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.list_category, null);
         }
 
-        Category category = (Category)this.getItem(position);
-        if(category != null){
-            Button buttonCategory = (Button)v.findViewById(R.id.buttonCat);
+        Category category = (Category) this.getItem(position);
+        if (category != null) {
+            Button buttonCategory = (Button) v.findViewById(R.id.buttonCat);
             buttonCategory.setText(category.getLabel());
             buttonCategory.setBackgroundColor(category.getColor());
         }

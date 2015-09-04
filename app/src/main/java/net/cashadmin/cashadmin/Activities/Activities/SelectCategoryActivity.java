@@ -35,9 +35,11 @@ public class SelectCategoryActivity extends ActionBarActivity {
 
         DataManager dataManager = new DataManager(this);
         List<Entity> list = null;
-        try{
+        try {
             list = dataManager.getAll(TypeEnum.CATEGORY);
-        } catch (DataNotFoundException e) {}
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
 
         ListAdapter adapter = new ButtonCategoryAdapter(
                 this,
@@ -46,17 +48,16 @@ public class SelectCategoryActivity extends ActionBarActivity {
         );
         mGridView.setAdapter(adapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                         @Override
-                                         public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
-                                             // TODO Auto-generated method stub
+                                             @Override
+                                             public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
 
-                                             Button button = (Button) mGridView.getItemAtPosition(position);
-                                             String cat = (String)button.getText();
-                                             Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
-                                             intent.putExtra("catName", cat);
-                                             startActivity(intent);
+                                                 Button button = (Button) mGridView.getItemAtPosition(position);
+                                                 String cat = (String) button.getText();
+                                                 Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                                                 intent.putExtra("catName", cat);
+                                                 startActivity(intent);
+                                             }
                                          }
-                                     }
         );
     }
 }

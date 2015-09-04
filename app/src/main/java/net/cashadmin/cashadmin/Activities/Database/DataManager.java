@@ -4,6 +4,7 @@ import android.content.Context;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
+import net.cashadmin.cashadmin.Activities.Exception.InvalidQueryException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
@@ -128,8 +129,15 @@ public class DataManager {
 
     }
 
-//    public boolean deleteBy(TypeEnum type, String condition) {
-//        return true;
-//    }
+    public boolean deleteBy(TypeEnum type, String condition) throws InvalidQueryException {
+        switch (type) {
+            case EXPENSE:
+                return mExpenseHandler.deleteBy(type, condition);
+            case INCOME:
+                return mIncomeHandler.deleteBy(type, condition);
+            default:
+                throw new InvalidQueryException("DataBe.DataManager : deleteBy(TypeEnum, String");
+        }
+    }
 
 }
