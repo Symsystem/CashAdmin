@@ -87,22 +87,22 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_CATEGORIES;
+        String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE id = MAX(id)";
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        while(!(cursor.isLast())){
-            cursor.moveToNext();
+        if (cursor.moveToFirst()) {
+            Category category = new Category(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2)
+            );
+            cursor.close();
+            return category;
         }
-        Category category = new Category(
-                Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1),
-                cursor.getString(2)
-        );
-        cursor.close();
         db.close();
-        return category;
+        throw new DataNotFoundException("Database.CategoryHandler : getLast(TypeEnum)");
     }
 
     @Override

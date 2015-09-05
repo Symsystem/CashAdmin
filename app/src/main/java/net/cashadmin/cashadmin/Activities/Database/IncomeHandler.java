@@ -44,23 +44,23 @@ public class IncomeHandler extends TransactionHandler {
 
     @Override
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_INCOMES;
+        String query = "SELECT * FROM " + TABLE_INCOMES + " WHERE " + COLUMN_DATE + " = MAX(" + COLUMN_DATE + ")";
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        while(!(cursor.isLast())){
-            cursor.moveToNext();
+        if (cursor.moveToFirst()) {
+            Income income = new Income(
+                    Integer.parseInt(cursor.getString(0)),
+                    Float.parseFloat(cursor.getString(1)),
+                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
+                    Integer.parseInt(cursor.getString(3))
+            );
+            cursor.close();
+            return income;
         }
-        Income income = new Income(
-                Integer.parseInt(cursor.getString(0)),
-                Float.parseFloat(cursor.getString(1)),
-                new Date(Long.parseLong(cursor.getString(2)) * 1000),
-                Integer.parseInt(cursor.getString(3))
-        );
-        cursor.close();
         db.close();
-        return income;
+        throw new DataNotFoundException("Database.CategoryHandler : getLast(TypeEnum)");
     }
 
     @Override
