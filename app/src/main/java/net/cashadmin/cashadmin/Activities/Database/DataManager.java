@@ -63,6 +63,19 @@ public class DataManager {
         }
     }
 
+    public Entity getLast(TypeEnum type) throws DataNotFoundException{
+        switch(type){
+            case CATEGORY:
+                return mCategoryHandler.getLast(type);
+            case EXPENSE:
+                return mExpenseHandler.getLast(type);
+            case INCOME:
+                return mIncomeHandler.getLast(type);
+            default:
+                throw new DataNotFoundException("DataBase.DataManager : getLast(TypeEnum)");
+        }
+    }
+
     public List<Entity> getAll(TypeEnum type) throws DataNotFoundException {
         switch (type) {
             case CATEGORY:

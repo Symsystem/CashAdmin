@@ -66,7 +66,7 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public Category findById(int id) throws DataNotFoundException {
-        String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
+        String query = "SELECT id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -83,6 +83,26 @@ public class CategoryHandler extends GenericHandler {
         }
         db.close();
         throw new DataNotFoundException("Database.CategoryHandler : findById(int)");
+    }
+
+    @Override
+    public Entity getLast(TypeEnum type) throws DataNotFoundException{
+        String query = "SELECT * FROM " + TABLE_CATEGORIES;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(!(cursor.isLast())){
+            cursor.moveToNext();
+        }
+        Category category = new Category(
+                Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1),
+                cursor.getString(2)
+        );
+        cursor.close();
+        db.close();
+        return category;
     }
 
     @Override

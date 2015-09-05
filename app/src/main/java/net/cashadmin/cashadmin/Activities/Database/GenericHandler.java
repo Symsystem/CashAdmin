@@ -38,6 +38,11 @@ public abstract class GenericHandler {
     /**
      * @param type
      */
+    public abstract Entity getLast(TypeEnum type) throws DataNotFoundException;
+
+    /**
+     * @param type
+     */
     public abstract List<Entity> getAll(TypeEnum type) throws DataNotFoundException;
 
     /**

@@ -78,6 +78,11 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
+    public Entity getLast(TypeEnum type) throws DataNotFoundException{
+        return null;
+    }
+
+    @Override
     public List<Entity> getAll(TypeEnum type) {
         return null;
     }

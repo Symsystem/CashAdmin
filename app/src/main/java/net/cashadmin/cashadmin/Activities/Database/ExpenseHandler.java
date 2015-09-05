@@ -43,6 +43,27 @@ public class ExpenseHandler extends TransactionHandler {
     }
 
     @Override
+    public Entity getLast(TypeEnum type) throws DataNotFoundException{
+        String query = "SELECT * FROM " + TABLE_EXPENSES;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(!(cursor.isLast())){
+            cursor.moveToNext();
+        }
+        Expense expense = new Expense(
+                Integer.parseInt(cursor.getString(0)),
+                Float.parseFloat(cursor.getString(1)),
+                new Date(Long.parseLong(cursor.getString(2)) * 1000),
+                Integer.parseInt(cursor.getString(3))
+        );
+        cursor.close();
+        db.close();
+        return expense;
+    }
+
+    @Override
     public List<Entity> getAll(TypeEnum type) {
         String query = "SELECT * FROM " + TABLE_EXPENSES;
 

@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.R;
 
+import java.util.Date;
+
 import butterknife.ButterKnife;
 
 
@@ -21,6 +23,9 @@ public class MainActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         mDataManager = new DataManager(this);
+
+        Date currentDate = new Date();
+
     }
 
 }
