@@ -1,8 +1,8 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -11,7 +11,7 @@ import android.widget.ListAdapter;
 
 import net.cashadmin.cashadmin.Activities.Adapter.ButtonCategoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.R;
@@ -37,7 +37,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
         List<Entity> list = null;
         try {
             list = dataManager.getAll(TypeEnum.CATEGORY);
-        } catch (DataNotFoundException e) {
+        } catch (IllegalTypeException e) {
             e.printStackTrace();
         }
 

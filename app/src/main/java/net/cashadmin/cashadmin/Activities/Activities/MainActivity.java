@@ -5,7 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.TextView;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
@@ -13,17 +13,21 @@ import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.R;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private DataManager mDataManager;
 
+    @InjectView(R.id.addExpenseButton)
+    TextView mAddExpenseButton;
+    @InjectView(R.id.addIncomeButton)
+    TextView mAddIncomeButton;
     @InjectView(R.id.lastExpense)
     TextView mLastExpense;
     @InjectView(R.id.lastIncome)
@@ -47,15 +51,21 @@ public class MainActivity extends ActionBarActivity {
         Expense lastExpense = null;
         Income lastIncome = null;
 
-        try{
+        try {
+            List<Entity> l = mDataManager.getAll(TypeEnum.EXPENSE);
+        } catch (IllegalTypeException e) {
+            e.printStackTrace();
+        }
+
+   /*     try{
             lastExpense = (Expense)mDataManager.getLast(TypeEnum.EXPENSE);
             lastIncome = (Income)mDataManager.getLast(TypeEnum.INCOME);
         } catch (DataNotFoundException e){
             e.printStackTrace();
         }
 
-        mLastExpense.setText(lastExpense + "€");
-        mLastIncome.setText(lastIncome + "€");
+        mLastExpense.setText(lastExpense.getTotal() + " €");
+        mLastIncome.setText(lastIncome.getTotal() + " €");
 
         List<Entity> expenseCycle = null;
         List<Entity> incomeCycle = null;
@@ -74,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
                 sumExpenses = sumExpenses + ex.getTotal();
             }
         }
-        mTotalExpense.setText(sumExpenses + "€");
+        mTotalExpense.setText(sumExpenses + " €");
 
         float sumIncomes = 0;
         if(!(incomeCycle.isEmpty())){
@@ -83,10 +93,13 @@ public class MainActivity extends ActionBarActivity {
                 sumIncomes = sumIncomes + in.getTotal();
             }
         }
-        mTotalIncome.setText(sumIncomes + "€");
+        mTotalIncome.setText(sumIncomes + " €");*/
 
 
+    }
 
+    @OnClick(R.id.addExpenseButton)
+    public void onClickExpenseButton(){
     }
 
 }

@@ -19,9 +19,9 @@ public class DataManager {
 
     public DataManager(Context context) {
         DBHandler db = new DBHandler(context, null, null, 0);
-        mCategoryHandler = new CategoryHandler(db);
-        mIncomeHandler = new IncomeHandler(db);
-        mExpenseHandler = new ExpenseHandler(db);
+        this.mCategoryHandler = new CategoryHandler(db);
+        this.mIncomeHandler = new IncomeHandler(db);
+        this.mExpenseHandler = new ExpenseHandler(db);
     }
 
     public boolean insert(Entity entity) {
@@ -76,7 +76,7 @@ public class DataManager {
         }
     }
 
-    public List<Entity> getAll(TypeEnum type) throws DataNotFoundException {
+    public List<Entity> getAll(TypeEnum type) throws IllegalTypeException {
         switch (type) {
             case CATEGORY:
                 return mCategoryHandler.getAll(type);
@@ -85,12 +85,12 @@ public class DataManager {
             case INCOME:
                 return mIncomeHandler.getAll(type);
             default:
-                throw new DataNotFoundException("Database.DataManager : getAll(TypeEnum)");
+                throw new IllegalTypeException("Database.DataManager : getAll(TypeEnum)");
         }
 
     }
 
-    public List<Entity> getFromTo(TypeEnum type, int start, int end) throws DataNotFoundException {
+    public List<Entity> getFromTo(TypeEnum type, int start, int end) throws IllegalTypeException {
         switch (type) {
             case CATEGORY:
                 return mCategoryHandler.getFromTo(type, start, end);
@@ -99,7 +99,7 @@ public class DataManager {
             case INCOME:
                 return mIncomeHandler.getFromTo(type, start, end);
             default:
-                throw new DataNotFoundException("Database.DataManager : getFromTo(TypeEnum, int, int");
+                throw new IllegalTypeException("Database.DataManager : getFromTo(TypeEnum, int, int");
         }
     }
 

@@ -42,6 +42,7 @@ public class Category extends Entity {
         this.id = id;
         this.label = label;
         this.color = Color.parseColor(color);
+        this.mType = TypeEnum.CATEGORY;
     }
 
     /**

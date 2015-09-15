@@ -9,7 +9,6 @@ import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +32,9 @@ public class TransactionHandler extends GenericHandler {
         this.setTableCreator("CREATE TABLE " +
                 TABLE_NAME + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY, " +
-                COLUMN_TOTAL + "INTEGER NOT NULL, " +
-                COLUMN_DATE + "DATETIME NOT NULL, " +
-                COLUMN_CATEGORY + "INTEGER NOT NULL, " +
+                COLUMN_TOTAL + " INTEGER NOT NULL, " +
+                COLUMN_DATE + " DATETIME NOT NULL, " +
+                COLUMN_CATEGORY + " INTEGER NOT NULL, " +
                 "FOREIGN KEY (" + COLUMN_CATEGORY + ") REFERENCES " + TABLE_CATEGORIES + ")");
     }
 
