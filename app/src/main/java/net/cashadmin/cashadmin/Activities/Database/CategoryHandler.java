@@ -87,7 +87,7 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE id = MAX(id)";
+        String query = "SELECT * FROM " + TABLE_CATEGORIES + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);

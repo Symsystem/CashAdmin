@@ -44,7 +44,7 @@ public class IncomeHandler extends TransactionHandler {
 
     @Override
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_INCOMES + " WHERE " + COLUMN_DATE + " = MAX(" + COLUMN_DATE + ")";
+        String query = "SELECT * FROM " + TABLE_INCOMES + " ORDER BY " + COLUMN_DATE + " DESC LIMIT 1";
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);

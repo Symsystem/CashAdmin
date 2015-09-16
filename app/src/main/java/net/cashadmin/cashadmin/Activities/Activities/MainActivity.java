@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.TextView;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
@@ -13,6 +14,7 @@ import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.R;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -51,18 +53,15 @@ public class MainActivity extends ActionBarActivity {
         Expense lastExpense = null;
         Income lastIncome = null;
 
-        try {
-            List<Entity> l = mDataManager.getAll(TypeEnum.EXPENSE);
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
-        }
 
-   /*     try{
+
+        try{
             lastExpense = (Expense)mDataManager.getLast(TypeEnum.EXPENSE);
             lastIncome = (Income)mDataManager.getLast(TypeEnum.INCOME);
         } catch (DataNotFoundException e){
             e.printStackTrace();
         }
+
 
         mLastExpense.setText(lastExpense.getTotal() + " €");
         mLastIncome.setText(lastIncome.getTotal() + " €");
@@ -73,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
         try{
             expenseCycle = mDataManager.getAll(TypeEnum.EXPENSE);
             incomeCycle = mDataManager.getAll(TypeEnum.INCOME);
-        } catch (DataNotFoundException e){
+        } catch (IllegalTypeException e){
             e.printStackTrace();
         }
 
@@ -93,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
                 sumIncomes = sumIncomes + in.getTotal();
             }
         }
-        mTotalIncome.setText(sumIncomes + " €");*/
+        mTotalIncome.setText(sumIncomes + " €");
 
 
     }

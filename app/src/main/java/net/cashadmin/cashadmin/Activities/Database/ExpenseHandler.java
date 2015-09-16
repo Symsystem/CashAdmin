@@ -26,9 +26,10 @@ public class ExpenseHandler extends TransactionHandler {
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
+        Expense expense = null;
 
         if (cursor.moveToFirst()) {
-            Expense expense = new Expense(
+            expense = new Expense(
                     Integer.parseInt(cursor.getString(0)),
                     Float.parseFloat(cursor.getString(1)),
                     new Date(Long.parseLong(cursor.getString(2)) * 1000),
@@ -43,14 +44,15 @@ public class ExpenseHandler extends TransactionHandler {
     }
 
     @Override
-    public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_EXPENSES + " WHERE " + COLUMN_DATE + " = MAX(" + COLUMN_DATE + ")";
+    public Entity getLast(TypeEnum type) throws DataNotFoundException {
+        String query = "SELECT * FROM " + TABLE_EXPENSES + " ORDER BY " + COLUMN_DATE + " DESC LIMIT 1";
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
+        Expense expense = null;
 
         if (cursor.moveToFirst()) {
-            Expense expense = new Expense(
+            expense = new Expense(
                     Integer.parseInt(cursor.getString(0)),
                     Float.parseFloat(cursor.getString(1)),
                     new Date(Long.parseLong(cursor.getString(2)) * 1000),
@@ -87,14 +89,14 @@ public class ExpenseHandler extends TransactionHandler {
     }
 
     @Override
-    public List<Entity> getFromTo(TypeEnum type, int start, int end){
+    public List<Entity> getFromTo(TypeEnum type, int start, int end) {
         String query = "SELECT * FROM " + TABLE_EXPENSES + " LIMIT " + start + "," + end;
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         List<Entity> list = new ArrayList<>();
 
-        while(!(cursor.isAfterLast())){
+        while (!(cursor.isAfterLast())) {
             Expense expense = new Expense(
                     Integer.parseInt(cursor.getString(0)),
                     Float.parseFloat(cursor.getString(1)),
