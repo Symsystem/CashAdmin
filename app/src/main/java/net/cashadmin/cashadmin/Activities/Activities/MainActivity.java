@@ -52,6 +52,16 @@ public class MainActivity extends ActionBarActivity {
         setHistory();
     }
 
+    @OnClick(R.id.addExpenseButton)
+    public void onClickExpenseButton(){
+        Category cat = new Category(0, "MyCat", "#FFFFFF");
+        Expense expense = new Expense(0, 10, new Date(), cat);
+
+        mDataManager.insert(expense);
+
+        setHistory();
+    }
+
     private void setHistory()
     {
         Date currentDate = new Date();
@@ -76,39 +86,26 @@ public class MainActivity extends ActionBarActivity {
         try{
             expenseCycle = mDataManager.getAll(TypeEnum.EXPENSE);
             incomeCycle = mDataManager.getAll(TypeEnum.INCOME);
-
-            float sumExpenses = 0;
-            if(!(expenseCycle.isEmpty())){
-                for(Iterator it=expenseCycle.iterator(); it.hasNext();){
-                    Expense ex = (Expense)it.next();
-                    sumExpenses = sumExpenses + ex.getTotal();
-                }
-            }
-
-            float sumIncomes = 0;
-            if(!(incomeCycle.isEmpty())){
-                for(Iterator it=incomeCycle.iterator(); it.hasNext();){
-                    Income in = (Income)it.next();
-                    sumIncomes = sumIncomes + in.getTotal();
-                }
-            }
-
-            mTotalExpense.setText(sumExpenses + " €");
-            mTotalIncome.setText(sumIncomes + " €");
-
         } catch (IllegalTypeException e){
             e.printStackTrace();
         }
+
+        float sumExpenses = 0;
+        if(!(expenseCycle.isEmpty())){
+            for(Iterator it=expenseCycle.iterator(); it.hasNext();){
+                Expense ex = (Expense)it.next();
+                sumExpenses = sumExpenses + ex.getTotal();
+            }
+            mTotalExpense.setText(sumExpenses + " €");
+        }
+
+        float sumIncomes = 0;
+        if(!(incomeCycle.isEmpty())){
+            for(Iterator it=incomeCycle.iterator(); it.hasNext();){
+                Income in = (Income)it.next();
+                sumIncomes = sumIncomes + in.getTotal();
+            }
+            mTotalIncome.setText(sumIncomes + " €");
+        }
     }
-
-    @OnClick(R.id.addExpenseButton)
-    public void onClickExpenseButton(){
-        Category cat = new Category(0, "MyCat", "#FFFFFF");
-        Expense expense = new Expense(0, 10, new Date(), cat);
-
-        mDataManager.insert(expense);
-
-        setHistory();
-    }
-
 }
