@@ -28,4 +28,9 @@
     <string name="emptyMail">Il faut entrer une adresse mail</string>
     <string name="validationMail">Mail envoyé !</string>
     <string name="title_activity_select_category">SelectCategoryActivity</string>
+
+    <string name="CategoryName">Nom de la catégorie :</string>
+    <string name="Name">Nom</string>
+    <string name="CategoryColor">Couleur choisie :</string>
+    <string name="ChooseColor">Choisissez une couleur</string>
 </resources>

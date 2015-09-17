@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+}
+
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 
@@ -30,5 +37,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.android.support:design:22.2.0'
+    compile 'com.github.QuadFlask:colorpicker:0.0.9'
 
 }
