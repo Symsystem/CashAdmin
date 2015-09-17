@@ -5,14 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
-import net.cashadmin.cashadmin.Activities.Exception.InvalidQueryException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CategoryHandler extends GenericHandler {
@@ -22,14 +18,12 @@ public class CategoryHandler extends GenericHandler {
     private static final String COLUMN_LABEL = "label";
     private static final String COLUMN_COLOR = "color";
 
-    private DBHandler mDBHandler;
-
     public CategoryHandler(DBHandler handler) {
         mDBHandler = handler;
 
         this.setTableCreator("CREATE TABLE " +
                 TABLE_CATEGORIES + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY, " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_LABEL + " VARCHAR(255) NOT NULL, " +
                 COLUMN_COLOR + " VARCHAR(11) NOT NULL)");
     }
@@ -38,7 +32,6 @@ public class CategoryHandler extends GenericHandler {
     public boolean insert(Entity entity) {
         Category cat = (Category) entity;
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ID, cat.getId());
         values.put(COLUMN_LABEL, cat.getLabel());
         values.put(COLUMN_COLOR, cat.getRGBColor());
 
@@ -53,7 +46,6 @@ public class CategoryHandler extends GenericHandler {
     public boolean update(Entity entity) {
         Category cat = (Category) entity;
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ID, cat.getId());
         values.put(COLUMN_LABEL, cat.getLabel());
         values.put(COLUMN_COLOR, cat.getRGBColor());
 
@@ -65,23 +57,14 @@ public class CategoryHandler extends GenericHandler {
     }
 
     @Override
-    public Category findById(int id) throws DataNotFoundException {
+    public Entity findById(int id) throws DataNotFoundException {
         String query = "SELECT id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> l = createEntityListFromQuery(query);
 
-        if (cursor.moveToFirst()) {
-            Category category = new Category(
-                    Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1),
-                    cursor.getString(2)
-            );
-            cursor.close();
-            db.close();
-            return category;
-        }
-        db.close();
+        if(l.size() > 0)
+            return l.get(0);
+
         throw new DataNotFoundException("Database.CategoryHandler : findById(int)");
     }
 
@@ -89,19 +72,11 @@ public class CategoryHandler extends GenericHandler {
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
         String query = "SELECT * FROM " + TABLE_CATEGORIES + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> l = createEntityListFromQuery(query);
 
-        if (cursor.moveToFirst()) {
-            Category category = new Category(
-                    Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1),
-                    cursor.getString(2)
-            );
-            cursor.close();
-            return category;
-        }
-        db.close();
+        if(l.size() > 0)
+            return l.get(0);
+
         throw new DataNotFoundException("Database.CategoryHandler : getLast(TypeEnum)");
     }
 
@@ -109,44 +84,14 @@ public class CategoryHandler extends GenericHandler {
     public List<Entity> getAll(TypeEnum type) {
         String query = "SELECT * FROM " + TABLE_CATEGORIES;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        List<Entity> list = new ArrayList<>();
-
-        while (!(cursor.isAfterLast())) {
-            Category cat = new Category(
-                    Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1),
-                    cursor.getString(2)
-            );
-            list.add(cat);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        db.close();
-        return list;
+        return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
         String query = "SELECT * FROM " + TABLE_CATEGORIES + " LIMIT " + start + "," + end;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        List<Entity> list = new ArrayList<>();
-
-        while (!(cursor.isAfterLast())) {
-            Category cat = new Category(
-                    Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1),
-                    cursor.getString(2)
-            );
-            list.add(cat);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        db.close();
-        return list;
+        return createEntityListFromQuery(query);
     }
 
     @Override
@@ -183,5 +128,14 @@ public class CategoryHandler extends GenericHandler {
         }
         db.close();
         return result;
+    }
+
+    @Override
+    protected Entity createEntityFromCursor(Cursor c){
+        return new Category(
+            c.getInt(c.getColumnIndex(COLUMN_ID)),
+            c.getString(c.getColumnIndex(COLUMN_LABEL)),
+            c.getString(c.getColumnIndex(COLUMN_COLOR))
+        );
     }
 }

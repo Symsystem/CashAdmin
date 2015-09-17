@@ -23,6 +23,7 @@
             android:layout_height="@dimen/half_width"
             android:layout_margin="16dp"
             android:text="@string/expense"
+            android:textColor="@color/White"
             style="@style/RedButton"
             android:layout_weight="1"/>
 

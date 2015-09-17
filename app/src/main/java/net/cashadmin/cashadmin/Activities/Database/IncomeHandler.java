@@ -1,14 +1,12 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,21 +22,11 @@ public class IncomeHandler extends TransactionHandler {
     public Entity findById(int id) throws DataNotFoundException {
         String query = "SELECT id FROM " + TABLE_INCOMES + " WHERE " + COLUMN_ID + " = " + id;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> l = createEntityListFromQuery(query);
 
-        if (cursor.moveToFirst()) {
-            Income income = new Income(
-                    Integer.parseInt(cursor.getString(0)),
-                    Float.parseFloat(cursor.getString(1)),
-                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
-                    Integer.parseInt(cursor.getString(3))
-            );
-            cursor.close();
-            db.close();
-            return income;
-        }
-        db.close();
+        if(l.size() > 0)
+            return l.get(0);
+
         throw new DataNotFoundException("Database.IncomeHandler : findById(int)");
     }
 
@@ -46,89 +34,42 @@ public class IncomeHandler extends TransactionHandler {
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
         String query = "SELECT * FROM " + TABLE_INCOMES + " ORDER BY " + COLUMN_DATE + " DESC LIMIT 1";
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> l = createEntityListFromQuery(query);
 
-        if (cursor.moveToFirst()) {
-            Income income = new Income(
-                    Integer.parseInt(cursor.getString(0)),
-                    Float.parseFloat(cursor.getString(1)),
-                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
-                    Integer.parseInt(cursor.getString(3))
-            );
-            cursor.close();
-            return income;
-        }
-        db.close();
-        throw new DataNotFoundException("Database.CategoryHandler : getLast(TypeEnum)");
+        if(l.size() > 0)
+            return l.get(0);
+
+        throw new DataNotFoundException("Database.IncomeHandler : getLast(TypeEnum)");
     }
 
     @Override
     public List<Entity> getAll(TypeEnum type) {
         String query = "SELECT * FROM " + TABLE_INCOMES;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        List<Entity> list = new ArrayList<>();
-
-        while (!(cursor.isAfterLast())) {
-            Income income = new Income(
-                    Integer.parseInt(cursor.getString(0)),
-                    Float.parseFloat(cursor.getString(1)),
-                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
-                    Integer.parseInt(cursor.getString(3))
-            );
-            list.add(income);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        db.close();
-        return list;
+        return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
         String query = "SELECT * FROM " + TABLE_INCOMES + " LIMIT " + start + "," + end;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        List<Entity> list = new ArrayList<>();
-
-        while (!(cursor.isAfterLast())) {
-            Income income = new Income(
-                    Integer.parseInt(cursor.getString(0)),
-                    Float.parseFloat(cursor.getString(1)),
-                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
-                    Integer.parseInt(cursor.getString(3))
-            );
-            list.add(income);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        db.close();
-        return list;
+        return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
         String query = "SELECT * FROM " + TABLE_INCOMES + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate + " and " + endDate;
 
-        SQLiteDatabase db = mDBHandler.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        List<Entity> list = new ArrayList<>();
+        return createEntityListFromQuery(query);
+    }
 
-        while (!(cursor.isAfterLast())) {
-            Income income = new Income(
-                    Integer.parseInt(cursor.getString(0)),
-                    Float.parseFloat(cursor.getString(1)),
-                    new Date(Long.parseLong(cursor.getString(2)) * 1000),
-                    Integer.parseInt(cursor.getString(3))
-            );
-            list.add(income);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        db.close();
-        return list;
+    @Override
+    protected Entity createEntityFromCursor(Cursor c){
+        return new Income(
+            c.getInt(c.getColumnIndex(COLUMN_ID)),
+            c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+            new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
+            c.getInt(c.getColumnIndex(COLUMN_CATEGORY))
+        );
     }
 }

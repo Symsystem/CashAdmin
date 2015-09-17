@@ -7,6 +7,7 @@ import android.widget.TextView;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
@@ -48,23 +49,26 @@ public class MainActivity extends ActionBarActivity {
 
         mDataManager = new DataManager(this);
 
+        setHistory();
+    }
+
+    private void setHistory()
+    {
         Date currentDate = new Date();
 
         Expense lastExpense = null;
         Income lastIncome = null;
 
-
-
         try{
             lastExpense = (Expense)mDataManager.getLast(TypeEnum.EXPENSE);
             lastIncome = (Income)mDataManager.getLast(TypeEnum.INCOME);
+
         } catch (DataNotFoundException e){
             e.printStackTrace();
         }
 
-
-        mLastExpense.setText(lastExpense.getTotal() + " €");
-        mLastIncome.setText(lastIncome.getTotal() + " €");
+        mLastExpense.setText(lastExpense != null ? lastExpense.getTotal() + " €" : "Pas de dépense");
+        mLastIncome.setText(lastIncome != null ? lastIncome.getTotal() + " €" : "Pas de revenu");
 
         List<Entity> expenseCycle = null;
         List<Entity> incomeCycle = null;
@@ -72,33 +76,39 @@ public class MainActivity extends ActionBarActivity {
         try{
             expenseCycle = mDataManager.getAll(TypeEnum.EXPENSE);
             incomeCycle = mDataManager.getAll(TypeEnum.INCOME);
+
+            float sumExpenses = 0;
+            if(!(expenseCycle.isEmpty())){
+                for(Iterator it=expenseCycle.iterator(); it.hasNext();){
+                    Expense ex = (Expense)it.next();
+                    sumExpenses = sumExpenses + ex.getTotal();
+                }
+            }
+
+            float sumIncomes = 0;
+            if(!(incomeCycle.isEmpty())){
+                for(Iterator it=incomeCycle.iterator(); it.hasNext();){
+                    Income in = (Income)it.next();
+                    sumIncomes = sumIncomes + in.getTotal();
+                }
+            }
+
+            mTotalExpense.setText(sumExpenses + " €");
+            mTotalIncome.setText(sumIncomes + " €");
+
         } catch (IllegalTypeException e){
             e.printStackTrace();
         }
-
-        float sumExpenses = 0;
-        if(!(expenseCycle.isEmpty())){
-            for(Iterator it=expenseCycle.iterator(); it.hasNext();){
-                Expense ex = (Expense)it.next();
-                sumExpenses = sumExpenses + ex.getTotal();
-            }
-        }
-        mTotalExpense.setText(sumExpenses + " €");
-
-        float sumIncomes = 0;
-        if(!(incomeCycle.isEmpty())){
-            for(Iterator it=incomeCycle.iterator(); it.hasNext();){
-                Income in = (Income)it.next();
-                sumIncomes = sumIncomes + in.getTotal();
-            }
-        }
-        mTotalIncome.setText(sumIncomes + " €");
-
-
     }
 
     @OnClick(R.id.addExpenseButton)
     public void onClickExpenseButton(){
+        Category cat = new Category(0, "MyCat", "#FFFFFF");
+        Expense expense = new Expense(0, 10, new Date(), cat);
+
+        mDataManager.insert(expense);
+
+        setHistory();
     }
 
 }

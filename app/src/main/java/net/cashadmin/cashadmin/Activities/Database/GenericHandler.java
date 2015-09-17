@@ -1,16 +1,21 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Exception.InvalidQueryException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public abstract class GenericHandler {
 
     protected String tableCreator = "";
+    protected DBHandler mDBHandler;
 
     public String getTableCreator() {
         return tableCreator;
@@ -73,4 +78,29 @@ public abstract class GenericHandler {
     public boolean deleteBy(TypeEnum type, String condition) throws InvalidQueryException{
         return true;
     }
+
+    /**
+     * @param query
+     */
+    protected List<Entity> createEntityListFromQuery(String query){
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        if(cursor != null && cursor.moveToFirst()) {
+            while (!(cursor.isAfterLast())) {
+                list.add(createEntityFromCursor(cursor));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    /**
+     * @param c
+     * @return Entity
+     */
+    protected abstract Entity createEntityFromCursor(Cursor c);
 }

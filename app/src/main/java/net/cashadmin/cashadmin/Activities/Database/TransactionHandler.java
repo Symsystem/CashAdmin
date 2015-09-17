@@ -23,15 +23,13 @@ public class TransactionHandler extends GenericHandler {
     protected static final String COLUMN_DATE = "date";
     protected static final String COLUMN_CATEGORY = "category";
 
-    protected DBHandler mDBHandler;
-
     public TransactionHandler(DBHandler handler, String tableName) {
         mDBHandler = handler;
         TABLE_NAME = tableName;
 
         this.setTableCreator("CREATE TABLE " +
                 TABLE_NAME + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY, " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_DATE + " DATETIME NOT NULL, " +
                 COLUMN_CATEGORY + " INTEGER NOT NULL, " +
@@ -42,7 +40,6 @@ public class TransactionHandler extends GenericHandler {
     public boolean insert(Entity entity) {
         Transaction transaction = (Transaction) entity;
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ID, transaction.getId());
         values.put(COLUMN_TOTAL, transaction.getTotal());
         values.put(COLUMN_DATE, transaction.getDate());
         values.put(COLUMN_CATEGORY, transaction.getCategory().toString());
@@ -59,7 +56,6 @@ public class TransactionHandler extends GenericHandler {
     public boolean update(Entity entity) {
         Transaction transaction = (Transaction) entity;
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ID, transaction.getId());
         values.put(COLUMN_TOTAL, transaction.getTotal());
         values.put(COLUMN_DATE, transaction.getDate());
         values.put(COLUMN_CATEGORY, transaction.getCategory().toString());
@@ -103,7 +99,7 @@ public class TransactionHandler extends GenericHandler {
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             cursor.close();
             db.close();
             return true;
@@ -123,7 +119,7 @@ public class TransactionHandler extends GenericHandler {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
             cursor.close();
             result = true;
@@ -142,12 +138,17 @@ public class TransactionHandler extends GenericHandler {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if(!(cursor.isAfterLast())){
+        while(!(cursor.isAfterLast())){
             db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
             cursor.close();
             result = true;
         }
         db.close();
         return result;
+    }
+
+    @Override
+    protected Entity createEntityFromCursor(Cursor c) {
+        return null;
     }
 }
