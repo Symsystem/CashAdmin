@@ -13,13 +13,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
@@ -89,7 +88,9 @@ public class SelectCategoryActivity extends ActionBarActivity {
         View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
         pop.setContentView(layout);
         pop.setFocusable(true);
-        pop.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 0);
+        pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        pop.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
         final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
         colorChoice.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +99,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
                 ColorPickerDialogBuilder
                         .with(SelectCategoryActivity.this)
                         .setTitle(getString(R.string.ChooseColor))
-                        .initialColor(((ColorDrawable)colorChoice.getBackground()).getColor())
+                        .initialColor(((ColorDrawable) colorChoice.getBackground()).getColor())
                         .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                         .density(6)
                         .showAlphaSlider(false)

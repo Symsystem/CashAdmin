@@ -1,5 +1,6 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.TextView;
@@ -7,7 +8,6 @@ import android.widget.TextView;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
-import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
@@ -54,12 +54,7 @@ public class MainActivity extends ActionBarActivity {
 
     @OnClick(R.id.addExpenseButton)
     public void onClickExpenseButton(){
-        Category cat = new Category(0, "MyCat", "#FFFFFF");
-        Expense expense = new Expense(0, 10, new Date(), cat);
-
-        mDataManager.insert(expense);
-
-        setHistory();
+        startActivity(new Intent(MainActivity.this, SelectCategoryActivity.class));
     }
 
     private void setHistory()
