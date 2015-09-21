@@ -58,142 +58,80 @@ public class SelectCategoryActivity extends ActionBarActivity {
         DataManager dataManager = new DataManager(this);
         try {
             final List<Entity> list = dataManager.getAll(TypeEnum.CATEGORY);
-            if (list.isEmpty()) {
-                final Button addCat = (Button) findViewById(R.id.addCat);
-                addCat.setVisibility(View.VISIBLE);
-                addCat.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
-                        View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
-                        pop.setContentView(layout);
-                        pop.setFocusable(true);
-                        pop.setAnimationStyle(R.style.Animation);
-                        pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                        pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-                        pop.showAtLocation(layout, Gravity.TOP, 0, 250);
+            list.add(0, new Category(0, "+", R.color.White));
+            ListAdapter adapter = new ButtonCategoryAdapter(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    list
+            );
+            mGridView.setAdapter(adapter);
+            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                 @Override
+                                                 public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
 
-                        final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
-                        colorChoice.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ColorPickerDialogBuilder
-                                        .with(SelectCategoryActivity.this)
-                                        .setTitle(getString(R.string.ChooseColor))
-                                        .initialColor(((ColorDrawable) colorChoice.getBackground()).getColor())
-                                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                                        .density(6)
-                                        .showAlphaSlider(false)
-                                        .setPositiveButton("Ok", new ColorPickerClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
-                                                colorChoice.setBackgroundColor(i);
-                                                color = i;
-                                            }
-                                        })
-                                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        })
-                                        .build()
-                                        .show();
-                            }
-                        });
-                        final EditText nameCat = (EditText) layout.findViewById(R.id.nameCat);
-                        Button addFinalCategoryButton = (Button) layout.findViewById(R.id.addFinalCategoryButton);
-                        addFinalCategoryButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String name = nameCat.getText().toString().trim();
+                                                     if (position == 0) {
+                                                         PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
+                                                         View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
+                                                         pop.setContentView(layout);
+                                                         pop.setFocusable(true);
+                                                         pop.setAnimationStyle(R.style.Animation);
+                                                         pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+                                                         pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+                                                         pop.showAtLocation(layout, Gravity.TOP, 0, 250);
 
-                                //TODO : Faire un popup si name est vide
+                                                         final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
+                                                         colorChoice.setOnClickListener(new View.OnClickListener() {
+                                                             @Override
+                                                             public void onClick(View v) {
+                                                                 ColorPickerDialogBuilder
+                                                                         .with(SelectCategoryActivity.this)
+                                                                         .setTitle(getString(R.string.ChooseColor))
+                                                                         .initialColor(((ColorDrawable) colorChoice.getBackground()).getColor())
+                                                                         .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                                                                         .density(6)
+                                                                         .showAlphaSlider(false)
+                                                                         .setPositiveButton("Ok", new ColorPickerClickListener() {
+                                                                             @Override
+                                                                             public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
+                                                                                 colorChoice.setBackgroundColor(i);
+                                                                                 color = i;
+                                                                             }
+                                                                         })
+                                                                         .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                                                             @Override
+                                                                             public void onClick(DialogInterface dialog, int which) {
+                                                                             }
+                                                                         })
+                                                                         .build()
+                                                                         .show();
+                                                             }
+                                                         });
+                                                         final EditText nameCat = (EditText) layout.findViewById(R.id.nameCat);
+                                                         Button addFinalCategoryButton = (Button) layout.findViewById(R.id.addFinalCategoryButton);
+                                                         addFinalCategoryButton.setOnClickListener(new View.OnClickListener() {
+                                                             @Override
+                                                             public void onClick(View v) {
+                                                                 String name = nameCat.getText().toString().trim();
 
-                                Category cat = new Category(0, name, color);
-                                mDataManager.insert(cat);
-                                Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
-                                intent.putExtra("category", cat);
-                                addCat.setVisibility(View.GONE);
-                                startActivity(intent);
-                            }
-                        });
-                    }
-                });
-            } else {
-                ListAdapter adapter = new ButtonCategoryAdapter(
-                        this,
-                        android.R.layout.simple_list_item_1,
-                        list
-                );
-                mGridView.setAdapter(adapter);
-                mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                     @Override
-                                                     public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
+                                                                 //TODO : Faire un popup si name est vide
 
-                                                         if (position == 0) {
-                                                             PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
-                                                             View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
-                                                             pop.setContentView(layout);
-                                                             pop.setFocusable(true);
-                                                             pop.setAnimationStyle(R.style.Animation);
-                                                             pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                                                             pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-                                                             pop.showAtLocation(layout, Gravity.TOP, 0, 250);
+                                                                 Category cat = new Category(0, name, color);
+                                                                 mDataManager.insert(cat);
+                                                                 Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                                                                 intent.putExtra("category", cat);
+                                                                 startActivity(intent);
+                                                             }
+                                                         });
 
-                                                             final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
-                                                             colorChoice.setOnClickListener(new View.OnClickListener() {
-                                                                 @Override
-                                                                 public void onClick(View v) {
-                                                                     ColorPickerDialogBuilder
-                                                                             .with(SelectCategoryActivity.this)
-                                                                             .setTitle(getString(R.string.ChooseColor))
-                                                                             .initialColor(((ColorDrawable) colorChoice.getBackground()).getColor())
-                                                                             .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
-                                                                             .density(6)
-                                                                             .showAlphaSlider(false)
-                                                                             .setPositiveButton("Ok", new ColorPickerClickListener() {
-                                                                                 @Override
-                                                                                 public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
-                                                                                     colorChoice.setBackgroundColor(i);
-                                                                                     color = i;
-                                                                                 }
-                                                                             })
-                                                                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                                                 @Override
-                                                                                 public void onClick(DialogInterface dialog, int which) {
-                                                                                 }
-                                                                             })
-                                                                             .build()
-                                                                             .show();
-                                                                 }
-                                                             });
-                                                             final EditText nameCat = (EditText) layout.findViewById(R.id.nameCat);
-                                                             Button addFinalCategoryButton = (Button) layout.findViewById(R.id.addFinalCategoryButton);
-                                                             addFinalCategoryButton.setOnClickListener(new View.OnClickListener() {
-                                                                 @Override
-                                                                 public void onClick(View v) {
-                                                                     String name = nameCat.getText().toString().trim();
-
-                                                                     //TODO : Faire un popup si name est vide
-
-                                                                     Category cat = new Category(0, name, color);
-                                                                     mDataManager.insert(cat);
-                                                                     Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
-                                                                     intent.putExtra("category", cat);
-                                                                     startActivity(intent);
-                                                                 }
-                                                             });
-
-                                                         } else {
-                                                             Category cat = (Category) list.get(position - 1);
-                                                             Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
-                                                             intent.putExtra("category", cat);
-                                                             startActivity(intent);
-                                                         }
+                                                     } else {
+                                                         Category cat = (Category) list.get(position);
+                                                         Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                                                         intent.putExtra("category", cat);
+                                                         startActivity(intent);
                                                      }
                                                  }
-                );
-            }
+                                             }
+            );
         } catch (IllegalTypeException e) {
             e.printStackTrace();
         }

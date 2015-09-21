@@ -28,14 +28,7 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
             LayoutInflater vi = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.list_category, null);
         }
-        if (position == 0) {
-            Button buttonAddActegory = (Button) v.findViewById(R.id.buttonCat);
-            buttonAddActegory.setText("+");
-            buttonAddActegory.setBackgroundResource(R.color.White);
-            buttonAddActegory.setFocusable(false);
-            buttonAddActegory.setClickable(false);
-        } else {
-            Category category = (Category) this.getItem(position - 1);
+            Category category = (Category) this.getItem(position);
             if (category != null) {
                 Button buttonCategory = (Button) v.findViewById(R.id.buttonCat);
                 buttonCategory.setText(category.getLabel());
@@ -43,8 +36,6 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
                 buttonCategory.setFocusable(false);
                 buttonCategory.setClickable(false);
             }
-        }
-
         return v;
     }
 }
