@@ -2,7 +2,9 @@ package net.cashadmin.cashadmin.Activities.Model;
 
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable{
 
     protected TypeEnum mType;
 

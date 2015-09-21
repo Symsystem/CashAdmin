@@ -8,25 +8,25 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context="net.cashadmin.cashadmin.Activities.Activities.SelectCategoryActivity">
 
-    <Button
-        android:id="@+id/addCategoryButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="TEST"/>
-
     <GridView
         android:id="@+id/gridView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/addCategoryButton"
         android:horizontalSpacing="8dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
         android:verticalSpacing="8dp">
     </GridView>
 
-
-
+    <Button
+        android:id="@+id/addCat"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/Black"
+        android:textSize="16dp"
+        android:padding="16dp"
+        android:text="+"
+        android:background="@color/White"
+        android:visibility="gone"/>
 
 </RelativeLayout>
