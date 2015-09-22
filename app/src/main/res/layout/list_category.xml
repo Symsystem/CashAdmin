@@ -7,10 +7,10 @@
     <Button
         android:id="@+id/buttonCat"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:textColor="@color/Black"
         android:textSize="16dp"
-        android:padding="16dp"
-        />
+        android:textStyle="bold"
+        android:padding="16dp"/>
 
 </LinearLayout>

@@ -32,7 +32,7 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
             if (category != null) {
                 Button buttonCategory = (Button) v.findViewById(R.id.buttonCat);
                 buttonCategory.setText(category.getLabel());
-                buttonCategory.setBackgroundColor(category.getColor());
+                buttonCategory.setTextColor(category.getColor());
                 buttonCategory.setFocusable(false);
                 buttonCategory.setClickable(false);
             }

@@ -1,5 +1,7 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -44,6 +47,8 @@ public class SelectCategoryActivity extends ActionBarActivity {
 
     @InjectView(R.id.gridView)
     GridView mGridView;
+    @InjectView(R.id.mainLayout)
+    FrameLayout mMainLayout;
 
     private int color;
     private DataManager mDataManager;
@@ -55,10 +60,12 @@ public class SelectCategoryActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         mDataManager = new DataManager(this);
 
+        mMainLayout.getForeground().setAlpha(0);
+
         DataManager dataManager = new DataManager(this);
         try {
             final List<Entity> list = dataManager.getAll(TypeEnum.CATEGORY);
-            list.add(0, new Category(0, "+", R.color.White));
+            list.add(0, new Category(0, "+", "#000000"));
             ListAdapter adapter = new ButtonCategoryAdapter(
                     this,
                     android.R.layout.simple_list_item_1,
@@ -70,14 +77,23 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                  public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
 
                                                      if (position == 0) {
-                                                         PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
+                                                         final PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
                                                          View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
                                                          pop.setContentView(layout);
                                                          pop.setFocusable(true);
-                                                         pop.setAnimationStyle(R.style.Animation);
+                                                         pop.setAnimationStyle(R.style.DialogAnimation);
+                                                         pop.setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_button));
+                                                         pop.setElevation(10);
+                                                         pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                                                             @Override
+                                                             public void onDismiss() {
+                                                                 mMainLayout.getForeground().setAlpha(0);
+                                                             }
+                                                         });
                                                          pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.showAtLocation(layout, Gravity.TOP, 0, 250);
+                                                         mMainLayout.getForeground().setAlpha(200);
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                                                          colorChoice.setOnClickListener(new View.OnClickListener() {
@@ -119,10 +135,11 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                                  mDataManager.insert(cat);
                                                                  Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                  intent.putExtra("category", cat);
+                                                                 mMainLayout.getForeground().setAlpha(0);
+                                                                 pop.dismiss();
                                                                  startActivity(intent);
                                                              }
                                                          });
-
                                                      } else {
                                                          Category cat = (Category) list.get(position);
                                                          Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);

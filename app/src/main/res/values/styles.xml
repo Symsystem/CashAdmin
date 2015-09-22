@@ -9,9 +9,11 @@
         <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorControlNormal">@color/primary</item>
+        <item name="colorControlActivated">@color/accent</item>
         <item name="colorAccent">@color/accent</item>
 
-        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="buttonStyle">@style/ButtonStyle</item>
 
         <item name="android:checkboxStyle">@color/White</item>
 
@@ -27,7 +29,7 @@
         <item name="android:background">@drawable/red_button</item>
     </style>
 
-    <style name="Animation">
+    <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/popup_show</item>
         <item name="android:windowExitAnimation">@anim/popup_hide</item>
     </style>
