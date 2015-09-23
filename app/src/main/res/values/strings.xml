@@ -41,4 +41,7 @@
     <string name="lastIncomeLabel">Dernier revenu :</string>
     <string name="totalIncomeLabel">Total des revenus :</string>
     <string name="cancel">Annuler</string>
+    <string name="amount">Montant :</string>
+    <string name="addExpense">Ajouter une dépense</string>
+    <string name="label">Libellé :</string>
 </resources>

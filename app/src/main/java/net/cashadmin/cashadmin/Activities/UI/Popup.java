@@ -2,11 +2,7 @@ package net.cashadmin.cashadmin.Activities.UI;
 
 import android.graphics.Color;
 
-/**
- * Created by jeremyduchesne on 13/07/15.
- */
 public class Popup {
-
 
 
     public static void toast(String text){

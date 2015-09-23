@@ -76,8 +76,6 @@ public class SelectCategoryActivity extends ActionBarActivity {
         animHide.setFillAfter(true);
         animHide.setInterpolator(new AccelerateInterpolator());
 
-        //mMainLayout.getForeground().setAlpha(0);
-
         DataManager dataManager = new DataManager(this);
         try {
             final List<Entity> list = dataManager.getAll(TypeEnum.CATEGORY);
@@ -100,19 +98,16 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                          pop.setContentView(layout);
                                                          pop.setFocusable(true);
                                                          pop.setAnimationStyle(R.style.DialogAnimation);
-                                                         pop.setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_button));
-                                                         pop.setElevation(10);
+                                                         pop.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
                                                          pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                                                              @Override
                                                              public void onDismiss() {
-                                                                 //mMainLayout.getForeground().setAlpha(0);
                                                                  mMainLayout.startAnimation(animHide);
                                                              }
                                                          });
                                                          pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.showAtLocation(layout, Gravity.TOP, 0, 250);
-                                                         //mMainLayout.getForeground().setAlpha(200);
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                                                          colorChoice.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +149,6 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                                  mDataManager.insert(cat);
                                                                  Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                  intent.putExtra("category", cat);
-                                                                 //mMainLayout.getForeground().setAlpha(0);
                                                                  mMainLayout.startAnimation(animHide);
                                                                  pop.dismiss();
                                                                  startActivity(intent);

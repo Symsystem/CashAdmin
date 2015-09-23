@@ -36,7 +36,7 @@ public class TransactionHandler extends GenericHandler {
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_DATE + " DATETIME NOT NULL, " +
                 COLUMN_CATEGORY + " INTEGER NOT NULL, " +
-                "FOREIGN KEY (" + COLUMN_CATEGORY + ") REFERENCES " + TABLE_CATEGORIES + ")");
+                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + TABLE_CATEGORIES + ")");
     }
 
     @Override

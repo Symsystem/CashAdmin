@@ -5,6 +5,8 @@
     <color name="White">#ffffff</color>
     <color name="Black">#000000</color>
     <color name="accent">#FFC107</color>
+    <color name="transparent">#be3f51b5</color>
+    <color name="greyBackground">#a5c4c4c2</color>
 
     <color name="red">#F44336</color>
     <color name="green">#8BC34A</color>
