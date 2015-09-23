@@ -6,12 +6,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +54,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
     @InjectView(R.id.gridView)
     GridView mGridView;
     @InjectView(R.id.mainLayout)
-    FrameLayout mMainLayout;
+    LinearLayout mMainLayout;
 
     private int color;
     private DataManager mDataManager;
@@ -60,7 +66,17 @@ public class SelectCategoryActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         mDataManager = new DataManager(this);
 
-        mMainLayout.getForeground().setAlpha(0);
+        final Animation animShow = new AlphaAnimation(1.0f, 0.3f);
+        animShow.setDuration(200);
+        animShow.setFillAfter(true);
+        animShow.setInterpolator(new AccelerateInterpolator());
+
+        final Animation animHide = new AlphaAnimation(0.3f, 1.0f);
+        animHide.setDuration(200);
+        animHide.setFillAfter(true);
+        animHide.setInterpolator(new AccelerateInterpolator());
+
+        //mMainLayout.getForeground().setAlpha(0);
 
         DataManager dataManager = new DataManager(this);
         try {
@@ -77,6 +93,8 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                  public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
 
                                                      if (position == 0) {
+
+                                                         mMainLayout.startAnimation(animShow);
                                                          final PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
                                                          View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
                                                          pop.setContentView(layout);
@@ -87,13 +105,14 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                          pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                                                              @Override
                                                              public void onDismiss() {
-                                                                 mMainLayout.getForeground().setAlpha(0);
+                                                                 //mMainLayout.getForeground().setAlpha(0);
+                                                                 mMainLayout.startAnimation(animHide);
                                                              }
                                                          });
                                                          pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.showAtLocation(layout, Gravity.TOP, 0, 250);
-                                                         mMainLayout.getForeground().setAlpha(200);
+                                                         //mMainLayout.getForeground().setAlpha(200);
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                                                          colorChoice.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +154,8 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                                  mDataManager.insert(cat);
                                                                  Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                  intent.putExtra("category", cat);
-                                                                 mMainLayout.getForeground().setAlpha(0);
+                                                                 //mMainLayout.getForeground().setAlpha(0);
+                                                                 mMainLayout.startAnimation(animHide);
                                                                  pop.dismiss();
                                                                  startActivity(intent);
                                                              }
