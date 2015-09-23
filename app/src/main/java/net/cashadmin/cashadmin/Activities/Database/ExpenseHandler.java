@@ -3,6 +3,7 @@ package net.cashadmin.cashadmin.Activities.Database;
 import android.database.Cursor;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
@@ -14,8 +15,8 @@ public class ExpenseHandler extends TransactionHandler {
 
     private static final String TABLE_EXPENSES = "expenses";
 
-    public ExpenseHandler(DBHandler handler) {
-        super(handler, TABLE_EXPENSES);
+    public ExpenseHandler(DBHandler handler, CategoryHandler catHandler) {
+        super(handler, TABLE_EXPENSES, catHandler);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ExpenseHandler extends TransactionHandler {
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        String query = "SELECT * FROM " + TABLE_EXPENSES + " LIMIT " + start + "," + end;
+        String query = "SELECT * FROM " + TABLE_EXPENSES + " LIMIT " + start + ", " + end;
 
         return createEntityListFromQuery(query);
     }
@@ -65,11 +66,17 @@ public class ExpenseHandler extends TransactionHandler {
 
     @Override
     protected Entity createEntityFromCursor(Cursor c){
-        return new Expense(
-            c.getInt(c.getColumnIndex(COLUMN_ID)),
-            c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
-            new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
-            c.getInt(c.getColumnIndex(COLUMN_CATEGORY))
-        );
+        try {
+            return new Expense(
+                    c.getInt(c.getColumnIndex(COLUMN_ID)),
+                    c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+                    new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
+                    (Category)mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
+            );
+        }
+        catch (DataNotFoundException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

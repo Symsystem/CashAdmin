@@ -58,7 +58,7 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public Entity findById(int id) throws DataNotFoundException {
-        String query = "SELECT id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
+        String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
 
         List<Entity> l = createEntityListFromQuery(query);
 
@@ -89,7 +89,7 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        String query = "SELECT * FROM " + TABLE_CATEGORIES + " LIMIT " + start + "," + end;
+        String query = "SELECT * FROM " + TABLE_CATEGORIES + " LIMIT " + start + ", " + end;
 
         return createEntityListFromQuery(query);
     }

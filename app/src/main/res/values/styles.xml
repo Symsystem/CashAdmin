@@ -13,7 +13,7 @@
         <item name="colorControlActivated">@color/accent</item>
         <item name="colorAccent">@color/accent</item>
 
-        <item name="buttonStyle">@style/ButtonStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
 
         <item name="android:checkboxStyle">@color/White</item>
 

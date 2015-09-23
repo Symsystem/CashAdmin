@@ -19,9 +19,9 @@ public class DataManager {
 
     public DataManager(Context context) {
         DBHandler db = new DBHandler(context, null, null, 0);
-        this.mCategoryHandler = new CategoryHandler(db);
-        this.mIncomeHandler = new IncomeHandler(db);
-        this.mExpenseHandler = new ExpenseHandler(db);
+        this.mCategoryHandler = (CategoryHandler) db.getHandler("category");
+        this.mIncomeHandler = (IncomeHandler) db.getHandler("income");
+        this.mExpenseHandler = (ExpenseHandler) db.getHandler("expense");
     }
 
     public boolean insert(Entity entity) {

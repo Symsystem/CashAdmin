@@ -18,9 +18,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
 
-        handlers.put("category", new CategoryHandler(this));
-        handlers.put("income", new IncomeHandler(this));
-        handlers.put("expense", new ExpenseHandler(this));
+        CategoryHandler catHandler = new CategoryHandler(this);
+        handlers.put("category", catHandler);
+        handlers.put("income", new IncomeHandler(this, catHandler));
+        handlers.put("expense", new ExpenseHandler(this, catHandler));
     }
 
     @Override

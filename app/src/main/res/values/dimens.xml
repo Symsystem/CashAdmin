@@ -22,4 +22,6 @@
     <dimen name="control_corner_material">2dp</dimen>
     <!--Default button size for MainActivity-->
     <dimen name="half_width">110dp</dimen>
+
+    <dimen name="textview_margin">8dp</dimen>
 </resources>

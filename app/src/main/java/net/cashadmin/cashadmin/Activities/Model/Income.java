@@ -15,7 +15,7 @@ public class Income extends Transaction {
         this.mType = TypeEnum.INCOME;
     }
 
-    public Income(int id, float total, Date date, int category) {
+    /*public Income(int id, float total, Date date, int category) {
 
-    }
+    }*/
 }

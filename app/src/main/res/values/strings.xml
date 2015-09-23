@@ -9,6 +9,11 @@
 
     <string name="expense">Dépense</string>
     <string name="income">Revenu</string>
+    <string name="noExpense">Pas de dépense</string>
+    <string name="noIncome">Pas de revenu</string>
+    <string name="lastExpenseLabel">Dernière dépense :</string>
+    <string name="totalExpenseLabel">Total des dépenses :</string>
+    <string name="historyLabel">Historique</string>
 
     <string name="title_activity_account_connexion">Ca$hAdmin</string>
 
@@ -33,5 +38,7 @@
     <string name="Name">Nom</string>
     <string name="CategoryColor">Couleur choisie :</string>
     <string name="ChooseColor">Choisissez une couleur</string>
+    <string name="lastIncomeLabel">Dernier revenu :</string>
+    <string name="totalIncomeLabel">Total des revenus :</string>
     <string name="cancel">Annuler</string>
 </resources>

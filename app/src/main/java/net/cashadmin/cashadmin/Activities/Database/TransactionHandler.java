@@ -23,9 +23,12 @@ public class TransactionHandler extends GenericHandler {
     protected static final String COLUMN_DATE = "date";
     protected static final String COLUMN_CATEGORY = "category";
 
-    public TransactionHandler(DBHandler handler, String tableName) {
+    protected final CategoryHandler mCategoryHandler;
+
+    public TransactionHandler(DBHandler handler, String tableName, CategoryHandler catHandler) {
         mDBHandler = handler;
         TABLE_NAME = tableName;
+        mCategoryHandler = catHandler;
 
         this.setTableCreator("CREATE TABLE " +
                 TABLE_NAME + "(" +
@@ -42,13 +45,12 @@ public class TransactionHandler extends GenericHandler {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TOTAL, transaction.getTotal());
         values.put(COLUMN_DATE, transaction.getDate());
-        values.put(COLUMN_CATEGORY, transaction.getCategory().toString());
+        values.put(COLUMN_CATEGORY, transaction.getCategory().getId());
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
         db.insert(TABLE_NAME, null, values);
         db.close();
-        ;
         return true;
     }
 
@@ -58,7 +60,7 @@ public class TransactionHandler extends GenericHandler {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TOTAL, transaction.getTotal());
         values.put(COLUMN_DATE, transaction.getDate());
-        values.put(COLUMN_CATEGORY, transaction.getCategory().toString());
+        values.put(COLUMN_CATEGORY, transaction.getCategory().getId());
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 

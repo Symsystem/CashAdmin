@@ -3,6 +3,7 @@ package net.cashadmin.cashadmin.Activities.Database;
 import android.database.Cursor;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
@@ -14,8 +15,8 @@ public class IncomeHandler extends TransactionHandler {
 
     private static final String TABLE_INCOMES = "incomes";
 
-    public IncomeHandler(DBHandler handler) {
-        super(handler, TABLE_INCOMES);
+    public IncomeHandler(DBHandler handler, CategoryHandler catHandler) {
+        super(handler, TABLE_INCOMES, catHandler);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class IncomeHandler extends TransactionHandler {
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        String query = "SELECT * FROM " + TABLE_INCOMES + " LIMIT " + start + "," + end;
+        String query = "SELECT * FROM " + TABLE_INCOMES + " LIMIT " + start + ", " + end;
 
         return createEntityListFromQuery(query);
     }
@@ -65,11 +66,16 @@ public class IncomeHandler extends TransactionHandler {
 
     @Override
     protected Entity createEntityFromCursor(Cursor c){
-        return new Income(
-            c.getInt(c.getColumnIndex(COLUMN_ID)),
-            c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
-            new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
-            c.getInt(c.getColumnIndex(COLUMN_CATEGORY))
-        );
+        try {
+            return new Income(
+                    c.getInt(c.getColumnIndex(COLUMN_ID)),
+                    c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+                    new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
+                    (Category) mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
+            );
+        } catch(DataNotFoundException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

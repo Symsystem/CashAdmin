@@ -36,14 +36,30 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/historyChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/buttonLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        android:id="@+id/historyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/historyLabel"
+        android:layout_alignParentBottom="true"/>
+
+    <!--<LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/buttonLayout"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -51,30 +67,39 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/lastExpenseLabel"
                 android:textSize="12dp"
-                android:text="Dernière dépense : "/>
+                android:text="@string/lastExpenseLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
             <TextView
                 android:id="@+id/lastExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/lastExpenseLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/totalExpenseLabel"
                 android:textSize="12dp"
-                android:text="Total des dépenses : "/>
+                android:text="@string/totalExpenseLabel"
+                android:layout_below="@id/lastExpenseLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
             <TextView
                 android:id="@+id/totalExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/totalExpenseLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
@@ -82,29 +107,38 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/lastIncomeLabel"
                 android:textSize="12dp"
-                android:text="Dernièr revenu : "/>
+                android:text="@string/lastIncomeLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
             <TextView
                 android:id="@+id/lastIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/lastIncomeLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/totalIncomeLabel"
                 android:textSize="12dp"
-                android:text="Total des revenus : "/>
+                android:text="@string/totalIncomeLabel"
+                android:layout_below="@id/lastIncomeLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
             <TextView
                 android:id="@+id/totalIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"/>
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/totalIncomeLabel"
+                android:layout_margin="@dimen/textview_margin"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
+    </LinearLayout>-->
 
-    </LinearLayout>
 </RelativeLayout>

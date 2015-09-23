@@ -15,7 +15,7 @@ public class Expense extends Transaction {
         this.mType = TypeEnum.EXPENSE;
     }
 
-    public Expense(int id, float total, Date date, int category) {
+    /*public Expense(int id, float total, Date date, int category) {
 
-    }
+    }*/
 }
