@@ -13,15 +13,15 @@ import java.util.List;
 
 public class IncomeHandler extends TransactionHandler {
 
-    private static final String TABLE_INCOMES = "incomes";
+    public static final String TABLE_NAME = "incomes";
 
     public IncomeHandler(DBHandler handler, CategoryHandler catHandler) {
-        super(handler, TABLE_INCOMES, catHandler);
+        super(handler, TABLE_NAME, catHandler);
     }
 
     @Override
     public Entity findById(int id) throws DataNotFoundException {
-        String query = "SELECT id FROM " + TABLE_INCOMES + " WHERE " + COLUMN_ID + " = " + id;
+        String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + id;
 
         List<Entity> l = createEntityListFromQuery(query);
 
@@ -33,7 +33,7 @@ public class IncomeHandler extends TransactionHandler {
 
     @Override
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_INCOMES + " ORDER BY " + COLUMN_DATE + " DESC LIMIT 1";
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_DATE + " DESC LIMIT 1";
 
         List<Entity> l = createEntityListFromQuery(query);
 
@@ -45,21 +45,21 @@ public class IncomeHandler extends TransactionHandler {
 
     @Override
     public List<Entity> getAll(TypeEnum type) {
-        String query = "SELECT * FROM " + TABLE_INCOMES;
+        String query = "SELECT * FROM " + TABLE_NAME;
 
         return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        String query = "SELECT * FROM " + TABLE_INCOMES + " LIMIT " + start + ", " + end;
+        String query = "SELECT * FROM " + TABLE_NAME + " LIMIT " + start + ", " + end;
 
         return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
-        String query = "SELECT * FROM " + TABLE_INCOMES + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate + " and " + endDate;
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate + " and " + endDate;
 
         return createEntityListFromQuery(query);
     }

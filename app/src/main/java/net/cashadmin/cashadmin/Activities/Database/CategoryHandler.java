@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CategoryHandler extends GenericHandler {
 
-    private static final String TABLE_CATEGORIES = "categories";
+    public static final String TABLE_NAME = "categories";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_LABEL = "label";
     private static final String COLUMN_COLOR = "color";
@@ -22,7 +22,7 @@ public class CategoryHandler extends GenericHandler {
         mDBHandler = handler;
 
         this.setTableCreator("CREATE TABLE " +
-                TABLE_CATEGORIES + "(" +
+                TABLE_NAME + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_LABEL + " VARCHAR(255) NOT NULL, " +
                 COLUMN_COLOR + " VARCHAR(11) NOT NULL)");
@@ -37,7 +37,7 @@ public class CategoryHandler extends GenericHandler {
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
-        db.insert(TABLE_CATEGORIES, null, values);
+        db.insert(TABLE_NAME, null, values);
         db.close();
         return true;
     }
@@ -51,14 +51,14 @@ public class CategoryHandler extends GenericHandler {
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
-        db.update(TABLE_CATEGORIES, values, COLUMN_ID + " = ?", new String[]{String.valueOf(cat.getId())});
+        db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{String.valueOf(cat.getId())});
         db.close();
         return true;
     }
 
     @Override
     public Entity findById(int id) throws DataNotFoundException {
-        String query = "SELECT * FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + id;
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + id;
 
         List<Entity> l = createEntityListFromQuery(query);
 
@@ -70,7 +70,7 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        String query = "SELECT * FROM " + TABLE_CATEGORIES + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ID + " DESC LIMIT 1";
 
         List<Entity> l = createEntityListFromQuery(query);
 
@@ -82,21 +82,21 @@ public class CategoryHandler extends GenericHandler {
 
     @Override
     public List<Entity> getAll(TypeEnum type) {
-        String query = "SELECT * FROM " + TABLE_CATEGORIES;
+        String query = "SELECT * FROM " + TABLE_NAME;
 
         return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        String query = "SELECT * FROM " + TABLE_CATEGORIES + " LIMIT " + start + ", " + end;
+        String query = "SELECT * FROM " + TABLE_NAME + " LIMIT " + start + ", " + end;
 
         return createEntityListFromQuery(query);
     }
 
     @Override
     public boolean isIn(Entity entity) {
-        String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
+        String query = "Select id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -115,14 +115,14 @@ public class CategoryHandler extends GenericHandler {
     public boolean delete(Entity entity) {
         boolean result = false;
 
-        String query = "Select id FROM " + TABLE_CATEGORIES + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
+        String query = "Select id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
-            db.delete(TABLE_CATEGORIES, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
+            db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
             cursor.close();
             result = true;
         }

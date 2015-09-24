@@ -13,9 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class TransactionHandler extends GenericHandler {
-
-    private static final String TABLE_CATEGORIES = "categories";
+public abstract class TransactionHandler extends GenericHandler {
 
     private final String TABLE_NAME;
     protected static final String COLUMN_ID = "id";
@@ -36,7 +34,7 @@ public class TransactionHandler extends GenericHandler {
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_DATE + " DATETIME NOT NULL, " +
                 COLUMN_CATEGORY + " INTEGER NOT NULL, " +
-                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + TABLE_CATEGORIES + ")");
+                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME + ")");
     }
 
     @Override
@@ -70,29 +68,19 @@ public class TransactionHandler extends GenericHandler {
     }
 
     @Override
-    public Entity findById(int id) throws DataNotFoundException {
-        return null;
-    }
+    public abstract Entity findById(int id) throws DataNotFoundException;
 
     @Override
-    public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        return null;
-    }
+    public abstract Entity getLast(TypeEnum type) throws DataNotFoundException;
 
     @Override
-    public List<Entity> getAll(TypeEnum type) {
-        return null;
-    }
+    public abstract List<Entity> getAll(TypeEnum type);
 
     @Override
-    public List<Entity> getFromTo(TypeEnum type, int start, int end){
-        return null;
-    }
+    public abstract List<Entity> getFromTo(TypeEnum type, int start, int end);
 
     @Override
-    public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
-        return null;
-    }
+    public abstract List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate);
 
     @Override
     public boolean isIn(Entity entity) {

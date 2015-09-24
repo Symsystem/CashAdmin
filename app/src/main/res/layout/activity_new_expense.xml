@@ -31,8 +31,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/amount"
-            android:numeric="decimal"
-            android:inputType="numberDecimal"
             android:textSize="14dp"
             android:textColor="@color/Black"
             android:layout_weight="1"
@@ -44,6 +42,8 @@
             android:layout_height="wrap_content"
             android:textSize="14dp"
             android:layout_weight="0.3"
+            android:numeric="decimal"
+            android:inputType="numberDecimal"
             android:singleLine="true"
             android:lines="1"
             android:maxLines="1"/>
