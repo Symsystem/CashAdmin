@@ -7,12 +7,15 @@ import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Exception.InvalidQueryException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Utils.Counter;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class DataManager {
 
+    private HashMap<TypeEnum, Counter> mAutoIncrementNumbers;
     private CategoryHandler mCategoryHandler;
     private IncomeHandler mIncomeHandler;
     private ExpenseHandler mExpenseHandler;
@@ -22,15 +25,36 @@ public class DataManager {
         this.mCategoryHandler = (CategoryHandler) db.getHandler("category");
         this.mIncomeHandler = (IncomeHandler) db.getHandler("income");
         this.mExpenseHandler = (ExpenseHandler) db.getHandler("expense");
+
+        this.mAutoIncrementNumbers = db.getAutoIncrementNumbers();
+    }
+
+    public int getNextId(TypeEnum type){
+        if (mAutoIncrementNumbers.get(type) != null)
+            return mAutoIncrementNumbers.get(type).getCounter();
+        else
+            return 1;
     }
 
     public boolean insert(Entity entity) {
         switch (entity.getType()) {
             case CATEGORY:
+                if (mAutoIncrementNumbers.get(TypeEnum.CATEGORY) != null)
+                    mAutoIncrementNumbers.get(TypeEnum.CATEGORY).addOne();
+                else
+                    mAutoIncrementNumbers.put(TypeEnum.CATEGORY, new Counter(1));
                 return mCategoryHandler.insert(entity);
             case EXPENSE:
+                if (mAutoIncrementNumbers.get(TypeEnum.EXPENSE) != null)
+                    mAutoIncrementNumbers.get(TypeEnum.EXPENSE).addOne();
+                else
+                    mAutoIncrementNumbers.put(TypeEnum.EXPENSE, new Counter(1));
                 return mExpenseHandler.insert(entity);
             case INCOME:
+                if (mAutoIncrementNumbers.get(TypeEnum.INCOME) != null)
+                    mAutoIncrementNumbers.get(TypeEnum.INCOME).addOne();
+                else
+                    mAutoIncrementNumbers.put(TypeEnum.INCOME, new Counter(1));
                 return mIncomeHandler.insert(entity);
             default:
                 return false;

@@ -88,10 +88,9 @@ public abstract class GenericHandler {
         List<Entity> list = new ArrayList<>();
 
         if(cursor != null && cursor.moveToFirst()) {
-            while (!(cursor.isAfterLast())) {
+            do{
                 list.add(createEntityFromCursor(cursor));
-                cursor.moveToNext();
-            }
+            }while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
