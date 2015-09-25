@@ -21,7 +21,7 @@
         android:id="@+id/amountLayout"
         android:layout_below="@id/subtitle"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:background="@color/greyBackground"
         android:orientation="horizontal"
         android:layout_margin="8dp"
@@ -33,6 +33,7 @@
             android:text="@string/amount"
             android:textSize="14dp"
             android:textColor="@color/Black"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             />
 
@@ -44,6 +45,7 @@
             android:layout_weight="0.3"
             android:numeric="decimal"
             android:inputType="numberDecimal"
+            android:layout_gravity="center_vertical"
             android:singleLine="true"
             android:lines="1"
             android:maxLines="1"/>
@@ -51,6 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="€"
             android:textSize="14dp"
             android:textColor="@color/Black"/>
@@ -72,7 +75,7 @@
         android:id="@+id/labelLayout"
         android:layout_below="@id/addExpenseButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:background="@color/greyBackground"
         android:orientation="horizontal"
         android:layout_margin="8dp"
@@ -84,6 +87,7 @@
             android:text="@string/label"
             android:textSize="14dp"
             android:textColor="@color/Black"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
             />
 
@@ -91,6 +95,7 @@
             android:id="@+id/label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:textSize="14dp"
             android:layout_weight="1"
             android:singleLine="true"
@@ -98,6 +103,58 @@
             android:maxLines="1"
             android:scrollHorizontally="true"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recurrenceLayout"
+        android:layout_below="@id/labelLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="@color/greyBackground"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recurrence"
+            android:textSize="14dp"
+            android:textColor="@color/Black"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
+            />
+
+        <Switch
+            android:id="@+id/mySwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:checked="false"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/whicheRecurrenceLayout"
+        android:layout_below="@id/recurrenceLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="@color/greyBackground"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recurrence"
+            android:textSize="14dp"
+            android:textColor="@color/Black"
+            android:layout_weight="0.5"
+            android:layout_gravity="center_vertical"
+            />
     </LinearLayout>
 
 </RelativeLayout>

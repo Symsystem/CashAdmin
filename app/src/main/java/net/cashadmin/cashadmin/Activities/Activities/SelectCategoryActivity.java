@@ -145,7 +145,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
 
                                                                  //TODO : Faire un popup si name est vide
 
-                                                                 Category cat = new Category(0, name, color);
+                                                                 Category cat = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), name, color);
                                                                  mDataManager.insert(cat);
                                                                  Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                  intent.putExtra("category", cat);

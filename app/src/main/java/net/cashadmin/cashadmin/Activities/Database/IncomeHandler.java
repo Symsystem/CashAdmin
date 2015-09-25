@@ -1,22 +1,70 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
+import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 
 import java.util.Date;
 import java.util.List;
 
-public class IncomeHandler extends TransactionHandler {
+public class IncomeHandler extends GenericHandler {
 
     public static final String TABLE_NAME = "incomes";
+    protected static final String COLUMN_ID = "id";
+    protected static final String COLUMN_TOTAL = "total";
+    protected static final String COLUMN_LABEL = "label";
+    protected static final String COLUMN_DATE = "date";
+    protected static final String COLUMN_FREQUENCY = "frequency";
 
-    public IncomeHandler(DBHandler handler, CategoryHandler catHandler) {
-        super(handler, TABLE_NAME, catHandler);
+    public IncomeHandler(DBHandler handler) {
+        mDBHandler = handler;
+
+        this.setTableCreator("CREATE TABLE " +
+                TABLE_NAME + "(" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TOTAL + " INTEGER NOT NULL, " +
+                COLUMN_LABEL + " VARCHAR(127), " +
+                COLUMN_DATE + " DATETIME NOT NULL, " +
+                COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL" + ")");
+    }
+
+    @Override
+    public boolean insert(Entity entity) {
+        Income income = (Income) entity;
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TOTAL, income.getTotal());
+        values.put(COLUMN_LABEL, income.getLabel());
+        values.put(COLUMN_DATE, income.getDate());
+        values.put(COLUMN_FREQUENCY, income.getFrequency().toString());
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+
+        db.insert(TABLE_NAME, null, values);
+        db.close();
+        return true;
+    }
+
+    @Override
+    public boolean update(Entity entity) {
+        Income income = (Income) entity;
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TOTAL, income.getTotal());
+        values.put(COLUMN_LABEL, income.getLabel());
+        values.put(COLUMN_DATE, income.getDate());
+        values.put(COLUMN_FREQUENCY, income.getFrequency().toString());
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+
+        db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{String.valueOf(income.getId())});
+        db.close();
+        return true;
     }
 
     @Override
@@ -25,19 +73,19 @@ public class IncomeHandler extends TransactionHandler {
 
         List<Entity> l = createEntityListFromQuery(query);
 
-        if(l.size() > 0)
+        if (l.size() > 0)
             return l.get(0);
 
         throw new DataNotFoundException("Database.IncomeHandler : findById(int)");
     }
 
     @Override
-    public Entity getLast(TypeEnum type) throws DataNotFoundException{
+    public Entity getLast(TypeEnum type) throws DataNotFoundException {
         String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_DATE + " DESC LIMIT 1";
 
         List<Entity> l = createEntityListFromQuery(query);
 
-        if(l.size() > 0)
+        if (l.size() > 0)
             return l.get(0);
 
         throw new DataNotFoundException("Database.IncomeHandler : getLast(TypeEnum)");
@@ -65,17 +113,68 @@ public class IncomeHandler extends TransactionHandler {
     }
 
     @Override
-    protected Entity createEntityFromCursor(Cursor c){
-        try {
-            return new Income(
-                    c.getInt(c.getColumnIndex(COLUMN_ID)),
-                    c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
-                    new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
-                    (Category) mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
-            );
-        } catch(DataNotFoundException e){
-            e.printStackTrace();
+    public boolean isIn(Entity entity) {
+        String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + ((Income) entity).getId();
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
+            return true;
+        } else {
+            db.close();
+            return false;
         }
-        return null;
+    }
+
+    @Override
+    public boolean delete(Entity entity) {
+        boolean result = false;
+
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Income) entity).getId();
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
+            cursor.close();
+            result = true;
+        }
+        db.close();
+        return result;
+    }
+
+    @Override
+    public boolean deleteBy(TypeEnum type, String condition) {
+        boolean result = false;
+
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + condition;
+
+        SQLiteDatabase db = mDBHandler.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while (!(cursor.isAfterLast())) {
+            db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{cursor.getString(0)});
+            cursor.close();
+            result = true;
+        }
+        db.close();
+        return result;
+    }
+
+    @Override
+    protected Entity createEntityFromCursor(Cursor c) {
+        return new Income(
+                c.getInt(c.getColumnIndex(COLUMN_ID)),
+                c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+                c.getString(c.getColumnIndex(COLUMN_LABEL)),
+                new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
+                FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
+        );
     }
 }

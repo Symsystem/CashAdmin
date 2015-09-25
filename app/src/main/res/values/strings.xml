@@ -44,4 +44,5 @@
     <string name="amount">Montant :</string>
     <string name="addExpense">Ajouter une dépense</string>
     <string name="label">Libellé :</string>
+    <string name="recurrence">Récurrence :</string>
 </resources>

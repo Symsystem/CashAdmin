@@ -24,7 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         CategoryHandler catHandler = new CategoryHandler(this);
         handlers.put("category", catHandler);
-        handlers.put("income", new IncomeHandler(this, catHandler));
+        handlers.put("income", new IncomeHandler(this));
         handlers.put("expense", new ExpenseHandler(this, catHandler));
     }
 

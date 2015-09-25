@@ -49,9 +49,9 @@ public class MainActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         mDataManager = new DataManager(this);
-        mHistoryChart = new CircleChart(mPieChart, mDataManager, "Historique des dépenses");
+        //mHistoryChart = new CircleChart(mPieChart, mDataManager, "Historique des dépenses");
 
-        Category cat1 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test1", "#ff8d00");
+        /*Category cat1 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test1", "#ff8d00");
         Category cat2 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test2", "#7e0000");
         Category cat3 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test3", "#f9bc00");
 
@@ -81,9 +81,9 @@ public class MainActivity extends ActionBarActivity {
         mDataManager.insert(exp8);
         mDataManager.insert(exp9);
         mDataManager.insert(exp10);
-        mDataManager.insert(exp11);
+        mDataManager.insert(exp11);*/
 
-        mHistoryChart.setData(10);
+        //mHistoryChart.setData(10);
     }
 
     @OnClick(R.id.addExpenseButton)
