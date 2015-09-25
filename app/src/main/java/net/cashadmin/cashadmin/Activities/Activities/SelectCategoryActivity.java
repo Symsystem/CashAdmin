@@ -64,7 +64,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_category);
         ButterKnife.inject(this);
-        mDataManager = new DataManager(this);
+        mDataManager = DataManager.getDataManager(this);
 
         final Animation animShow = new AlphaAnimation(1.0f, 0.3f);
         animShow.setDuration(200);
@@ -76,9 +76,8 @@ public class SelectCategoryActivity extends ActionBarActivity {
         animHide.setFillAfter(true);
         animHide.setInterpolator(new AccelerateInterpolator());
 
-        DataManager dataManager = new DataManager(this);
         try {
-            final List<Entity> list = dataManager.getAll(TypeEnum.CATEGORY);
+            final List<Entity> list = mDataManager.getAll(TypeEnum.CATEGORY);
             list.add(0, new Category(0, "+", "#000000"));
             ListAdapter adapter = new ButtonCategoryAdapter(
                     this,

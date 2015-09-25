@@ -39,13 +39,14 @@
 
         <EditText
             android:id="@+id/amount"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14dp"
             android:layout_weight="0.3"
             android:numeric="decimal"
             android:inputType="numberDecimal"
             android:layout_gravity="center_vertical"
+            android:gravity="right"
             android:singleLine="true"
             android:lines="1"
             android:maxLines="1"/>
@@ -93,9 +94,10 @@
 
         <EditText
             android:id="@+id/label"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:gravity="right"
             android:textSize="14dp"
             android:layout_weight="1"
             android:singleLine="true"
@@ -149,12 +151,22 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/recurrence"
+            android:text="@string/each"
             android:textSize="14dp"
             android:textColor="@color/Black"
-            android:layout_weight="0.5"
+            android:layout_weight="0.1"
             android:layout_gravity="center_vertical"
             />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:spinnerMode="dropdown"
+            >
+
+        </Spinner>
     </LinearLayout>
 
 </RelativeLayout>

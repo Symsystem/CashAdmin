@@ -8,12 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
@@ -23,13 +27,15 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.R;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class NewExpenseActivity extends ActionBarActivity {
+public class NewExpenseActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     @InjectView(R.id.subtitle)
     TextView mSubtitle;
@@ -43,6 +49,8 @@ public class NewExpenseActivity extends ActionBarActivity {
     Switch mSwitch;
     @InjectView(R.id.whicheRecurrenceLayout)
     LinearLayout mWhichRecurrenceLayout;
+    @InjectView(R.id.spinner)
+    Spinner mSpinner;
 
     private Category mCategory;
     private DataManager mDataManager;
@@ -51,7 +59,7 @@ public class NewExpenseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_expense);
-        mDataManager = new DataManager(this);
+        mDataManager = DataManager.getDataManager(this);
 
         ButterKnife.inject(this);
 
@@ -68,13 +76,25 @@ public class NewExpenseActivity extends ActionBarActivity {
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mWhichRecurrenceLayout.setVisibility(View.GONE);
                 }
             }
         });
+
+        mSpinner.setOnItemSelectedListener(this);
+
+        List<String> listSpinner = new ArrayList<>();
+        listSpinner.add(FrequencyEnum.JAMAIS.toString());
+        listSpinner.add(FrequencyEnum.JOURS.toString());
+        listSpinner.add(FrequencyEnum.SEMAINES.toString());
+        listSpinner.add(FrequencyEnum.MOIS.toString());
+        listSpinner.add(FrequencyEnum.ANNEES.toString());
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(dataAdapter);
 
     }
 
@@ -82,11 +102,23 @@ public class NewExpenseActivity extends ActionBarActivity {
     public void onClickAddExpenseButton() {
         float amount = Float.valueOf(mAmount.getText().toString());
         String label = mLabel.getText().toString().trim();
+        String frequency = FrequencyEnum.JAMAIS.toString();
+        if(mSwitch.isChecked()){
+            frequency = (String) mSpinner.getSelectedItem();
+        }
 
         //TODO : Alert si pas de montant entré
 
-        Expense expense = new Expense(0, amount, label, new Date(), mCategory, FrequencyEnum.DAYLY);
+        Expense expense = new Expense(0, amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
         mDataManager.insert(expense);
         startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String item = parent.getItemAtPosition(position).toString();
+    }
+
+    public void onNothingSelected(AdapterView<?> arg0) {
     }
 }

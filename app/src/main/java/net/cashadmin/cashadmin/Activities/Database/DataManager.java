@@ -19,14 +19,22 @@ public class DataManager {
     private CategoryHandler mCategoryHandler;
     private IncomeHandler mIncomeHandler;
     private ExpenseHandler mExpenseHandler;
+    private static DataManager dataManager = null;
 
-    public DataManager(Context context) {
+    private DataManager(Context context) {
         DBHandler db = new DBHandler(context, null, null, 0);
         this.mCategoryHandler = (CategoryHandler) db.getHandler("category");
         this.mIncomeHandler = (IncomeHandler) db.getHandler("income");
         this.mExpenseHandler = (ExpenseHandler) db.getHandler("expense");
 
         this.mAutoIncrementNumbers = db.getAutoIncrementNumbers();
+    }
+
+    public static DataManager getDataManager(Context context){
+        if(dataManager==null){
+            dataManager = new DataManager(context);
+        }
+        return dataManager;
     }
 
     public int getNextId(TypeEnum type){

@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        mDataManager = new DataManager(this);
+        mDataManager = DataManager.getDataManager(this);
         //mHistoryChart = new CircleChart(mPieChart, mDataManager, "Historique des dépenses");
 
         /*Category cat1 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test1", "#ff8d00");

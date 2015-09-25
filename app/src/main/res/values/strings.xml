@@ -45,4 +45,5 @@
     <string name="addExpense">Ajouter une dépense</string>
     <string name="label">Libellé :</string>
     <string name="recurrence">Récurrence :</string>
+    <string name="each">Tous les :</string>
 </resources>
