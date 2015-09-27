@@ -86,11 +86,9 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
         mSpinner.setOnItemSelectedListener(this);
 
         List<String> listSpinner = new ArrayList<>();
-        listSpinner.add(FrequencyEnum.JAMAIS.toString());
-        listSpinner.add(FrequencyEnum.JOURS.toString());
-        listSpinner.add(FrequencyEnum.SEMAINES.toString());
-        listSpinner.add(FrequencyEnum.MOIS.toString());
-        listSpinner.add(FrequencyEnum.ANNEES.toString());
+        for(FrequencyEnum frequency : FrequencyEnum.values()){
+            listSpinner.add(frequency.toString());
+        }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
