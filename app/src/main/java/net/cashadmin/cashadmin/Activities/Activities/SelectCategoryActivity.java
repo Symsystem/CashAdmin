@@ -17,6 +17,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -74,7 +75,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
         final Animation animHide = new AlphaAnimation(0.3f, 1.0f);
         animHide.setDuration(200);
         animHide.setFillAfter(true);
-        animHide.setInterpolator(new AccelerateInterpolator());
+        animHide.setInterpolator(new DecelerateInterpolator());
 
         try {
             final List<Entity> list = mDataManager.getAll(TypeEnum.CATEGORY);

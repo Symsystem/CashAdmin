@@ -91,6 +91,11 @@ public class MainActivity extends ActionBarActivity {
         startActivity(new Intent(MainActivity.this, SelectCategoryActivity.class));
     }
 
+    @OnClick(R.id.addIncomeButton)
+    public void onClickIncomeButton(){
+        startActivity(new Intent(MainActivity.this, NewIncomeActivity.class));
+    }
+
     private void drawPieChart(){
 
     }

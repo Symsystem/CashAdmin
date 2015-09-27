@@ -48,7 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cashadmin.cashadmin.Activities.Activities.SelectCategoryActivity" />
         </activity>
-
+        <activity
+            android:name=".Activities.Activities.NewIncomeActivity"
+            android:label="@string/title_activity_new_income"
+            android:parentActivityName=".Activities.Activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

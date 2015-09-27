@@ -46,4 +46,6 @@
     <string name="label">Libellé :</string>
     <string name="recurrence">Récurrence :</string>
     <string name="each">Tous les :</string>
+    <string name="title_activity_new_income">NewIncomeActivity</string>
+    <string name="addIncome">Ajouter un revenu</string>
 </resources>
