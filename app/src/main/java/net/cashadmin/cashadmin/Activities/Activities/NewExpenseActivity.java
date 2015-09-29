@@ -49,6 +49,7 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
     Spinner mSpinner;
 
     private Category mCategory;
+    private boolean newCategory;
     private DataManager mDataManager;
 
     @Override
@@ -60,7 +61,7 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
         ButterKnife.inject(this);
 
         Intent intent = getIntent();
-        final boolean newCategory = intent.getBooleanExtra("newCategory", false);
+        newCategory = intent.getBooleanExtra("newCategory", false);
         mCategory = (Category) intent.getSerializableExtra("category");
         mSubtitle.setText(mCategory.getLabel());
         mSubtitle.setBackgroundColor(mCategory.getColor());
@@ -106,7 +107,8 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
         //TODO : Alert si pas de montant entré
 
         Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
-        mDataManager.insert(mCategory);
+        if(newCategory)
+            mDataManager.insert(mCategory);
         mDataManager.insert(expense);
         startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
     }
