@@ -1,15 +1,11 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,7 +50,7 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_income);
-        mDataManager = DataManager.getDataManager(this);
+        mDataManager = DataManager.getDataManager();
 
         ButterKnife.inject(this);
 

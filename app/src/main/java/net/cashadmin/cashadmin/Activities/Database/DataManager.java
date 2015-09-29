@@ -37,9 +37,16 @@ public class DataManager {
         return dataManager;
     }
 
+    public static DataManager getDataManager(){
+        if(dataManager==null){
+            return null;
+        }
+        return dataManager;
+    }
+
     public int getNextId(TypeEnum type){
         if (mAutoIncrementNumbers.get(type) != null)
-            return mAutoIncrementNumbers.get(type).getCounter();
+            return mAutoIncrementNumbers.get(type).getCounterInt();
         else
             return 1;
     }
@@ -50,19 +57,19 @@ public class DataManager {
                 if (mAutoIncrementNumbers.get(TypeEnum.CATEGORY) != null)
                     mAutoIncrementNumbers.get(TypeEnum.CATEGORY).addOne();
                 else
-                    mAutoIncrementNumbers.put(TypeEnum.CATEGORY, new Counter(1));
+                    mAutoIncrementNumbers.put(TypeEnum.CATEGORY, new Counter(2f));
                 return mCategoryHandler.insert(entity);
             case EXPENSE:
                 if (mAutoIncrementNumbers.get(TypeEnum.EXPENSE) != null)
                     mAutoIncrementNumbers.get(TypeEnum.EXPENSE).addOne();
                 else
-                    mAutoIncrementNumbers.put(TypeEnum.EXPENSE, new Counter(1));
+                    mAutoIncrementNumbers.put(TypeEnum.EXPENSE, new Counter(2f));
                 return mExpenseHandler.insert(entity);
             case INCOME:
                 if (mAutoIncrementNumbers.get(TypeEnum.INCOME) != null)
                     mAutoIncrementNumbers.get(TypeEnum.INCOME).addOne();
                 else
-                    mAutoIncrementNumbers.put(TypeEnum.INCOME, new Counter(1));
+                    mAutoIncrementNumbers.put(TypeEnum.INCOME, new Counter(2f));
                 return mIncomeHandler.insert(entity);
             default:
                 return false;

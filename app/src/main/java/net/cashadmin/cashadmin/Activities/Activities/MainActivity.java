@@ -8,13 +8,8 @@ import android.widget.TextView;
 import com.github.mikephil.charting.charts.PieChart;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
-import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
-
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,41 +44,39 @@ public class MainActivity extends ActionBarActivity {
         ButterKnife.inject(this);
 
         mDataManager = DataManager.getDataManager(this);
-        //mHistoryChart = new CircleChart(mPieChart, mDataManager, "Historique des dépenses");
+        mHistoryChart = new CircleChart(mPieChart, this, mDataManager, "");
 
-        /*Category cat1 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test1", "#ff8d00");
-        Category cat2 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test2", "#7e0000");
-        Category cat3 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test3", "#f9bc00");
-
-        Expense exp1 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 10f, new Date(), cat1);
-        Expense exp2 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 5f, new Date(), cat1);
-        Expense exp3 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 6f, new Date(), cat1);
-        Expense exp4 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 13f, new Date(), cat2);
-        Expense exp5 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 17f, new Date(), cat2);
-        Expense exp6 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 3f, new Date(), cat2);
-        Expense exp7 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 4f, new Date(), cat3);
-        Expense exp8 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 8f, new Date(), cat3);
-        Expense exp9 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 9f, new Date(), cat3);
-        Expense exp10 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 11f, new Date(), cat3);
-        Expense exp11 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 23f, new Date(), cat3);
-
+        /*Category cat1 = new Category(mDataManager.getNextId(TypeEdnum.CATEGORY), "Test1", "#ff8d00");
         mDataManager.insert(cat1);
+        Category cat2 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test2", "#7e0000");
         mDataManager.insert(cat2);
-        mDataManager.insert(cat3);
+        Category cat3 = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), "Test3", "#f9bc00");
+        mDataManager.insert(cat3);*/
 
+        /*Expense exp1 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 10f, new Date(), cat1);
         mDataManager.insert(exp1);
+        Expense exp2 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 5f, new Date(), cat2);
         mDataManager.insert(exp2);
+        Expense exp3 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 6f, new Date(), cat1);
         mDataManager.insert(exp3);
+        Expense exp4 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 13f, new Date(), cat2);
         mDataManager.insert(exp4);
+        Expense exp5 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 17f, new Date(), cat2);
         mDataManager.insert(exp5);
+        Expense exp6 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 3f, new Date(), cat2);
         mDataManager.insert(exp6);
+        Expense exp7 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 4f, new Date(), cat2);
         mDataManager.insert(exp7);
+        Expense exp8 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 8f, new Date(), cat2);
         mDataManager.insert(exp8);
+        Expense exp9 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 9f, new Date(), cat2);
         mDataManager.insert(exp9);
+        Expense exp10 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 11f, new Date(), cat2);
         mDataManager.insert(exp10);
+        Expense exp11 = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), 23f, new Date(), cat2);
         mDataManager.insert(exp11);*/
 
-        //mHistoryChart.setData(10);
+        mHistoryChart.setData(12);
     }
 
     @OnClick(R.id.addExpenseButton)

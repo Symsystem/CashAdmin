@@ -1,10 +1,8 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,10 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
@@ -59,11 +55,12 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_expense);
-        mDataManager = DataManager.getDataManager(this);
+        mDataManager = DataManager.getDataManager();
 
         ButterKnife.inject(this);
 
         Intent intent = getIntent();
+        final boolean newCategory = intent.getBooleanExtra("newCategory", false);
         mCategory = (Category) intent.getSerializableExtra("category");
         mSubtitle.setText(mCategory.getLabel());
         mSubtitle.setBackgroundColor(mCategory.getColor());
@@ -76,7 +73,8 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
-                } else {
+                }
+                else{
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mWhichRecurrenceLayout.setVisibility(View.GONE);
                 }
@@ -108,6 +106,7 @@ public class NewExpenseActivity extends ActionBarActivity implements AdapterView
         //TODO : Alert si pas de montant entré
 
         Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
+        mDataManager.insert(mCategory);
         mDataManager.insert(expense);
         startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
     }

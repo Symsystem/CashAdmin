@@ -1,7 +1,9 @@
 package net.cashadmin.cashadmin.Activities.UI;
 
+import android.content.Context;
 import android.graphics.Color;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
@@ -22,18 +24,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CircleChart {
 
     private PieChart mChart;
     private String mTitle;
+    private Context mContext;
     private DataManager mDataManager;
 
     private List<Entity> data;
 
-    public CircleChart(PieChart pc, DataManager dm, String title){
+    public CircleChart(PieChart pc, Context context, DataManager dm, String title){
         this.mChart = pc;
+        this.mContext = context;
         this.mDataManager = dm;
         this.mTitle = title;
 
@@ -83,48 +86,34 @@ public class CircleChart {
 
         ArrayList<String> categories = new ArrayList<>();
         HashMap<Integer, Counter> expenseByCategory = new HashMap<>();
+        ArrayList<Integer> colors = new ArrayList<Integer>();
 
-        for (Entity cat : cats){
-            int id = ((Category)cat).getId();
-            categories.add(((Category) cat).getLabel());
-            expenseByCategory.put(id, new Counter());
+        for (Entity entity : cats){
+            Category cat = (Category)entity;
+            categories.add(cat.getLabel());
+            expenseByCategory.put(cat.getId(), new Counter());
+            colors.add(cat.getColor());
         }
 
         for (Entity exp : data){
             Counter c = (Counter)expenseByCategory.get(((Expense)exp).getCategory().getId());
-            c.addOne();
+            c.add(((Expense) exp).getTotal());
         }
 
         ArrayList<Entry> yVals = new ArrayList<>();
         int i = 0;
-        for (Map.Entry<Integer, Counter> e : expenseByCategory.entrySet())
+        for (Entity entity : cats)
         {
-            yVals.add(new Entry(e.getValue().getCounter().floatValue(), i));
+            Category cat = (Category)entity;
+            yVals.add(new Entry(expenseByCategory.get(cat.getId()).getCounterFloat(), i));
             i++;
         }
 
-        PieDataSet dataSet = new PieDataSet(yVals, "Historique des dépenses");
+        PieDataSet dataSet = new PieDataSet(yVals, mContext.getString(R.string.labelCategory));
 
-        // add a lot of colors
-
-        ArrayList<Integer> colors = new ArrayList<Integer>();
 
         for (int c : ColorTemplate.VORDIPLOM_COLORS)
             colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-
-        colors.add(ColorTemplate.getHoloBlue());
 
         dataSet.setColors(colors);
 
@@ -134,6 +123,7 @@ public class CircleChart {
         data.setValueTextColor(Color.WHITE);
         mChart.setData(data);
 
+        mChart.animateY(300, Easing.EasingOption.EaseInOutQuad);
         // undo all highlights
         mChart.highlightValues(null);
 

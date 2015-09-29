@@ -1,37 +1,26 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
@@ -43,7 +32,6 @@ import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.R;
 
-import java.io.Serializable;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -65,7 +53,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_category);
         ButterKnife.inject(this);
-        mDataManager = DataManager.getDataManager(this);
+        mDataManager = DataManager.getDataManager();
 
         final Animation animShow = new AlphaAnimation(1.0f, 0.3f);
         animShow.setDuration(200);
@@ -146,9 +134,9 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                                  //TODO : Faire un popup si name est vide
 
                                                                  Category cat = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), name, color);
-                                                                 mDataManager.insert(cat);
                                                                  Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                  intent.putExtra("category", cat);
+                                                                 intent.putExtra("newCategory", true);
                                                                  mMainLayout.startAnimation(animHide);
                                                                  pop.dismiss();
                                                                  startActivity(intent);
