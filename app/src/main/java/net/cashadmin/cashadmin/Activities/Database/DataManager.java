@@ -22,7 +22,7 @@ public class DataManager {
     private static DataManager dataManager = null;
 
     private DataManager(Context context) {
-        DBHandler db = new DBHandler(context, null, null, 0);
+        DBHandler db = new DBHandler(context);
         this.mCategoryHandler = (CategoryHandler) db.getHandler("category");
         this.mIncomeHandler = (IncomeHandler) db.getHandler("income");
         this.mExpenseHandler = (ExpenseHandler) db.getHandler("expense");

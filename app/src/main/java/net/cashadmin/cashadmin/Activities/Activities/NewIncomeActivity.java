@@ -8,7 +8,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -41,8 +40,6 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     LinearLayout mWhichRecurrenceLayout;
     @InjectView(R.id.spinner)
     Spinner mSpinner;
-    @InjectView(R.id.addIncomeButton)
-    Button mAddIncomeButton;
 
     private DataManager mDataManager;
 

@@ -2,8 +2,8 @@ package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class ForgetPasswordActivity extends ActionBarActivity {
+public class ForgetPasswordActivity extends AppCompatActivity {
 
     @InjectView(R.id.mail) EditText mMail;
     @InjectView(R.id.sendButton) Button mSendButton;

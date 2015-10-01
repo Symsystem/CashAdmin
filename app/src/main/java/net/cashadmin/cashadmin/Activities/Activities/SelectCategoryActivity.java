@@ -1,26 +1,18 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;

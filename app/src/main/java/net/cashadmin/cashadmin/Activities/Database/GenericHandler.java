@@ -26,61 +26,64 @@ public abstract class GenericHandler {
     }
 
     /**
-     * @param entity
+     * @param entity Entity
      */
     public abstract boolean insert(Entity entity);
 
     /**
-     * @param entity
+     * @param entity Entity
      */
     public abstract boolean update(Entity entity);
 
     /**
-     * @param id
+     * @param id int
      */
     public abstract Entity findById(int id) throws DataNotFoundException;
 
     /**
-     * @param type
+     * @param type TypeEnum
      */
     public abstract Entity getLast(TypeEnum type) throws DataNotFoundException;
 
     /**
-     * @param type
+     * @param type TypeEnum
      */
     public abstract List<Entity> getAll(TypeEnum type) throws DataNotFoundException;
 
     /**
-     * @param type,start,end
+     * @param type TypeEnum
+     * @param start,end int
      */
     public abstract List<Entity> getFromTo(TypeEnum type, int start, int end) throws DataNotFoundException;
 
     /**
-     * @param type,startDate,endDate
+     * @param type TypeEnum
+     * @param startDate,endDate Date
      */
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws DataNotFoundException{
         return null;
     }
 
     /**
-     * @param entity
+     * @param entity Entity
      */
     public abstract boolean isIn(Entity entity);
 
     /**
-     * @param entity
+     * @param entity Entity
      */
     public abstract boolean delete(Entity entity);
 
     /**
-     * @param type,condition
+     * @param type TypeEnum
+     * @param condition String
      */
     public boolean deleteBy(TypeEnum type, String condition) throws InvalidQueryException{
         return true;
     }
 
     /**
-     * @param query
+     * @param query String
      */
     protected List<Entity> createEntityListFromQuery(String query){
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -98,7 +101,7 @@ public abstract class GenericHandler {
     }
 
     /**
-     * @param c
+     * @param c Cursor
      * @return Entity
      */
     protected abstract Entity createEntityFromCursor(Cursor c);

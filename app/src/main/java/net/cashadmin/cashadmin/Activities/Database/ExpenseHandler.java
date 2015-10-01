@@ -191,12 +191,10 @@ public class ExpenseHandler extends GenericHandler {
                     FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
             );
         }
-        catch (DataNotFoundException e){
+        catch (DataNotFoundException|ParseException e){
             e.printStackTrace();
         }
-        catch (ParseException e){
-            e.printStackTrace();
-        }
+
         return null;
     }
 }

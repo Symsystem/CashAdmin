@@ -2,27 +2,22 @@ package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ProgressBar;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 
 import net.cashadmin.cashadmin.Activities.Config.Utils;
 import net.cashadmin.cashadmin.Activities.Request.OkHttpStack;
@@ -31,7 +26,11 @@ import net.cashadmin.cashadmin.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccountConnexionActivity extends ActionBarActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+public class AccountConnexionActivity extends AppCompatActivity {
 
     private boolean checked;
 

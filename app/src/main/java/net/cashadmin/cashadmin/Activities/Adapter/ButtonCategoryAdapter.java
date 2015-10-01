@@ -4,10 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;

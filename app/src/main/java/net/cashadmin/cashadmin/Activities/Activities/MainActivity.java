@@ -2,8 +2,7 @@ package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.widget.TextView;
+import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.PieChart;
 
@@ -19,15 +18,11 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private DataManager mDataManager;
     private CircleChart mHistoryChart;
 
-    @InjectView(R.id.addExpenseButton)
-    TextView mAddExpenseButton;
-    @InjectView(R.id.addIncomeButton)
-    TextView mAddIncomeButton;
     @InjectView(R.id.historyChart)
     PieChart mPieChart;
 
@@ -54,9 +49,5 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.addIncomeButton)
     public void onClickIncomeButton(){
         startActivity(new Intent(MainActivity.this, NewIncomeActivity.class));
-    }
-
-    private void drawPieChart(){
-
     }
 }
