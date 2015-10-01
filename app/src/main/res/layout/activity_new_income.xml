@@ -143,7 +143,6 @@
             android:layout_gravity="center_vertical"
             android:spinnerMode="dropdown"
             >
-
         </Spinner>
     </LinearLayout>
 

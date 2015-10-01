@@ -1,5 +1,7 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -30,6 +33,7 @@ import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
 import java.util.List;
@@ -55,16 +59,6 @@ public class SelectCategoryActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         mDataManager = DataManager.getDataManager();
 
-        final Animation animShow = new AlphaAnimation(1.0f, 0.3f);
-        animShow.setDuration(200);
-        animShow.setFillAfter(true);
-        animShow.setInterpolator(new AccelerateInterpolator());
-
-        final Animation animHide = new AlphaAnimation(0.3f, 1.0f);
-        animHide.setDuration(200);
-        animHide.setFillAfter(true);
-        animHide.setInterpolator(new DecelerateInterpolator());
-
         try {
             final List<Entity> list = mDataManager.getAll(TypeEnum.CATEGORY);
             list.add(0, new Category(0, "+", "#000000"));
@@ -80,10 +74,11 @@ public class SelectCategoryActivity extends ActionBarActivity {
 
                                                      if (position == 0) {
 
-                                                         mMainLayout.startAnimation(animShow);
+                                                         /*mMainLayout.startAnimation(animShow);
                                                          final PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
                                                          View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
                                                          pop.setContentView(layout);
+                                                         //pop.setWindowLayoutType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
                                                          pop.setFocusable(true);
                                                          pop.setAnimationStyle(R.style.DialogAnimation);
                                                          pop.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
@@ -95,7 +90,10 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                          });
                                                          pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
                                                          pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-                                                         pop.showAtLocation(layout, Gravity.TOP, 0, 250);
+                                                         pop.showAtLocation(layout, Gravity.TOP, 0, 250);*/
+                                                         View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
+                                                         final Dialog popu = Popup.infoAlert(SelectCategoryActivity.this, "Nouvelle catégorie", layout);
+                                                         popu.show();
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                                                          colorChoice.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +123,14 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                              }
                                                          });
                                                          final EditText nameCat = (EditText) layout.findViewById(R.id.nameCat);
+
+                                                         Button cancelPopup = (Button) layout.findViewById(R.id.cancelPopup);
+                                                         cancelPopup.setOnClickListener(new View.OnClickListener() {
+                                                             @Override
+                                                             public void onClick(View view) {
+                                                                 popu.dismiss();
+                                                             }
+                                                         });
                                                          Button addFinalCategoryButton = (Button) layout.findViewById(R.id.addFinalCategoryButton);
                                                          addFinalCategoryButton.setOnClickListener(new View.OnClickListener() {
                                                              @Override
@@ -137,8 +143,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                                  Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                  intent.putExtra("category", cat);
                                                                  intent.putExtra("newCategory", true);
-                                                                 mMainLayout.startAnimation(animHide);
-                                                                 pop.dismiss();
+                                                                 popu.dismiss();
                                                                  startActivity(intent);
                                                              }
                                                          });
