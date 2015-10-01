@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -66,8 +68,8 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Animation animShow = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_show);
-                Animation animHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide);
+                Animation animShow = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_show_down);
+                Animation animHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide_up);
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
@@ -96,7 +98,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
     public void onClickAddExpenseButton() {
         float amount = Float.valueOf(mAmount.getText().toString());
         String label = mLabel.getText().toString().trim();
-        String frequency = FrequencyEnum.JAMAIS.toString();
+        String frequency = FrequencyEnum.values()[0].toString();
         if(mSwitch.isChecked()){
             frequency = (String) mSpinner.getSelectedItem();
         }

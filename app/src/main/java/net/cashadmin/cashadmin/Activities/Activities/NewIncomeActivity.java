@@ -1,13 +1,18 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -36,10 +41,14 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     EditText mLabel;
     @InjectView(R.id.mySwitch)
     Switch mSwitch;
+    @InjectView(R.id.recurrenceLayout)
+    LinearLayout mRecurrenceLayout;
     @InjectView(R.id.whicheRecurrenceLayout)
     LinearLayout mWhichRecurrenceLayout;
     @InjectView(R.id.spinner)
     Spinner mSpinner;
+    @InjectView(R.id.addIncomeButton)
+    Button mAddIncomeButton;
 
     private DataManager mDataManager;
 
@@ -54,21 +63,26 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Animation animShow = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_show);
-                Animation animHide = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_hide);
+                Animation animShow = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_show_down);
+                Animation animHide = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_hide_up);
+                float startY = mRecurrenceLayout.getBottom();
+                float endY = mWhichRecurrenceLayout.getBottom();
                 if (b) {
-                    //float startY = mAddIncomeButton.getTop();
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
-                    //float endY = mAddIncomeButton.getTop();
-                    //Animation animDown = new TranslateAnimation(0 , 0, 0, 100);
-                    //animDown.setDuration(2000);
-                    //animDown.setFillAfter(true);
-                    //animDown.setInterpolator(new LinearInterpolator());
-                    //mAddIncomeButton.startAnimation(animDown);
+                    Animation animDown = new TranslateAnimation(0 , 0, startY - endY, 0);
+                    animDown.setDuration(200);
+                    animDown.setFillAfter(true);
+                    animDown.setInterpolator(new LinearInterpolator());
+                    mAddIncomeButton.startAnimation(animDown);
                 } else {
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mWhichRecurrenceLayout.setVisibility(View.GONE);
+                    Animation animUp = new TranslateAnimation(0, 0, endY - startY, 0);
+                    animUp.setDuration(200);
+                    animUp.setFillAfter(true);
+                    animUp.setInterpolator(new LinearInterpolator());
+                    mAddIncomeButton.startAnimation(animUp);
                 }
             }
         });
@@ -89,7 +103,7 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     public void onClickIncomeButton(){
         float amount = Float.valueOf(mAmount.getText().toString());
         String label = mLabel.getText().toString().trim();
-        String frequency = FrequencyEnum.JAMAIS.toString();
+        String frequency = FrequencyEnum.values()[0].toString();
         if(mSwitch.isChecked()){
             frequency = (String) mSpinner.getSelectedItem();
         }

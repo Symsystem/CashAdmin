@@ -29,9 +29,9 @@
         <item name="android:background">@drawable/red_button</item>
     </style>
 
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/popup_show</item>
-        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    <style name="DialogAnimationBottomUp">
+        <item name="android:windowEnterAnimation">@anim/popup_show_up</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide_down</item>
     </style>
 
 

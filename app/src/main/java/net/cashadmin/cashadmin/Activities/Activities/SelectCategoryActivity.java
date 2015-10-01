@@ -38,8 +38,6 @@ public class SelectCategoryActivity extends ActionBarActivity {
 
     @InjectView(R.id.gridView)
     GridView mGridView;
-    @InjectView(R.id.mainLayout)
-    LinearLayout mMainLayout;
 
     private int color;
     private DataManager mDataManager;
@@ -65,26 +63,8 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                  public void onItemClick(AdapterView parent, View itemClicked, int position, long id) {
 
                                                      if (position == 0) {
-
-                                                         /*mMainLayout.startAnimation(animShow);
-                                                         final PopupWindow pop = new PopupWindow(SelectCategoryActivity.this);
                                                          View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
-                                                         pop.setContentView(layout);
-                                                         //pop.setWindowLayoutType(WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG);
-                                                         pop.setFocusable(true);
-                                                         pop.setAnimationStyle(R.style.DialogAnimation);
-                                                         pop.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
-                                                         pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                                                             @Override
-                                                             public void onDismiss() {
-                                                                 mMainLayout.startAnimation(animHide);
-                                                             }
-                                                         });
-                                                         pop.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-                                                         pop.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-                                                         pop.showAtLocation(layout, Gravity.TOP, 0, 250);*/
-                                                         View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
-                                                         final Dialog popu = Popup.infoAlert(SelectCategoryActivity.this, "Nouvelle catégorie", layout);
+                                                         final Dialog popu = Popup.popInfo(SelectCategoryActivity.this, layout);
                                                          popu.show();
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
