@@ -58,11 +58,11 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()){
             do{
                 switch(cursor.getString(cursor.getColumnIndex("name"))){
-                    case CategoryHandler.TABLE_NAME: autoIncList.put(TypeEnum.CATEGORY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq")))));
+                    case CategoryHandler.TABLE_NAME: autoIncList.put(TypeEnum.CATEGORY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
-                    case ExpenseHandler.TABLE_NAME: autoIncList.put(TypeEnum.EXPENSE, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq")))));
+                    case ExpenseHandler.TABLE_NAME: autoIncList.put(TypeEnum.EXPENSE, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
-                    case IncomeHandler.TABLE_NAME: autoIncList.put(TypeEnum.INCOME, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq")))));
+                    case IncomeHandler.TABLE_NAME: autoIncList.put(TypeEnum.INCOME, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
                 }
             }while (cursor.moveToNext());

@@ -143,11 +143,13 @@ public class DataManager {
     }
 
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) throws IllegalTypeException {
+        java.sql.Date start = new java.sql.Date(startDate.getTime());
+        java.sql.Date end = new java.sql.Date(endDate.getTime());
         switch (type) {
             case EXPENSE:
-                return mExpenseHandler.getByDate(type, startDate, endDate);
+                return mExpenseHandler.getByDate(type, start, end);
             case INCOME:
-                return mIncomeHandler.getByDate(type, startDate, endDate);
+                return mIncomeHandler.getByDate(type, start, end);
             default:
                 throw new IllegalTypeException("DataBase.DataManager : getByDate(TypeEnum, Date, Date");
 

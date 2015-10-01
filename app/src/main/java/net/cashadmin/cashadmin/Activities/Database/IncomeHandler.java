@@ -5,14 +5,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
-import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 
-import java.util.Date;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class IncomeHandler extends GenericHandler {
 
@@ -41,7 +43,7 @@ public class IncomeHandler extends GenericHandler {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TOTAL, income.getTotal());
         values.put(COLUMN_LABEL, income.getLabel());
-        values.put(COLUMN_DATE, income.getDate());
+        values.put(COLUMN_DATE, income.getStringSQLDate());
         values.put(COLUMN_FREQUENCY, income.getFrequency().toString());
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -57,7 +59,7 @@ public class IncomeHandler extends GenericHandler {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TOTAL, income.getTotal());
         values.put(COLUMN_LABEL, income.getLabel());
-        values.put(COLUMN_DATE, income.getDate());
+        values.put(COLUMN_DATE, income.getStringSQLDate());
         values.put(COLUMN_FREQUENCY, income.getFrequency().toString());
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
@@ -169,12 +171,18 @@ public class IncomeHandler extends GenericHandler {
 
     @Override
     protected Entity createEntityFromCursor(Cursor c) {
-        return new Income(
-                c.getInt(c.getColumnIndex(COLUMN_ID)),
-                c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
-                c.getString(c.getColumnIndex(COLUMN_LABEL)),
-                new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
-                FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
-        );
+        try{
+            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(c.getString(c.getColumnIndex(COLUMN_DATE)));
+            return new Income(
+                    c.getInt(c.getColumnIndex(COLUMN_ID)),
+                    c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+                    c.getString(c.getColumnIndex(COLUMN_LABEL)),
+                    date,
+                    FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
+            );
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -11,8 +11,11 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 
-import java.util.Date;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ExpenseHandler extends GenericHandler {
 
@@ -47,7 +50,7 @@ public class ExpenseHandler extends GenericHandler {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TOTAL, expense.getTotal());
         values.put(COLUMN_LABEL, expense.getLabel());
-        values.put(COLUMN_DATE, expense.getDate());
+        values.put(COLUMN_DATE, expense.getStringSQLDate());
         values.put(COLUMN_CATEGORY, expense.getCategory().getId());
         values.put(COLUMN_FREQUENCY, expense.getFrequency().toString());
 
@@ -64,7 +67,7 @@ public class ExpenseHandler extends GenericHandler {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TOTAL, expense.getTotal());
         values.put(COLUMN_LABEL, expense.getLabel());
-        values.put(COLUMN_DATE, expense.getDate());
+        values.put(COLUMN_DATE, expense.getStringSQLDate());
         values.put(COLUMN_CATEGORY, expense.getCategory().getId());
         values.put(COLUMN_FREQUENCY, expense.getFrequency().toString());
 
@@ -115,7 +118,7 @@ public class ExpenseHandler extends GenericHandler {
 
     @Override
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate + " and " + endDate;
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN '" + startDate + "' and '" + endDate + "'";
 
         return createEntityListFromQuery(query);
     }
@@ -178,16 +181,20 @@ public class ExpenseHandler extends GenericHandler {
     @Override
     protected Entity createEntityFromCursor(Cursor c){
         try {
+            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(c.getString(c.getColumnIndex(COLUMN_DATE)));
             return new Expense(
                     c.getInt(c.getColumnIndex(COLUMN_ID)),
                     c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
                     c.getString(c.getColumnIndex(COLUMN_LABEL)),
-                    new Date(c.getLong(c.getColumnIndex(COLUMN_DATE)) * 1000),
+                    date,
                     (Category)mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY))),
                     FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
             );
         }
         catch (DataNotFoundException e){
+            e.printStackTrace();
+        }
+        catch (ParseException e){
             e.printStackTrace();
         }
         return null;

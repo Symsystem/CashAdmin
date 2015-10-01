@@ -3,8 +3,8 @@ package net.cashadmin.cashadmin.Activities.UI;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -95,9 +95,13 @@ public class CircleChart {
             colors.add(cat.getColor());
         }
 
-        for (Entity exp : data){
-            Counter c = (Counter)expenseByCategory.get(((Expense)exp).getCategory().getId());
-            c.add(((Expense) exp).getTotal());
+        float totalAmount = 0;
+
+        for (Entity ent : data){
+            Expense exp = (Expense) ent;
+            Counter c = (Counter)expenseByCategory.get(exp.getCategory().getId());
+            c.add(exp.getTotal());
+            totalAmount += exp.getTotal();
         }
 
         ArrayList<Entry> yVals = new ArrayList<>();
@@ -123,11 +127,18 @@ public class CircleChart {
         data.setValueTextColor(Color.WHITE);
         mChart.setData(data);
 
-        mChart.animateY(300, Easing.EasingOption.EaseInOutQuad);
         // undo all highlights
         mChart.highlightValues(null);
 
         mChart.invalidate();
+
+        mChart.setExtraOffsets(0, 0, 75f, 0);
+        mChart.setCenterText("Total " + totalAmount);
+
+        Legend legend = mChart.getLegend();
+        legend.setWordWrapEnabled(true);
+        legend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
+        legend.setMaxSizePercent(0.95f);
     }
 
     public void updateData(){}

@@ -6,6 +6,7 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Income extends Entity {
 
@@ -85,11 +86,33 @@ public class Income extends Entity {
     }
 
     /**
+     * @return java.util.Date
+     */
+    public Date getDate(){
+        return this.date;
+    }
+
+    /**
      * @return String
      */
-    public String getDate() {
-        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+    public String getStringDate() {
+        SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return formater.format(date);
+    }
+
+    /**
+     * @return String
+     */
+    public String getStringSQLDate(){
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return formater.format(date);
+    }
+
+    /**
+     * @return java.sql.Date
+     */
+    public java.sql.Date getSQLDate(){
+        return new java.sql.Date(this.date.getTime());
     }
 
     /**
