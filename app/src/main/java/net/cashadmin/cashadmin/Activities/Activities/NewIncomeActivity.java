@@ -41,6 +41,8 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     EditText mLabel;
     @InjectView(R.id.mySwitch)
     Switch mSwitch;
+    @InjectView(R.id.labelLayout)
+    LinearLayout mLabelLayout;
     @InjectView(R.id.recurrenceLayout)
     LinearLayout mRecurrenceLayout;
     @InjectView(R.id.whicheRecurrenceLayout)
@@ -65,8 +67,8 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 Animation animShow = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_show_down);
                 Animation animHide = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_hide_up);
-                float startY = mRecurrenceLayout.getBottom();
-                float endY = mWhichRecurrenceLayout.getBottom();
+                float startY = mLabelLayout.getBottom();
+                float endY = mRecurrenceLayout.getBottom();
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
