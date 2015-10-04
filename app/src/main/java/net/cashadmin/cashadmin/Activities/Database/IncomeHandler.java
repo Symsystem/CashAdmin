@@ -11,10 +11,7 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class IncomeHandler extends GenericHandler {
 
@@ -33,7 +30,7 @@ public class IncomeHandler extends GenericHandler {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_LABEL + " VARCHAR(127), " +
-                COLUMN_DATE + " DATETIME NOT NULL, " +
+                COLUMN_DATE + " FLOAT NOT NULL, " +
                 COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL" + ")");
     }
 
@@ -95,7 +92,7 @@ public class IncomeHandler extends GenericHandler {
 
     @Override
     public List<Entity> getAll(TypeEnum type) {
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME  + " ORDER BY " + COLUMN_DATE + " DESC";
 
         return createEntityListFromQuery(query);
     }
@@ -109,7 +106,7 @@ public class IncomeHandler extends GenericHandler {
 
     @Override
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate + " and " + endDate;
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate.getTime() + " and " + endDate.getTime() + "' ORDER BY " + COLUMN_DATE + " DESC";
 
         return createEntityListFromQuery(query);
     }
@@ -171,18 +168,12 @@ public class IncomeHandler extends GenericHandler {
 
     @Override
     protected Entity createEntityFromCursor(Cursor c) {
-        try{
-            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(c.getString(c.getColumnIndex(COLUMN_DATE)));
-            return new Income(
-                    c.getInt(c.getColumnIndex(COLUMN_ID)),
-                    c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
-                    c.getString(c.getColumnIndex(COLUMN_LABEL)),
-                    date,
-                    FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
-            );
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-        return null;
+        return new Income(
+                c.getInt(c.getColumnIndex(COLUMN_ID)),
+                c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+                c.getString(c.getColumnIndex(COLUMN_LABEL)),
+                new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE))),
+                FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
+        );
     }
 }

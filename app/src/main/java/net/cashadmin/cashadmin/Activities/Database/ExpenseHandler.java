@@ -12,10 +12,7 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class ExpenseHandler extends GenericHandler {
 
@@ -38,7 +35,7 @@ public class ExpenseHandler extends GenericHandler {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_LABEL + " VARCHAR(127), " +
-                COLUMN_DATE + " DATETIME NOT NULL, " +
+                COLUMN_DATE + " FLOAT NOT NULL, " +
                 COLUMN_CATEGORY + " INTEGER NOT NULL, " +
                 COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL, " +
                 "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME + ")");
@@ -104,21 +101,21 @@ public class ExpenseHandler extends GenericHandler {
 
     @Override
     public List<Entity> getAll(TypeEnum type) {
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_DATE + " DESC";
 
         return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
-        String query = "SELECT * FROM " + TABLE_NAME + " LIMIT " + start + ", " + end;
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_DATE + " DESC LIMIT " + start + ", " + end ;
 
         return createEntityListFromQuery(query);
     }
 
     @Override
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
-        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN '" + startDate + "' and '" + endDate + "'";
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN '" + startDate.getTime() + "' and '" + endDate.getTime() + "' ORDER BY " + COLUMN_DATE + " DESC";
 
         return createEntityListFromQuery(query);
     }
@@ -181,17 +178,16 @@ public class ExpenseHandler extends GenericHandler {
     @Override
     protected Entity createEntityFromCursor(Cursor c){
         try {
-            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(c.getString(c.getColumnIndex(COLUMN_DATE)));
             return new Expense(
                     c.getInt(c.getColumnIndex(COLUMN_ID)),
                     c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
                     c.getString(c.getColumnIndex(COLUMN_LABEL)),
-                    date,
+                    new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE))),
                     (Category)mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY))),
                     FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
             );
         }
-        catch (DataNotFoundException|ParseException e){
+        catch (DataNotFoundException e){
             e.printStackTrace();
         }
 

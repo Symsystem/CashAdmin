@@ -52,4 +52,6 @@
     <string name="addIncome">Ajouter un revenu</string>
     <string name="labelCategory">Catégories</string>
     <string name="transactionLabel">Transactions</string>
+
+    <string name="title_activity_history">Historique</string>
 </resources>

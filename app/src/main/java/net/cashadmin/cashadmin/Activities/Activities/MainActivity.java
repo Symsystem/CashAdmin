@@ -50,4 +50,9 @@ public class MainActivity extends AppCompatActivity {
     public void onClickIncomeButton(){
         startActivity(new Intent(MainActivity.this, NewIncomeActivity.class));
     }
+
+    @OnClick(R.id.historyButton)
+    public void onClickHistoryButton(){
+        startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+    }
 }
