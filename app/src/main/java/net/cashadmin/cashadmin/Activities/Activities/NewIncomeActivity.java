@@ -18,11 +18,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
+import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
 import java.util.ArrayList;
@@ -99,22 +101,43 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
+
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (FrequencyEnum.valueOf(adapterView.getItemAtPosition(i).toString())){
+                    //case FrequencyEnum.valueOf(FrequencyEnum.values()[0].toString()) :
+                    case JOURS:
+                        
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
+
 
     @OnClick(R.id.addIncomeButton)
     public void onClickIncomeButton(){
-        float amount = Float.valueOf(mAmount.getText().toString());
+        String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
-        if(mSwitch.isChecked()){
-            frequency = (String) mSpinner.getSelectedItem();
+        if(label.isEmpty() || stringAmount.isEmpty()){
+            Toast toast = Popup.toast(NewIncomeActivity.this, getString(R.string.fieldEmpty));
+            toast.show();
+        }else {
+            float amount = Float.valueOf(stringAmount);
+            if(mSwitch.isChecked()){
+                frequency = (String) mSpinner.getSelectedItem();
+            }
+            Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date(), FrequencyEnum.valueOf(frequency));
+            mDataManager.insert(income);
+            startActivity(new Intent(NewIncomeActivity.this, MainActivity.class));
         }
-
-        //TODO : Alert si pas de montant entré
-
-        Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date(), FrequencyEnum.valueOf(frequency));
-        mDataManager.insert(income);
-        startActivity(new Intent(NewIncomeActivity.this, MainActivity.class));
     }
 
     @Override

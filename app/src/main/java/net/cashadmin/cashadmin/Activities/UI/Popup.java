@@ -8,9 +8,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import net.cashadmin.cashadmin.R;
 
@@ -35,12 +38,30 @@ public class Popup {
         return dialog;
     }
 
-    public static void toast(String text) {
+    public static Toast toast(Context context, String text) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.toast_layout,null);
+        TextView textView = (TextView) layout.findViewById(R.id.textToast);
+        textView.setText(text);
+        Toast toast = new Toast(context);
+        toast.setGravity(Gravity.BOTTOM, 0, 50);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
 
+        return toast;
     }
 
-    public static void toast(String text, int duration) {
+    public static Toast toast(Context context, String text, int duration) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.toast_layout,null);
+        TextView textView = (TextView) layout.findViewById(R.id.textToast);
+        textView.setText(text);
+        Toast toast = new Toast(context);
+        toast.setGravity(Gravity.BOTTOM, 0, 50);
+        toast.setDuration(duration);
+        toast.setView(layout);
 
+        return toast;
     }
 
     public static void infoSnackBar(String text) {

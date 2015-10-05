@@ -16,12 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
+import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
 import java.util.ArrayList;
@@ -96,20 +98,23 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
 
     @OnClick(R.id.addExpenseButton)
     public void onClickAddExpenseButton() {
-        float amount = Float.valueOf(mAmount.getText().toString());
+        String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
-        if(mSwitch.isChecked()){
-            frequency = (String) mSpinner.getSelectedItem();
+        if(stringAmount.isEmpty()){
+            Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
+            toast.show();
+        }else {
+            float amount = Float.valueOf(stringAmount);
+            if(mSwitch.isChecked()){
+                frequency = (String) mSpinner.getSelectedItem();
+            }
+            Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
+            if (newCategory)
+                mDataManager.insert(mCategory);
+            mDataManager.insert(expense);
+            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
         }
-
-        //TODO : Alert si pas de montant entré
-
-        Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
-        if(newCategory)
-            mDataManager.insert(mCategory);
-        mDataManager.insert(expense);
-        startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
     }
 
     @Override
