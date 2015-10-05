@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.cashadmin.cashadmin.Activities.Activities.HistoryActivity">
+    tools:context="net.cashadmin.cashadmin.Activities.Activities.HistoricActivity">
 
     <ListView
         android:layout_width="match_parent"

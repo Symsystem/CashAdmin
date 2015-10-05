@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -101,8 +99,11 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
+
+        //TODO : Vérifier si montant est numérique
+
         if(stringAmount.isEmpty()){
-            Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
+            Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.emptyAmount));
             toast.show();
         }else {
             float amount = Float.valueOf(stringAmount);

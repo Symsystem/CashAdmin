@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
 
     <string name="title_activity_new_expense">Nouvelle dépense</string>
+    <string name="emptyAmount">Il faut remplir d\'un montant !</string>
 
     <string name="title_activity_main">Ca$hAdmin</string>
 

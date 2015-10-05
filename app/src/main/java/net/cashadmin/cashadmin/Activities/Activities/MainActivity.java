@@ -53,6 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.historyButton)
     public void onClickHistoryButton(){
-        startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+        startActivity(new Intent(MainActivity.this, HistoricActivity.class));
     }
 }

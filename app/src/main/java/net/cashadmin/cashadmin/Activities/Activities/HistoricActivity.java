@@ -18,7 +18,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoricActivity extends AppCompatActivity {
 
     private DataManager mDataManager;
 
@@ -28,7 +28,7 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
+        setContentView(R.layout.activity_historic);
 
         ButterKnife.inject(this);
         mDataManager = DataManager.getDataManager();
@@ -37,7 +37,7 @@ public class HistoryActivity extends AppCompatActivity {
                     mDataManager.getAll(TypeEnum.EXPENSE),
                     mDataManager.getAll(TypeEnum.INCOME));
 
-            TransactionHistoryAdapter transactionAdapter = new TransactionHistoryAdapter(HistoryActivity.this, transactions);
+            TransactionHistoryAdapter transactionAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions);
             mHistoryList.setAdapter(transactionAdapter);
         } catch (IllegalTypeException e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private ArrayList<Transaction> mergeExpenseIncome(List<Entity> l1, List<Entity> l2){
         ArrayList<Transaction> transactions = new ArrayList<>();
-        Transaction t1 = null, t2 = null;
+        Transaction t1, t2;
         int i1 = 0, i2 = 0;
 
         while(i1 < l1.size() && i2 < l2.size()){

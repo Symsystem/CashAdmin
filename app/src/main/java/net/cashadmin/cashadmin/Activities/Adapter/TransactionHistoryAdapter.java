@@ -18,7 +18,7 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
     private ArrayList<Transaction> mTransactions;
 
     public TransactionHistoryAdapter(Context context, ArrayList<Transaction> objects) {
-        super(context, R.layout.history_item, objects);
+        super(context, R.layout.historic_item, objects);
         mTransactions = objects;
     }
 
@@ -28,7 +28,7 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
         Holder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.history_item, null);
+            convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.historic_item, null);
             holder = new Holder();
             holder.mColorCategory = (View) convertView.findViewById(R.id.colored_bar);
             holder.mLabel = (TextView) convertView.findViewById(R.id.label);
