@@ -56,4 +56,7 @@
     <string name="fieldEmpty">Il faut remplir tous les champs !</string>
 
     <string name="title_activity_history">Historique</string>
+    <string name="validAmount">Le montant doit être valide !</string>
+    <string name="from">A partir de :</string>
+    <string name="emptyName">Vous devez entrer un nom !</string>
 </resources>

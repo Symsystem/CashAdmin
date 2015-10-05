@@ -140,8 +140,41 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/whicheRecurrenceLayout"
+        android:id="@+id/dateLayout"
         android:layout_below="@id/recurrenceLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="@color/greyBackground"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from"
+            android:textSize="14dp"
+            android:textColor="@color/Black"
+            android:layout_weight="0.1"
+            android:layout_gravity="center_vertical"
+            />
+
+        <TextView
+            android:id="@+id/dateChoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:padding="8dp"
+            android:background="@color/White"
+            android:textColor="@color/Black"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/whicheRecurrenceLayout"
+        android:layout_below="@id/dateLayout"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:background="@color/greyBackground"
@@ -165,9 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:spinnerMode="dropdown"
-            >
-
+            android:spinnerMode="dropdown">
         </Spinner>
     </LinearLayout>
 

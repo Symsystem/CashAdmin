@@ -1,14 +1,19 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -24,6 +29,8 @@ import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,12 +51,17 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
     Switch mSwitch;
     @InjectView(R.id.whicheRecurrenceLayout)
     LinearLayout mWhichRecurrenceLayout;
+    @InjectView(R.id.dateLayout)
+    LinearLayout mDateLayout;
     @InjectView(R.id.spinner)
     Spinner mSpinner;
+    @InjectView(R.id.dateChoice)
+    TextView mDateChoice;
 
     private Category mCategory;
     private boolean newCategory;
     private DataManager mDataManager;
+    private DateFormat date = new SimpleDateFormat("dd/MM/yy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,9 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mDataManager = DataManager.getDataManager();
 
         ButterKnife.inject(this);
+
+        String currentDate = date.format(new Date());
+        mDateChoice.setText(currentDate);
 
         Intent intent = getIntent();
         newCategory = intent.getBooleanExtra("newCategory", false);
@@ -73,10 +88,14 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
+                    mDateLayout.startAnimation(animShow);
+                    mDateLayout.setVisibility(View.VISIBLE);
                 }
                 else{
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mWhichRecurrenceLayout.setVisibility(View.GONE);
+                    mDateLayout.startAnimation(animHide);
+                    mDateLayout.setVisibility(View.GONE);
                 }
             }
         });
@@ -99,23 +118,50 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
-
-        //TODO : Vérifier si montant est numérique
-
         if(stringAmount.isEmpty()){
-            Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.emptyAmount));
+            Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
             toast.show();
         }else {
-            float amount = Float.valueOf(stringAmount);
-            if(mSwitch.isChecked()){
-                frequency = (String) mSpinner.getSelectedItem();
+            if (stringAmount.isEmpty()) {
+                Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
+                toast.show();
+            } else {
+                float amount = Float.valueOf(stringAmount);
+                if (mSwitch.isChecked()) {
+                    frequency = (String) mSpinner.getSelectedItem();
+                }
+                Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
+                if (newCategory)
+                    mDataManager.insert(mCategory);
+                mDataManager.insert(expense);
+                startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
             }
-            Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
-            if (newCategory)
-                mDataManager.insert(mCategory);
-            mDataManager.insert(expense);
-            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
         }
+    }
+
+    @OnClick(R.id.dateChoice)
+    public void onClickDateChoice(){
+        final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
+        final Dialog pop = Popup.popInfo(NewExpenseActivity.this, layout);
+        pop.show();
+        Button cancelButton = (Button)layout.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pop.dismiss();
+            }
+        });
+
+        Button okButton = (Button) layout.findViewById(R.id.dateButton);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePicker datePicker = (DatePicker) layout.findViewById(R.id.dateSelection);
+                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth()));
+                mDateChoice.setText(choosenDate);
+                pop.dismiss();
+            }
+        });
     }
 
     @Override

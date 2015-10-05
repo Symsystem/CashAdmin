@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,11 @@ public class Popup {
         dialog.setContentView(view);
         dialog.setCanceledOnTouchOutside(true);
         Window window = dialog.getWindow();
-        window.setLayout(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        window.setLayout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         window.setWindowAnimations(R.style.DialogAnimationBottomUp);
         WindowManager.LayoutParams lp = window.getAttributes();
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.transparent)));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.greyBackground)));
         dialog.getWindow().setDimAmount(0.5f);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
@@ -107,15 +108,17 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                              @Override
                                                              public void onClick(View v) {
                                                                  String name = nameCat.getText().toString().trim();
-
-                                                                 //TODO : Faire un popup si name est vide
-
-                                                                 Category cat = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), name, color);
-                                                                 Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
-                                                                 intent.putExtra("category", cat);
-                                                                 intent.putExtra("newCategory", true);
-                                                                 popu.dismiss();
-                                                                 startActivity(intent);
+                                                                 if (name.isEmpty()) {
+                                                                     Toast toast = Popup.toast(SelectCategoryActivity.this, getString(R.string.emptyName));
+                                                                     toast.show();
+                                                                 } else {
+                                                                     Category cat = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), name, color);
+                                                                     Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                                                                     intent.putExtra("category", cat);
+                                                                     intent.putExtra("newCategory", true);
+                                                                     popu.dismiss();
+                                                                     startActivity(intent);
+                                                                 }
                                                              }
                                                          });
                                                      } else {
