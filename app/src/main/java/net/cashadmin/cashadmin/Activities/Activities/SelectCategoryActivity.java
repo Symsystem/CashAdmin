@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,8 +67,10 @@ public class SelectCategoryActivity extends ActionBarActivity {
 
                                                      if (position == 0) {
                                                          View layout = getLayoutInflater().inflate(R.layout.new_category_popup, null);
-                                                         final Dialog popu = Popup.popInfo(SelectCategoryActivity.this, layout);
-                                                         popu.show();
+                                                         final Dialog pop = Popup.popInfo(SelectCategoryActivity.this, layout);
+                                                         Window window = pop.getWindow();
+                                                         window.setLayout((6 * getResources().getDisplayMetrics().widthPixels)/7, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                                         pop.show();
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                                                          colorChoice.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +105,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                          cancelPopup.setOnClickListener(new View.OnClickListener() {
                                                              @Override
                                                              public void onClick(View view) {
-                                                                 popu.dismiss();
+                                                                 pop.dismiss();
                                                              }
                                                          });
                                                          Button addFinalCategoryButton = (Button) layout.findViewById(R.id.addFinalCategoryButton);
@@ -116,7 +121,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                                      Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
                                                                      intent.putExtra("category", cat);
                                                                      intent.putExtra("newCategory", true);
-                                                                     popu.dismiss();
+                                                                     pop.dismiss();
                                                                      startActivity(intent);
                                                                  }
                                                              }
