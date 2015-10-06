@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
+
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.R;
@@ -30,6 +32,8 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
         if (convertView == null) {
             convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.historic_item, null);
             holder = new Holder();
+            holder.mSwipeLayout = (SwipeLayout) convertView.findViewById(R.id.swipeHistoricLayout);
+            holder.mSwipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             holder.mColorCategory = (View) convertView.findViewById(R.id.colored_bar);
             holder.mLabel = (TextView) convertView.findViewById(R.id.label);
             holder.mCategory = (TextView) convertView.findViewById(R.id.category);
@@ -63,6 +67,7 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
     }
 
     private static class Holder{
+        private SwipeLayout mSwipeLayout;
         private View mColorCategory;
         private TextView mLabel;
         private TextView mCategory;
