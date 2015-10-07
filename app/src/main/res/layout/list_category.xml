@@ -11,6 +11,9 @@
         android:textColor="@color/Black"
         android:textSize="16dp"
         android:textStyle="bold"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:lines="1"
+        android:scrollHorizontally="true"
+        android:ellipsize="end"/>
 
 </LinearLayout>
