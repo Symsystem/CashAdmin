@@ -23,7 +23,7 @@
                 android:layout_height="16dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/bin"/>
+                android:src="@drawable/edit_icon"/>
 
         </RelativeLayout>
 
@@ -39,7 +39,7 @@
                 android:layout_height="16dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/bin"/>
+                android:src="@drawable/bin_icon"/>
         </RelativeLayout>
 
     </LinearLayout>
