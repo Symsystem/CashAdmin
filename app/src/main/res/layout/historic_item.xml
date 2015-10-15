@@ -19,8 +19,8 @@
             android:background="@color/primary">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/edit_icon"/>
@@ -35,8 +35,8 @@
             android:background="@color/red_dark">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/bin_icon"/>
@@ -50,7 +50,7 @@
 
         <View
             android:layout_width="8dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/colored_bar"
             tools:background="@color/red"
             android:layout_alignParentTop="true"
