@@ -44,52 +44,58 @@
 
     </LinearLayout>
 
-    <LinearLayout android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <View
-            android:id="@+id/colored_bar"
             android:layout_width="8dp"
-            android:layout_height="match_parent"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp">
+            android:id="@+id/colored_bar"
+            tools:background="@color/red"
+            android:layout_alignParentTop="true"
+            />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label"
-                tools:text="Libellé"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@id/amount"
-                android:layout_toStartOf="@id/amount"
-                android:textSize="16sp"
-                android:textColor="@color/Black"
-                android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label"
+            tools:text="Libellé"
+            android:textSize="16sp"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/colored_bar"
+            android:layout_toEndOf="@+id/colored_bar"
+            android:layout_margin="8dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/category"
-                tools:text="Category"
-                android:layout_below="@+id/label"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category"
+            android:paddingBottom="8dp"
+            tools:text="Category"
+            android:layout_below="@+id/label"
+            android:layout_alignLeft="@+id/label"
+            android:layout_alignStart="@+id/label"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/amount"
-                tools:text="10 €"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/amount"
+            tools:text="10 €"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"/>
 
-        </RelativeLayout>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/greyBackground"
+            android:layout_alignParentBottom="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </com.daimajia.swipe.SwipeLayout>

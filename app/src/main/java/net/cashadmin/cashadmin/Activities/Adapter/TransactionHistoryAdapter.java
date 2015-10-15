@@ -56,7 +56,7 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
             holder.mSwipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
             holder.mEditButton = (RelativeLayout) convertView.findViewById(R.id.editItemButton);
             holder.mDeleteButton = (RelativeLayout) convertView.findViewById(R.id.deleteItemButton);
-            holder.mColorCategory = (View) convertView.findViewById(R.id.colored_bar);
+            holder.mColorCategory = convertView.findViewById(R.id.colored_bar);
             holder.mLabel = (TextView) convertView.findViewById(R.id.label);
             holder.mCategory = (TextView) convertView.findViewById(R.id.category);
             holder.mAmount = (TextView) convertView.findViewById(R.id.amount);

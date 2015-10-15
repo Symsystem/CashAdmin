@@ -114,6 +114,7 @@ public class HistoricActivity extends AppCompatActivity {
                         int delta = startTop - top;
                         child.setTranslationY(delta);
                         child.animate().setDuration(MOVE_DURATION).translationY(0);
+                        break;
                     }
                 }
                 mItemIdTopMap.clear();

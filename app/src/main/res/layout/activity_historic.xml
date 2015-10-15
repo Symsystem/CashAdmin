@@ -8,6 +8,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/historyList"/>
+        android:id="@+id/historyList"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
 </RelativeLayout>
