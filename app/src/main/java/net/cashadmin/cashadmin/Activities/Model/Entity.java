@@ -11,4 +11,5 @@ public abstract class Entity implements Serializable{
     public TypeEnum getType(){
         return mType;
     }
+
 }

@@ -13,15 +13,12 @@ public class Income extends Transaction {
      * @param total
      * @param date
      * @param label
-     * @param frequency
      */
-    public Income(int id, float total,String label, Date date, FrequencyEnum frequency) {
+    public Income(int id, float total,String label, Date date) {
         this.id = id;
         this.total = total;
         this.label = label;
         this.date = date;
-        this.frequency = frequency;
-
         this.mType = TypeEnum.INCOME;
     }
 }

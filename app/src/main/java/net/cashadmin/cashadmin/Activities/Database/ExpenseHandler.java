@@ -22,7 +22,6 @@ public class ExpenseHandler extends GenericHandler {
     protected static final String COLUMN_LABEL = "label";
     protected static final String COLUMN_DATE = "date";
     protected static final String COLUMN_CATEGORY = "category";
-    protected static final String COLUMN_FREQUENCY = "frequency";
 
     protected final CategoryHandler mCategoryHandler;
 
@@ -37,7 +36,6 @@ public class ExpenseHandler extends GenericHandler {
                 COLUMN_LABEL + " VARCHAR(127), " +
                 COLUMN_DATE + " FLOAT NOT NULL, " +
                 COLUMN_CATEGORY + " INTEGER NOT NULL, " +
-                COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL, " +
                 "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME + ")");
     }
 
@@ -49,7 +47,6 @@ public class ExpenseHandler extends GenericHandler {
         values.put(COLUMN_LABEL, expense.getLabel());
         values.put(COLUMN_DATE, expense.getStringSQLDate());
         values.put(COLUMN_CATEGORY, expense.getCategory().getId());
-        values.put(COLUMN_FREQUENCY, expense.getFrequency().toString());
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
@@ -66,7 +63,6 @@ public class ExpenseHandler extends GenericHandler {
         values.put(COLUMN_LABEL, expense.getLabel());
         values.put(COLUMN_DATE, expense.getStringSQLDate());
         values.put(COLUMN_CATEGORY, expense.getCategory().getId());
-        values.put(COLUMN_FREQUENCY, expense.getFrequency().toString());
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
@@ -183,8 +179,7 @@ public class ExpenseHandler extends GenericHandler {
                     c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
                     c.getString(c.getColumnIndex(COLUMN_LABEL)),
                     new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE))),
-                    (Category)mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY))),
-                    FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY)))
+                    (Category)mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
             );
         }
         catch (DataNotFoundException e){

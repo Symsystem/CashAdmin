@@ -24,13 +24,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -127,6 +130,7 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
         String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
+        Date dateFrequency = null;
         if(!(stringAmount.toString().matches("-?\\d+(\\.\\d+)?"))) {
             Toast toast = Popup.toast(NewIncomeActivity.this, getString(R.string.validAmount));
             toast.show();
@@ -138,8 +142,19 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                 float amount = Float.valueOf(stringAmount);
                 if (mSwitch.isChecked()) {
                     frequency = (String) mSpinner.getSelectedItem();
+                    String frequencyDate = mDateChoice.getText().toString().trim();
+                    try {
+                        dateFrequency = date.parse(frequencyDate);
+                    }catch (ParseException e){
+                        e.printStackTrace();
+                    }
                 }
-                Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date(), FrequencyEnum.valueOf(frequency));
+                Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date());
+                if (mSwitch.isChecked() && !(frequency.equals(FrequencyEnum.values()[0].toString()))){
+                    Category cat = null;
+                    Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.INCOME, income.getTotal(), income.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, cat);
+                    mDataManager.insert(freq);
+                }
                 mDataManager.insert(income);
                 startActivity(new Intent(NewIncomeActivity.this, MainActivity.class));
             }

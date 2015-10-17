@@ -1,6 +1,7 @@
 package net.cashadmin.cashadmin.Activities.Model;
 
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,11 +28,6 @@ public class Transaction extends Entity {
      * @var Date
      */
     protected Date date;
-
-    /**
-     * @var FrequencyEnum
-     */
-    protected FrequencyEnum frequency;
 
     /**
      * @return int
@@ -90,19 +86,5 @@ public class Transaction extends Entity {
      */
     public java.sql.Date getSQLDate(){
         return new java.sql.Date(this.date.getTime());
-    }
-
-    /**
-     * @return FrenquencyEnum
-     */
-    public FrequencyEnum getFrequency(){
-        return frequency;
-    }
-
-    /**
-     * @parem frenquency
-     */
-    public void setFrenquency(FrequencyEnum frenquency){
-        this.frequency = frenquency;
     }
 }

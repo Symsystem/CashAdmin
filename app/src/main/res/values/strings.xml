@@ -59,4 +59,5 @@
     <string name="validAmount">Le montant doit être valide !</string>
     <string name="from">A partir de :</string>
     <string name="emptyName">Vous devez entrer un nom !</string>
+    <string name="newTransaction">Nouvelle transaction !</string>
 </resources>

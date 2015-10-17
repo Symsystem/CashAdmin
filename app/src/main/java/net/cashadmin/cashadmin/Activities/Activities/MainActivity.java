@@ -1,11 +1,16 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.PieChart;
 
+import net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
@@ -39,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1);
         mHistoryChart.setData(cal.getTime(), new Date());
+
+        AlarmReceiver alarm = new AlarmReceiver();
+        alarm.setAlarm(this);
     }
 
     @OnClick(R.id.addExpenseButton)

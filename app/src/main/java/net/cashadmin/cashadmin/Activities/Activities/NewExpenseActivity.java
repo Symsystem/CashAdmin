@@ -26,10 +26,12 @@ import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
+import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,8 +92,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
                     mDateLayout.startAnimation(animShow);
                     mDateLayout.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mWhichRecurrenceLayout.setVisibility(View.GONE);
                     mDateLayout.startAnimation(animHide);
@@ -103,7 +104,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mSpinner.setOnItemSelectedListener(this);
 
         List<String> listSpinner = new ArrayList<>();
-        for(FrequencyEnum frequency : FrequencyEnum.values()){
+        for (FrequencyEnum frequency : FrequencyEnum.values()) {
             listSpinner.add(frequency.toString());
         }
 
@@ -118,33 +119,40 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
-        if(stringAmount.isEmpty()){
+        Date dateFrequency = null;
+        if (stringAmount.isEmpty()) {
             Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
             toast.show();
-        }else {
-            if (stringAmount.isEmpty()) {
-                Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
-                toast.show();
-            } else {
-                float amount = Float.valueOf(stringAmount);
-                if (mSwitch.isChecked()) {
-                    frequency = (String) mSpinner.getSelectedItem();
+        } else {
+            float amount = Float.valueOf(stringAmount);
+            if (mSwitch.isChecked()) {
+                frequency = (String) mSpinner.getSelectedItem();
+                String frequencyDate = mDateChoice.getText().toString().trim();
+                try {
+                    dateFrequency = date.parse(frequencyDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory, FrequencyEnum.valueOf(frequency));
-                if (newCategory)
-                    mDataManager.insert(mCategory);
-                mDataManager.insert(expense);
-                startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
             }
+            Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory);
+            if (newCategory)
+                mDataManager.insert(mCategory);
+            if (mSwitch.isChecked() && !(frequency.equals(FrequencyEnum.values()[0].toString()))) {
+                Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.EXPENSE, expense.getTotal(), expense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, expense.getCategory());
+                mDataManager.insert(freq);
+            }
+            mDataManager.insert(expense);
+            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
         }
+
     }
 
     @OnClick(R.id.dateChoice)
-    public void onClickDateChoice(){
+    public void onClickDateChoice() {
         final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
         final Dialog pop = Popup.popInfo(NewExpenseActivity.this, layout);
         pop.show();
-        Button cancelButton = (Button)layout.findViewById(R.id.cancelButton);
+        Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

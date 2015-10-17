@@ -19,6 +19,7 @@ public class DataManager {
     private CategoryHandler mCategoryHandler;
     private IncomeHandler mIncomeHandler;
     private ExpenseHandler mExpenseHandler;
+    private FrequencyHandler mFrequencyHandler;
     private static DataManager dataManager = null;
 
     private DataManager(Context context) {
@@ -26,25 +27,26 @@ public class DataManager {
         this.mCategoryHandler = (CategoryHandler) db.getHandler("category");
         this.mIncomeHandler = (IncomeHandler) db.getHandler("income");
         this.mExpenseHandler = (ExpenseHandler) db.getHandler("expense");
+        this.mFrequencyHandler = (FrequencyHandler) db.getHandler("frequencies");
 
         this.mAutoIncrementNumbers = db.getAutoIncrementNumbers();
     }
 
-    public static DataManager getDataManager(Context context){
-        if(dataManager==null){
+    public static DataManager getDataManager(Context context) {
+        if (dataManager == null) {
             dataManager = new DataManager(context);
         }
         return dataManager;
     }
 
-    public static DataManager getDataManager(){
-        if(dataManager==null){
+    public static DataManager getDataManager() {
+        if (dataManager == null) {
             return null;
         }
         return dataManager;
     }
 
-    public int getNextId(TypeEnum type){
+    public int getNextId(TypeEnum type) {
         if (mAutoIncrementNumbers.get(type) != null)
             return mAutoIncrementNumbers.get(type).getCounterInt();
         else
@@ -71,6 +73,12 @@ public class DataManager {
                 else
                     mAutoIncrementNumbers.put(TypeEnum.INCOME, new Counter(2f));
                 return mIncomeHandler.insert(entity);
+            case FREQUENCY:
+                if (mAutoIncrementNumbers.get(TypeEnum.FREQUENCY) != null)
+                    mAutoIncrementNumbers.get(TypeEnum.FREQUENCY).addOne();
+                else
+                    mAutoIncrementNumbers.put(TypeEnum.FREQUENCY, new Counter(2f));
+                return mFrequencyHandler.insert(entity);
             default:
                 return false;
         }
@@ -84,6 +92,8 @@ public class DataManager {
                 return mExpenseHandler.update(entity);
             case INCOME:
                 return mIncomeHandler.update(entity);
+            case FREQUENCY:
+                return mFrequencyHandler.update(entity);
             default:
                 return false;
         }
@@ -97,13 +107,15 @@ public class DataManager {
                 return mExpenseHandler.findById(id);
             case INCOME:
                 return mIncomeHandler.findById(id);
+            case FREQUENCY:
+                return mFrequencyHandler.findById(id);
             default:
                 throw new DataNotFoundException("Database.DataManager : get(TypeEnum, int)");
         }
     }
 
-    public Entity getLast(TypeEnum type) throws DataNotFoundException{
-        switch(type){
+    public Entity getLast(TypeEnum type) throws DataNotFoundException {
+        switch (type) {
             case CATEGORY:
                 return mCategoryHandler.getLast(type);
             case EXPENSE:
@@ -123,6 +135,8 @@ public class DataManager {
                 return mExpenseHandler.getAll(type);
             case INCOME:
                 return mIncomeHandler.getAll(type);
+            case FREQUENCY:
+                return mFrequencyHandler.getAll(type);
             default:
                 throw new IllegalTypeException("Database.DataManager : getAll(TypeEnum)");
         }
@@ -137,6 +151,8 @@ public class DataManager {
                 return mExpenseHandler.getFromTo(type, start, end);
             case INCOME:
                 return mIncomeHandler.getFromTo(type, start, end);
+            case FREQUENCY:
+                return mFrequencyHandler.getFromTo(type, start, end);
             default:
                 throw new IllegalTypeException("Database.DataManager : getFromTo(TypeEnum, int, int");
         }
@@ -150,6 +166,8 @@ public class DataManager {
                 return mExpenseHandler.getByDate(type, start, end);
             case INCOME:
                 return mIncomeHandler.getByDate(type, start, end);
+            case FREQUENCY:
+                return mFrequencyHandler.getByDate(type, start, end);
             default:
                 throw new IllegalTypeException("DataBase.DataManager : getByDate(TypeEnum, Date, Date");
 
@@ -164,6 +182,8 @@ public class DataManager {
                 return mExpenseHandler.isIn(entity);
             case INCOME:
                 return mIncomeHandler.isIn(entity);
+            case FREQUENCY:
+                return mFrequencyHandler.isIn(entity);
             default:
                 return false;
         }
@@ -177,6 +197,8 @@ public class DataManager {
                 return mExpenseHandler.delete(entity);
             case INCOME:
                 return mIncomeHandler.delete(entity);
+            case FREQUENCY:
+                return mFrequencyHandler.delete(entity);
             default:
                 return false;
         }
@@ -189,6 +211,8 @@ public class DataManager {
                 return mExpenseHandler.deleteBy(type, condition);
             case INCOME:
                 return mIncomeHandler.deleteBy(type, condition);
+            case FREQUENCY:
+                return mFrequencyHandler.deleteBy(type, condition);
             default:
                 throw new InvalidQueryException("DataBe.DataManager : deleteBy(TypeEnum, String");
         }

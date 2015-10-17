@@ -25,6 +25,7 @@ public class DBHandler extends SQLiteOpenHelper {
         handlers.put("category", catHandler);
         handlers.put("income", new IncomeHandler(this));
         handlers.put("expense", new ExpenseHandler(this, catHandler));
+        handlers.put("frequencies", new FrequencyHandler(this, catHandler));
     }
 
     @Override
@@ -64,6 +65,9 @@ public class DBHandler extends SQLiteOpenHelper {
                         break;
                     case IncomeHandler.TABLE_NAME:
                         autoIncList.put(TypeEnum.INCOME, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
+                        break;
+                    case FrequencyHandler.TABLE_NAME:
+                        autoIncList.put(TypeEnum.FREQUENCY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) +1 ));
                         break;
                 }
             } while (cursor.moveToNext());

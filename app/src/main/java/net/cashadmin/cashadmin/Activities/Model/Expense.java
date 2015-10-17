@@ -14,21 +14,18 @@ public class Expense extends Transaction {
     private Category category;
 
     /**
-     *
      * @param id
      * @param total
      * @param label
      * @param date
      * @param category
-     * @param frequency
      */
-    public Expense(int id, float total, String label, Date date, Category category, FrequencyEnum frequency) {
+    public Expense(int id, float total, String label, Date date, Category category) {
         this.id = id;
         this.total = total;
         this.label = label;
         this.date = date;
         this.category = category;
-        this.frequency = frequency;
         this.mType = TypeEnum.EXPENSE;
     }
 
