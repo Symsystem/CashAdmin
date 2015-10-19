@@ -1,5 +1,6 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,8 +10,7 @@ import android.widget.ListView;
 import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
-import net.cashadmin.cashadmin.Activities.Model.Entity;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Functor.TransactionFunctor;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.R;
 
@@ -27,7 +27,8 @@ public class HistoricActivity extends AppCompatActivity {
 
     private DataManager mDataManager;
     private TransactionHistoryAdapter mAdapter;
-    private HashMap<Long, Integer> mItemIdTopMap = new HashMap<>();
+    private ArrayList<Transaction> mExpenses;
+    private ArrayList<Transaction> mIncomes;
 
     @InjectView(R.id.historyList)
     ListView mHistoryList;
@@ -38,11 +39,14 @@ public class HistoricActivity extends AppCompatActivity {
         setContentView(R.layout.activity_historic);
 
         ButterKnife.inject(this);
+
         mDataManager = DataManager.getDataManager();
+        Intent intent = getIntent();
+
         try {
-            ArrayList<Transaction> transactions = mergeExpenseIncome(
-                    mDataManager.getAll(TypeEnum.EXPENSE),
-                    mDataManager.getAll(TypeEnum.INCOME));
+            mExpenses = ((TransactionFunctor) intent.getParcelableExtra("expenses")).getList();
+            mIncomes = ((TransactionFunctor) intent.getParcelableExtra("incomes")).getList();
+            ArrayList<Transaction> transactions = mergeExpenseIncome(mExpenses, mIncomes);
 
             mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener);
             mHistoryList.setAdapter(mAdapter);
@@ -72,13 +76,14 @@ public class HistoricActivity extends AppCompatActivity {
      * layout, and then to run animations between all of those start/end positions.
      */
     private void animateRemoval(final ListView listview, View viewToRemove) {
+        final HashMap<Long, Integer> itemIdTopMap = new HashMap<>(); // Map pour connaitre les
         int firstVisiblePosition = listview.getFirstVisiblePosition();
         for (int i = 0; i < listview.getChildCount(); ++i) {
             View child = listview.getChildAt(i);
             if (child != viewToRemove) {
                 int position = firstVisiblePosition + i;
                 long itemId = mAdapter.getItemId(position);
-                mItemIdTopMap.put(itemId, child.getTop());
+                itemIdTopMap.put(itemId, child.getTop());
             }
         }
         // Delete the item from the adapter
@@ -97,7 +102,7 @@ public class HistoricActivity extends AppCompatActivity {
                     final View child = listview.getChildAt(i);
                     int position = firstVisiblePosition + i;
                     long itemId = mAdapter.getItemId(position);
-                    Integer startTop = mItemIdTopMap.get(itemId);
+                    Integer startTop = itemIdTopMap.get(itemId);
                     int top = child.getTop();
                     if (startTop != null) {
                         if (startTop != top) {
@@ -117,20 +122,19 @@ public class HistoricActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                mItemIdTopMap.clear();
                 return true;
             }
         });
     }
 
-    private ArrayList<Transaction> mergeExpenseIncome(List<Entity> l1, List<Entity> l2){
+    private ArrayList<Transaction> mergeExpenseIncome(List<Transaction> l1, List<Transaction> l2){
         ArrayList<Transaction> transactions = new ArrayList<>();
         Transaction t1, t2;
         int i1 = 0, i2 = 0;
 
         while(i1 < l1.size() && i2 < l2.size()){
-            t1 = (Transaction) l1.get(i1);
-            t2 = (Transaction) l2.get(i2);
+            t1 = l1.get(i1);
+            t2 = l2.get(i2);
 
             if(t1.getDate().compareTo(t2.getDate()) >= 0){
                 transactions.add(t1);

@@ -12,9 +12,14 @@ import com.github.mikephil.charting.charts.PieChart;
 
 import net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
+import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
+import net.cashadmin.cashadmin.Activities.Functor.TransactionFunctor;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -61,6 +66,44 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.historyButton)
     public void onClickHistoryButton(){
-        startActivity(new Intent(MainActivity.this, HistoricActivity.class));
+        TransactionFunctor exp = new TransactionFunctor() {
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel parcel, int i) {
+
+            }
+
+            @Override
+            public ArrayList<Transaction> getList() throws IllegalTypeException {
+                return (ArrayList<Transaction>)(ArrayList<?>) mDataManager.getFromTo(TypeEnum.EXPENSE, 0, 25);
+            }
+        };
+        TransactionFunctor inc = new TransactionFunctor() {
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel parcel, int i) {
+
+            }
+
+            @Override
+            public ArrayList<Transaction> getList() throws IllegalTypeException {
+                return (ArrayList<Transaction>)(ArrayList<?>) mDataManager.getFromTo(TypeEnum.INCOME, 0, 25);
+            }
+        };
+
+
+        Intent intent = new Intent(MainActivity.this, HistoricActivity.class);
+        intent.putExtra("expenses", exp);
+        intent.putExtra("incomes", inc);
+
+        startActivity(intent);
     }
 }
