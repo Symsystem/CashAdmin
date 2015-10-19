@@ -92,21 +92,13 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
                     mDateLayout.startAnimation(animShow);
                     mDateLayout.setVisibility(View.VISIBLE);
-                    Animation animDown = new TranslateAnimation(0 , 0, startY - endY, 0);
-                    animDown.setDuration(200);
-                    animDown.setFillAfter(true);
-                    animDown.setInterpolator(new LinearInterpolator());
-                    mAddIncomeButton.startAnimation(animDown);
+                    makeAnim(startY - endY);
                 } else {
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mWhichRecurrenceLayout.setVisibility(View.GONE);
                     mDateLayout.startAnimation(animHide);
                     mDateLayout.setVisibility(View.GONE);
-                    Animation animUp = new TranslateAnimation(0, 0, endY - startY, 0);
-                    animUp.setDuration(200);
-                    animUp.setFillAfter(true);
-                    animUp.setInterpolator(new LinearInterpolator());
-                    mAddIncomeButton.startAnimation(animUp);
+                    makeAnim(endY - startY);
                 }
             }
         });
@@ -118,7 +110,7 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
             listSpinner.add(frequency.toString());
         }
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listSpinner);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
 
@@ -186,13 +178,18 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
         });
     }
 
+    private void makeAnim(float move){
+        Animation animSample = new TranslateAnimation(0 , 0, move, 0);
+        animSample.setDuration(200);
+        animSample.setFillAfter(true);
+        animSample.setInterpolator(new LinearInterpolator());
+        mAddIncomeButton.startAnimation(animSample);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String item = parent.getItemAtPosition(position).toString();
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
     }
-
-
 }

@@ -60,4 +60,6 @@
     <string name="from">A partir de :</string>
     <string name="emptyName">Vous devez entrer un nom !</string>
     <string name="newTransaction">Nouvelle transaction !</string>
+    <string name="addWallet">€ ont été ajoutés à votre portefeuille (</string>
+    <string name="removeWallet">€ ont été retirés de votre portefeuille (</string>
 </resources>
