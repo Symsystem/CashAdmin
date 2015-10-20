@@ -46,19 +46,19 @@ public class SchedulingService extends IntentService {
             Calendar frequencyDate = Calendar.getInstance();
             frequencyDate.setTime(frequency.getDateFrequency());
             switch (frequency.getFrequency()){
-                case JOURS:
+                case DAILY:
                     handleFrequency(frequency);
                     break;
-                case SEMAINES:
+                case WEEKLY:
                     if(currentDate.get(Calendar.DAY_OF_WEEK) == frequencyDate.get(Calendar.DAY_OF_WEEK)){
                         handleFrequency(frequency);
                     }
-                case MOIS:
+                case MONTHLY:
                     if(currentDate.get(Calendar.DAY_OF_MONTH) == frequencyDate.get(Calendar.DAY_OF_MONTH)){
                         handleFrequency(frequency);
                     }
                     break;
-                case ANNEES:
+                case YEARLY:
                     if(currentDate.get(Calendar.DAY_OF_YEAR) == frequencyDate.get(Calendar.DAY_OF_YEAR)){
                         handleFrequency(frequency);
                     }

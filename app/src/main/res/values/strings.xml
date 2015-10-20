@@ -62,4 +62,9 @@
     <string name="newTransaction">Nouvelle transaction !</string>
     <string name="addWallet">€ ont été ajoutés à votre portefeuille (</string>
     <string name="removeWallet">€ ont été retirés de votre portefeuille (</string>
+    <string name="Never">Jamais</string>
+    <string name="Days">Jours</string>
+    <string name="Weeks">Semaines</string>
+    <string name="Months">Mois</string>
+    <string name="Years">Années</string>
 </resources>

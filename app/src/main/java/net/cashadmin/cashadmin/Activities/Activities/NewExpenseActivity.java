@@ -104,9 +104,11 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mSpinner.setOnItemSelectedListener(this);
 
         List<String> listSpinner = new ArrayList<>();
-        for (FrequencyEnum frequency : FrequencyEnum.values()) {
-            listSpinner.add(frequency.toString());
-        }
+        listSpinner.add(0, getString(R.string.Never));
+        listSpinner.add(1, getString(R.string.Days));
+        listSpinner.add(2, getString(R.string.Weeks));
+        listSpinner.add(3, getString(R.string.Months));
+        listSpinner.add(4, getString(R.string.Years));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -126,7 +128,8 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         } else {
             float amount = Float.valueOf(stringAmount);
             if (mSwitch.isChecked()) {
-                frequency = (String) mSpinner.getSelectedItem();
+                int idEnum = (int) mSpinner.getSelectedItemId();
+                frequency = FrequencyEnum.values()[idEnum].toString();
                 String frequencyDate = mDateChoice.getText().toString().trim();
                 try {
                     dateFrequency = date.parse(frequencyDate);
