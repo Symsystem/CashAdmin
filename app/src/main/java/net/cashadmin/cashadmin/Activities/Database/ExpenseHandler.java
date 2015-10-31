@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
-import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 
@@ -17,11 +16,11 @@ import java.util.List;
 public class ExpenseHandler extends GenericHandler {
 
     public static final String TABLE_NAME = "expenses";
-    protected static final String COLUMN_ID = "id";
-    protected static final String COLUMN_TOTAL = "total";
-    protected static final String COLUMN_LABEL = "label";
-    protected static final String COLUMN_DATE = "date";
-    protected static final String COLUMN_CATEGORY = "category";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_TOTAL = "total";
+    public static final String COLUMN_LABEL = "label";
+    public static final String COLUMN_DATE = "date";
+    public static final String COLUMN_CATEGORY = "category";
 
     protected final CategoryHandler mCategoryHandler;
 
@@ -117,6 +116,13 @@ public class ExpenseHandler extends GenericHandler {
     }
 
     @Override
+    public List<Entity> getWhere(String where) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + where;
+
+        return createEntityListFromQuery(query);
+    }
+
+    @Override
     public boolean isIn(Entity entity) {
         String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + ((Expense) entity).getId();
 
@@ -156,7 +162,7 @@ public class ExpenseHandler extends GenericHandler {
     public boolean deleteBy(TypeEnum type, String condition){
         boolean result = false;
 
-        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + condition;
+        String query = "SELECT FROM " + TABLE_NAME + " WHERE " + condition;
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 

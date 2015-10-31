@@ -7,8 +7,52 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/topBar"
+        android:padding="4dp">
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/checkDepense"
+            android:checked="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expense"
+            android:layout_toRightOf="@+id/checkDepense"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/historic_icon"
+            android:layout_margin="5dp"
+            android:layout_centerInParent="true"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/checkRevenu"
+            android:checked="true"
+            android:gravity="end"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/checkRevenu"
+            android:text="@string/income"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"/>
 
 
     </RelativeLayout>
@@ -19,37 +63,15 @@
         android:id="@+id/historyList"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:layout_below="@+id/checkBox"
+        android:layout_below="@id/topBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New CheckBox"
-        android:id="@+id/checkBox"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:padding="8dp"/>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New CheckBox"
-        android:id="@+id/checkBox2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:padding="8dp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@drawable/in_out_icon"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        />
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/greyBackground"
+        android:layout_alignTop="@id/historyList"/>
 
 </RelativeLayout>

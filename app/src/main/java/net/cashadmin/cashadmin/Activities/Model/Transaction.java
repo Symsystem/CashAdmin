@@ -1,13 +1,11 @@
 package net.cashadmin.cashadmin.Activities.Model;
 
-import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
-
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Transaction extends Entity {
+public class Transaction extends Entity implements Serializable{
 
     /**
      * @var int

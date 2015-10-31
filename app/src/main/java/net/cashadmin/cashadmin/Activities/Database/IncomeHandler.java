@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
-import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 
@@ -16,10 +15,10 @@ import java.util.List;
 public class IncomeHandler extends GenericHandler {
 
     public static final String TABLE_NAME = "incomes";
-    protected static final String COLUMN_ID = "id";
-    protected static final String COLUMN_TOTAL = "total";
-    protected static final String COLUMN_LABEL = "label";
-    protected static final String COLUMN_DATE = "date";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_TOTAL = "total";
+    public static final String COLUMN_LABEL = "label";
+    public static final String COLUMN_DATE = "date";
 
     public IncomeHandler(DBHandler handler) {
         mDBHandler = handler;
@@ -103,6 +102,13 @@ public class IncomeHandler extends GenericHandler {
     @Override
     public List<Entity> getByDate(TypeEnum type, Date startDate, Date endDate) {
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DATE + " BETWEEN " + startDate.getTime() + " and " + endDate.getTime() + "' ORDER BY " + COLUMN_DATE + " DESC";
+
+        return createEntityListFromQuery(query);
+    }
+
+    @Override
+    public List<Entity> getWhere(String where) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + where;
 
         return createEntityListFromQuery(query);
     }

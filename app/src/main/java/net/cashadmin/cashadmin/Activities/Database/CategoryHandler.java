@@ -14,9 +14,9 @@ import java.util.List;
 public class CategoryHandler extends GenericHandler {
 
     public static final String TABLE_NAME = "categories";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_LABEL = "label";
-    private static final String COLUMN_COLOR = "color";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_LABEL = "label";
+    public static final String COLUMN_COLOR = "color";
 
     public CategoryHandler(DBHandler handler) {
         mDBHandler = handler;
@@ -90,6 +90,13 @@ public class CategoryHandler extends GenericHandler {
     @Override
     public List<Entity> getFromTo(TypeEnum type, int start, int end) {
         String query = "SELECT * FROM " + TABLE_NAME + " LIMIT " + start + ", " + end;
+
+        return createEntityListFromQuery(query);
+    }
+
+    @Override
+    public List<Entity> getWhere(String where) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + where;
 
         return createEntityListFromQuery(query);
     }

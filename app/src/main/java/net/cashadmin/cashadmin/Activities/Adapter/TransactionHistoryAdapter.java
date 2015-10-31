@@ -97,6 +97,12 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
         return convertView;
     }
 
+    public synchronized void refreshAdapter(ArrayList<Transaction> transactions){
+        mTransactions.clear();
+        mTransactions.addAll(transactions);
+        notifyDataSetChanged();
+    }
+
     private static class Holder {
         private SwipeLayout mSwipeLayout;
         private RelativeLayout mEditButton;

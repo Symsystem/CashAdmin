@@ -15,8 +15,6 @@
 
         <item name="android:buttonStyle">@style/ButtonStyle</item>
 
-        <item name="android:checkboxStyle">@color/White</item>
-
 
         <!-- Customize your theme here. -->
     </style>

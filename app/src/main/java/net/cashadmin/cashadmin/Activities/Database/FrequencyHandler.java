@@ -125,6 +125,13 @@ public class FrequencyHandler extends GenericHandler {
     }
 
     @Override
+    public List<Entity> getWhere(String where) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + where;
+
+        return createEntityListFromQuery(query);
+    }
+
+    @Override
     public boolean isIn(Entity entity) {
         String query = "SELECT id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + ((Frequency) entity).getId();
 

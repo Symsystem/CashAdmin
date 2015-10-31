@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
-import net.cashadmin.cashadmin.Activities.Functor.TransactionFunctor;
+import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.R;
 
@@ -29,9 +32,15 @@ public class HistoricActivity extends AppCompatActivity {
     private TransactionHistoryAdapter mAdapter;
     private ArrayList<Transaction> mExpenses;
     private ArrayList<Transaction> mIncomes;
+    private ArrayList<Transaction> transactions;
 
     @InjectView(R.id.historyList)
     ListView mHistoryList;
+
+    @InjectView(R.id.checkDepense)
+    CheckBox mCheckExpense;
+    @InjectView(R.id.checkRevenu)
+    CheckBox mCheckIncome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +49,43 @@ public class HistoricActivity extends AppCompatActivity {
 
         ButterKnife.inject(this);
 
+        mCheckExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                checkedChange(mCheckExpense);
+            }
+        });
+        mCheckIncome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                checkedChange(mCheckIncome);
+            }
+        });
+
         mDataManager = DataManager.getDataManager();
         Intent intent = getIntent();
 
         try {
-            mExpenses = ((TransactionFunctor) intent.getParcelableExtra("expenses")).getList();
-            mIncomes = ((TransactionFunctor) intent.getParcelableExtra("incomes")).getList();
-            ArrayList<Transaction> transactions = mergeExpenseIncome(mExpenses, mIncomes);
+            HistoricEntryEnum entryType = HistoricEntryEnum.detachFrom(intent);
 
-            mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener);
-            mHistoryList.setAdapter(mAdapter);
+            switch (entryType){
+                case All:
+                    mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(TypeEnum.EXPENSE);
+                    mIncomes = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(TypeEnum.INCOME);
+                    break;
+                case ByCategory:
+                    mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getWhere(TypeEnum.EXPENSE, intent.getStringExtra("expenseCondition"));
+                    mIncomes = new ArrayList<Transaction>();
+                    break;
+            }
         } catch (IllegalTypeException e) {
             e.printStackTrace();
         }
+        transactions = mergeExpenseIncome(mExpenses, mIncomes);
+        mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener);
+
+        checkedChange(mCheckExpense);
+        mHistoryList.setAdapter(mAdapter);
     }
 
     private View.OnClickListener mOnClickDeleteListener = new View.OnClickListener() {
@@ -62,11 +95,31 @@ public class HistoricActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     animateRemoval(mHistoryList, view);
+
+                    // Delete the item from the adapter
+                    Transaction t = mAdapter.getItem(mHistoryList.getPositionForView(view));
+                    mDataManager.delete(t);
+                    mAdapter.remove(t);
                 }
             };
             r.run();
         }
     };
+
+    private void checkedChange(CheckBox c){
+        if (mCheckExpense.isChecked() && mCheckIncome.isChecked()){
+            mAdapter.refreshAdapter(mergeExpenseIncome(mExpenses, mIncomes));
+        } else if (mCheckExpense.isChecked()){
+            mAdapter.refreshAdapter(mExpenses);
+        } else if (mCheckIncome.isChecked()){
+            mAdapter.refreshAdapter(mIncomes);
+        } else {
+            if (c == mCheckExpense)
+                mCheckIncome.setChecked(true);
+            else
+                mCheckExpense.setChecked(true);
+        }
+    }
 
     /**
      * This method animates all other views in the ListView container (not including ignoreView)
@@ -86,12 +139,8 @@ public class HistoricActivity extends AppCompatActivity {
                 itemIdTopMap.put(itemId, child.getTop());
             }
         }
-        // Delete the item from the adapter
-        final int position = listview.getPositionForView(viewToRemove);
-        Transaction t = mAdapter.getItem(position);
-        mDataManager.delete(t);
-        mAdapter.remove(t);
 
+        final int position = mHistoryList.getPositionForView(viewToRemove);
         final ViewTreeObserver observer = listview.getViewTreeObserver();
         observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {

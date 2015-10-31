@@ -1,12 +1,12 @@
 package net.cashadmin.cashadmin.Activities.Model;
 
 
-import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Expense extends Transaction {
+public class Expense extends Transaction implements Serializable {
 
     /**
      * @var Category

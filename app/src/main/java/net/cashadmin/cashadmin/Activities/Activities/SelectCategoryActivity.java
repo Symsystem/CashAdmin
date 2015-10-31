@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -26,12 +25,11 @@ import net.cashadmin.cashadmin.Activities.Adapter.ButtonCategoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,7 +51,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
         mDataManager = DataManager.getDataManager();
 
         try {
-            final List<Entity> list = mDataManager.getAll(TypeEnum.CATEGORY);
+            final ArrayList<Category> list = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(TypeEnum.CATEGORY);
             list.add(0, new Category(0, "+", "#000000"));
             ListAdapter adapter = new ButtonCategoryAdapter(
                     this,

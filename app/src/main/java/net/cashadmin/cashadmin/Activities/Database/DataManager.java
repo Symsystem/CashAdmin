@@ -174,6 +174,21 @@ public class DataManager {
         }
     }
 
+    public List<Entity> getWhere(TypeEnum type, String where) throws IllegalTypeException{
+        switch (type) {
+            case CATEGORY:
+                return mCategoryHandler.getWhere(where);
+            case EXPENSE:
+                return mExpenseHandler.getWhere(where);
+            case INCOME:
+                return mIncomeHandler.getWhere(where);
+            case FREQUENCY:
+                return mFrequencyHandler.getWhere(where);
+            default:
+                throw new IllegalTypeException("Database.DataManager : getWhere(TypeEnum, int, int");
+        }
+    }
+
     public boolean isIn(Entity entity) {
         switch (entity.getType()) {
             case CATEGORY:

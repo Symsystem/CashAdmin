@@ -8,15 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
+public class ButtonCategoryAdapter extends ArrayAdapter<Category> {
 
-    public ButtonCategoryAdapter(Context context, int textViewRessourceId, List<Entity> categories) {
+    private ArrayList<Category> mCategories;
+
+    public ButtonCategoryAdapter(Context context, int textViewRessourceId, ArrayList<Category> categories) {
         super(context, textViewRessourceId, categories);
+        mCategories = categories;
     }
 
     @Override
@@ -35,5 +37,11 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Entity> {
                 buttonCategory.setClickable(false);
             }
         return v;
+    }
+
+    public synchronized void refreshAdapter(ArrayList<Category> categs){
+        mCategories.clear();
+        mCategories.addAll(categs);
+        notifyDataSetChanged();
     }
 }

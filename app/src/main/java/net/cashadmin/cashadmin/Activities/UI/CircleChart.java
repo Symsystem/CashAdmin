@@ -8,7 +8,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.PercentFormatter;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
@@ -31,6 +31,8 @@ public class CircleChart {
     private String mTitle;
     private Context mContext;
     private DataManager mDataManager;
+
+    private ArrayList<Category> cats;
 
     private List<Entity> data;
 
@@ -76,10 +78,10 @@ public class CircleChart {
     }
 
     private void setData(){
-        List<Entity> cats = new ArrayList<Entity>();
+        cats = new ArrayList<Category>();
 
         try{
-            cats = mDataManager.getAll(TypeEnum.CATEGORY);
+            cats = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(TypeEnum.CATEGORY);
         } catch (IllegalTypeException e){
             e.printStackTrace();
         }
@@ -88,8 +90,7 @@ public class CircleChart {
         HashMap<Integer, Counter> expenseByCategory = new HashMap<>();
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
-        for (Entity entity : cats){
-            Category cat = (Category)entity;
+        for (Category cat : cats){
             categories.add(cat.getLabel());
             expenseByCategory.put(cat.getId(), new Counter());
             colors.add(cat.getColor());
@@ -99,7 +100,7 @@ public class CircleChart {
 
         for (Entity ent : data){
             Expense exp = (Expense) ent;
-            Counter c = (Counter)expenseByCategory.get(exp.getCategory().getId());
+            Counter c = expenseByCategory.get(exp.getCategory().getId());
             c.add(exp.getTotal());
             totalAmount += exp.getTotal();
         }
@@ -114,10 +115,6 @@ public class CircleChart {
         }
 
         PieDataSet dataSet = new PieDataSet(yVals, mContext.getString(R.string.labelCategory));
-
-
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
 
         dataSet.setColors(colors);
 
@@ -139,6 +136,14 @@ public class CircleChart {
         legend.setWordWrapEnabled(true);
         legend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
         legend.setMaxSizePercent(0.95f);
+    }
+
+    public void setChartValueSelectedListener(OnChartValueSelectedListener listener){
+        mChart.setOnChartValueSelectedListener(listener);
+    }
+
+    public ArrayList<Category> getCategories(){
+        return this.cats;
     }
 
     public void updateData(){}

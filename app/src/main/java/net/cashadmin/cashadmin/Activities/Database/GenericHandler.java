@@ -65,6 +65,11 @@ public abstract class GenericHandler {
     }
 
     /**
+     * @param where String
+     */
+    public abstract List<Entity> getWhere(String where);
+
+    /**
      * @param entity Entity
      */
     public abstract boolean isIn(Entity entity);

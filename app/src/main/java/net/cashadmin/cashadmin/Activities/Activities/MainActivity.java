@@ -1,25 +1,21 @@
 package net.cashadmin.cashadmin.Activities.Activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
-import net.cashadmin.cashadmin.Activities.Functor.TransactionFunctor;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
-import net.cashadmin.cashadmin.Activities.Model.Transaction;
+import net.cashadmin.cashadmin.Activities.Database.ExpenseHandler;
+import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -49,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -1);
         mHistoryChart.setData(cal.getTime(), new Date());
+        mHistoryChart.setChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                Intent intent = new Intent(MainActivity.this, HistoricActivity.class);
+
+                System.out.println("INDEX : " + e.getXIndex());
+
+                HistoricEntryEnum.ByCategory.attachTo(intent);
+                intent.putExtra("expenseCondition", ExpenseHandler.COLUMN_CATEGORY + " = " + mHistoryChart.getCategories().get(e.getXIndex()).getId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onNothingSelected() {}
+        });
 
         AlarmReceiver alarm = new AlarmReceiver();
         alarm.setAlarm(this);
@@ -65,45 +76,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.historyButton)
-    public void onClickHistoryButton(){
-        TransactionFunctor exp = new TransactionFunctor() {
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(Parcel parcel, int i) {
-
-            }
-
-            @Override
-            public ArrayList<Transaction> getList() throws IllegalTypeException {
-                return (ArrayList<Transaction>)(ArrayList<?>) mDataManager.getFromTo(TypeEnum.EXPENSE, 0, 25);
-            }
-        };
-        TransactionFunctor inc = new TransactionFunctor() {
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(Parcel parcel, int i) {
-
-            }
-
-            @Override
-            public ArrayList<Transaction> getList() throws IllegalTypeException {
-                return (ArrayList<Transaction>)(ArrayList<?>) mDataManager.getFromTo(TypeEnum.INCOME, 0, 25);
-            }
-        };
-
+    public void onClickHistoryButton() {
 
         Intent intent = new Intent(MainActivity.this, HistoricActivity.class);
-        intent.putExtra("expenses", exp);
-        intent.putExtra("incomes", inc);
 
+        HistoricEntryEnum.All.attachTo(intent);
         startActivity(intent);
     }
 }
