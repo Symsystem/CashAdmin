@@ -15,7 +15,6 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.Model.Income;
-import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.R;
 
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ import java.util.List;
 public class SchedulingService extends IntentService {
 
     private DataManager mDataManager;
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
 
     public SchedulingService(){
         super("SchedulingService");
@@ -36,7 +33,7 @@ public class SchedulingService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent){
         mDataManager = DataManager.getDataManager(this);
-        List<Entity> transactions = new ArrayList<Entity>();
+        List<Entity> transactions = new ArrayList<>();
 
         try{
             transactions = mDataManager.getAll(TypeEnum.FREQUENCY);
@@ -49,19 +46,19 @@ public class SchedulingService extends IntentService {
             Calendar frequencyDate = Calendar.getInstance();
             frequencyDate.setTime(frequency.getDateFrequency());
             switch (frequency.getFrequency()){
-                case JOURS:
+                case DAILY:
                     handleFrequency(frequency);
                     break;
-                case SEMAINES:
+                case WEEKLY:
                     if(currentDate.get(Calendar.DAY_OF_WEEK) == frequencyDate.get(Calendar.DAY_OF_WEEK)){
                         handleFrequency(frequency);
                     }
-                case MOIS:
+                case MONTHLY:
                     if(currentDate.get(Calendar.DAY_OF_MONTH) == frequencyDate.get(Calendar.DAY_OF_MONTH)){
                         handleFrequency(frequency);
                     }
                     break;
-                case ANNEES:
+                case YEARLY:
                     if(currentDate.get(Calendar.DAY_OF_YEAR) == frequencyDate.get(Calendar.DAY_OF_YEAR)){
                         handleFrequency(frequency);
                     }
@@ -73,16 +70,16 @@ public class SchedulingService extends IntentService {
     }
 
     private void sendNotification(Frequency frequency){
-        mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
         String msg = null;
         switch (frequency.getTransactionType()){
             case INCOME:
-                msg = frequency.getTotal() + "€ ont été ajoutés à votre portefeuille (" + frequency.getLabel() + ")";
+                msg = frequency.getTotal() + getString(R.string.addWallet) + frequency.getLabel() + ")";
                 break;
             case EXPENSE:
-                msg = frequency.getTotal() + "€ ont été retirés de votre portefeuille (" + frequency.getLabel() + ")";
+                msg = frequency.getTotal() + getString(R.string.removeWallet) + frequency.getLabel() + ")";
                 break;
         }
 
