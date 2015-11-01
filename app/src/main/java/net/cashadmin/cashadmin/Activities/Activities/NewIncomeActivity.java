@@ -2,10 +2,8 @@ package net.cashadmin.cashadmin.Activities.Activities;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -181,8 +179,8 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
         });
     }
 
-    private void makeAnim(float move){
-        Animation animSample = new TranslateAnimation(0 , 0, move, 0);
+    private void makeAnim(float moove){
+        Animation animSample = new TranslateAnimation(0 , 0, moove, 0);
         animSample.setDuration(200);
         animSample.setFillAfter(true);
         animSample.setInterpolator(new LinearInterpolator());

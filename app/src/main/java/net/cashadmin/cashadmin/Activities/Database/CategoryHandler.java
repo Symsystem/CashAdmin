@@ -125,6 +125,7 @@ public class CategoryHandler extends GenericHandler {
         String query = "Select id FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + ((Category) entity).getId();
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
+        db.execSQL("PRAGMA foreign_keys = ON;");
 
         Cursor cursor = db.rawQuery(query, null);
 

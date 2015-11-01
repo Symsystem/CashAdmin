@@ -34,8 +34,8 @@ public class ExpenseHandler extends GenericHandler {
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_LABEL + " VARCHAR(127), " +
                 COLUMN_DATE + " FLOAT NOT NULL, " +
-                COLUMN_CATEGORY + " INTEGER NOT NULL, " +
-                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME + ")");
+                COLUMN_CATEGORY + " INTEGER DEFAULT 1 REFERENCES " + CategoryHandler.TABLE_NAME + "(" + CategoryHandler.COLUMN_ID + ")" + " ON DELETE SET DEFAULT)");
+                //"FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME + " ON DELETE SET DEFAULT )");
     }
 
     @Override

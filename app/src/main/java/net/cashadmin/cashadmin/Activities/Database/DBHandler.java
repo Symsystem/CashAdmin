@@ -1,12 +1,15 @@
 package net.cashadmin.cashadmin.Activities.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Utils.Counter;
+import net.cashadmin.cashadmin.R;
 
 import java.util.HashMap;
 
@@ -17,6 +20,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "cashAdminDB.db";
+    public static final String TABLE_NAME = "categories";
+    private static final String COLUMN_LABEL = "label";
+    private static final String COLUMN_COLOR = "color";
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -30,10 +36,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         for (String key : handlers.keySet()) {
             db.execSQL(handlers.get(key).getTableCreator());
         }
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_LABEL, "Autres");
+        values.put(COLUMN_COLOR, "#c4c4c4");
+        db.insert(TABLE_NAME, null, values);
     }
 
     @Override

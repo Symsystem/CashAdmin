@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.cashadmin.cashadmin" >
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -46,8 +47,8 @@
         <activity
             android:name=".Activities.Activities.NewExpenseActivity"
             android:label="@string/title_activity_new_expense"
-            android:windowSoftInputMode="stateVisible"
-            android:parentActivityName=".Activities.Activities.SelectCategoryActivity" >
+            android:parentActivityName=".Activities.Activities.SelectCategoryActivity"
+            android:windowSoftInputMode="stateVisible" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cashadmin.cashadmin.Activities.Activities.SelectCategoryActivity" />
@@ -68,16 +69,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
         </activity>
-        <receiver android:name="net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver"></receiver>
 
-        <receiver android:name="net.cashadmin.cashadmin.Activities.Alarm.BootReceiver"
-                  android:enabled="false">
+        <receiver android:name=".Activities.Alarm.AlarmReceiver" />
+        <receiver
+            android:name=".Activities.Alarm.BootReceiver"
+            android:enabled="false" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="net.cashadmin.cashadmin.Activities.Alarm.SchedulingService" />
+        <service android:name=".Activities.Alarm.SchedulingService" />
+
+        <activity android:name=".Activities.Activities.SettingsActivity" >
+        </activity>
+        <activity android:name=".Activities.Activities.EditCategoryActivity" >
+        </activity>
     </application>
 
 </manifest>
