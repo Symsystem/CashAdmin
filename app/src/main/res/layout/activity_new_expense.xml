@@ -2,6 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/greyBackground"
                 tools:context="net.cashadmin.cashadmin.Activities.Activities.NewExpenseActivity">
 
     <TextView
@@ -22,7 +23,7 @@
         android:layout_below="@id/subtitle"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:background="@color/greyBackground"
+        android:background="@color/White"
         android:orientation="horizontal"
         android:layout_margin="8dp"
         android:padding="8dp">
@@ -79,7 +80,7 @@
         android:layout_below="@id/addExpenseButton"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:background="@color/greyBackground"
+        android:background="@color/White"
         android:orientation="horizontal"
         android:layout_margin="8dp"
         android:padding="8dp">
@@ -114,7 +115,7 @@
         android:layout_below="@id/labelLayout"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:background="@color/greyBackground"
+        android:background="@color/White"
         android:orientation="horizontal"
         android:layout_margin="8dp"
         android:padding="8dp">
@@ -144,7 +145,7 @@
         android:layout_below="@id/recurrenceLayout"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:background="@color/greyBackground"
+        android:background="@color/White"
         android:orientation="horizontal"
         android:layout_margin="8dp"
         android:padding="8dp"
@@ -177,7 +178,7 @@
         android:layout_below="@id/dateLayout"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:background="@color/greyBackground"
+        android:background="@color/White"
         android:orientation="horizontal"
         android:layout_margin="8dp"
         android:padding="8dp"
