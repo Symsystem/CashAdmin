@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -80,7 +81,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                                                                  ColorPickerDialogBuilder
                                                                          .with(EditCategoryActivity.this)
                                                                          .setTitle(getString(R.string.ChooseColor))
-                                                                         .initialColor(color)
+                                                                         .initialColor(ContextCompat.getColor(EditCategoryActivity.this, R.color.White))
                                                                          .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                                                                          .density(6)
                                                                          .showAlphaSlider(false)
