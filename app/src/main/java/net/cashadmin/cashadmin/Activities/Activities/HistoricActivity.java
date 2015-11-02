@@ -8,6 +8,7 @@ import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
@@ -36,7 +37,6 @@ public class HistoricActivity extends AppCompatActivity {
 
     @InjectView(R.id.historyList)
     ListView mHistoryList;
-
     @InjectView(R.id.checkDepense)
     CheckBox mCheckExpense;
     @InjectView(R.id.checkRevenu)
