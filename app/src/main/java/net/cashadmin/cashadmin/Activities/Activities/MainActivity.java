@@ -15,6 +15,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Database.ExpenseHandler;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
@@ -53,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
                 Intent intent = new Intent(MainActivity.this, HistoricActivity.class);
 
-                System.out.println("INDEX : " + e.getXIndex());
-
                 HistoricEntryEnum.ByCategory.attachTo(intent);
-                intent.putExtra("expenseCondition", ExpenseHandler.COLUMN_CATEGORY + " = " + mHistoryChart.getCategories().get(e.getXIndex()).getId());
+                Category c = mHistoryChart.getCategories().get(e.getXIndex());
+                intent.putExtra("category", c);
+                intent.putExtra("expenseCondition", ExpenseHandler.COLUMN_CATEGORY + " = " + c.getId());
                 startActivity(intent);
             }
 

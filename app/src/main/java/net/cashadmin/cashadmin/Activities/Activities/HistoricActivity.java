@@ -8,11 +8,13 @@ import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
@@ -35,8 +37,13 @@ public class HistoricActivity extends AppCompatActivity {
     private ArrayList<Transaction> mIncomes;
     private ArrayList<Transaction> transactions;
 
+    @InjectView(R.id.topBar)
+    RelativeLayout relativeLayoutTopBar;
+    @InjectView(R.id.categoryLabelTopBar)
+    TextView categoryLabelTopBar;
     @InjectView(R.id.historyList)
     ListView mHistoryList;
+
     @InjectView(R.id.checkDepense)
     CheckBox mCheckExpense;
     @InjectView(R.id.checkRevenu)
@@ -75,7 +82,12 @@ public class HistoricActivity extends AppCompatActivity {
                     break;
                 case ByCategory:
                     mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getWhere(TypeEnum.EXPENSE, intent.getStringExtra("expenseCondition"));
-                    mIncomes = new ArrayList<Transaction>();
+                    mIncomes = new ArrayList<>();
+                    Category c = (Category) intent.getSerializableExtra("category");
+                    relativeLayoutTopBar.setVisibility(View.GONE);
+                    categoryLabelTopBar.setVisibility(View.VISIBLE);
+                    categoryLabelTopBar.setText(c.getLabel());
+                    categoryLabelTopBar.setBackgroundColor(c.getColor());
                     break;
             }
         } catch (IllegalTypeException e) {
