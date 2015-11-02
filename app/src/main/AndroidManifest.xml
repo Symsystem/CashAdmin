@@ -81,8 +81,6 @@
 
         <service android:name=".Activities.Alarm.SchedulingService" />
 
-        <activity android:name=".Activities.Activities.SettingsActivity" >
-        </activity>
         <activity android:name=".Activities.Activities.EditCategoryActivity" >
         </activity>
     </application>

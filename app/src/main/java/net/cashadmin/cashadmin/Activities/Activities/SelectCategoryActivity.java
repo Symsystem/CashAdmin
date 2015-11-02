@@ -40,7 +40,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
     @InjectView(R.id.gridView)
     GridView mGridView;
 
-    private int color;
+    private int color = R.color.White;
     private DataManager mDataManager;
 
     @Override

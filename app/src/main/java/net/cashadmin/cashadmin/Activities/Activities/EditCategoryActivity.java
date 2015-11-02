@@ -70,7 +70,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                                                      window.setLayout((6 * getResources().getDisplayMetrics().widthPixels) / 7, LinearLayout.LayoutParams.WRAP_CONTENT);
                                                      pop.show();
                                                      final Category cat = (Category) list.get(position);
-
+                                                     color = cat.getColor();
                                                      final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                                                      colorChoice.setBackgroundColor(cat.getColor());
                                                      colorChoice.setOnClickListener(new View.OnClickListener() {
