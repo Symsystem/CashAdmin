@@ -40,7 +40,7 @@ public class SelectCategoryActivity extends ActionBarActivity {
     @InjectView(R.id.gridView)
     GridView mGridView;
 
-    private int color = R.color.White;
+    private int color;
     private DataManager mDataManager;
 
     @Override
@@ -71,13 +71,14 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                                          pop.show();
 
                                                          final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
+                                                         color = ((ColorDrawable) colorChoice.getBackground()).getColor();
                                                          colorChoice.setOnClickListener(new View.OnClickListener() {
                                                              @Override
                                                              public void onClick(View v) {
                                                                  ColorPickerDialogBuilder
                                                                          .with(SelectCategoryActivity.this)
                                                                          .setTitle(getString(R.string.ChooseColor))
-                                                                         .initialColor(((ColorDrawable) colorChoice.getBackground()).getColor())
+                                                                         .initialColor(color)
                                                                          .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                                                                          .density(6)
                                                                          .showAlphaSlider(false)
