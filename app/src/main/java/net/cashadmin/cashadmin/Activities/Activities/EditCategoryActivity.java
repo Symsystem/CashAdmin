@@ -177,7 +177,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                                                          deleteCategoryButton.setOnClickListener(new View.OnClickListener() {
                                                              @Override
                                                              public void onClick(View view) {
-                                                                 if (position == 0) {
+                                                                 if (position == 1) {
                                                                      Popup.toast(EditCategoryActivity.this, getString(R.string.cantDeleteCat)).show();
                                                                  } else {
                                                                      mDataManager.delete(cat);
