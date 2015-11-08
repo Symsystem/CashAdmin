@@ -26,55 +26,60 @@ public class SchedulingService extends IntentService {
 
     private DataManager mDataManager;
 
-    public SchedulingService(){
+    public SchedulingService() {
         super("SchedulingService");
     }
 
     @Override
-    protected void onHandleIntent(Intent intent){
+    protected void onHandleIntent(Intent intent) {
         mDataManager = DataManager.getDataManager(this);
         List<Entity> transactions = new ArrayList<>();
 
-        try{
+        try {
             transactions = mDataManager.getAll(TypeEnum.FREQUENCY);
-        } catch (IllegalTypeException e){
+        } catch (IllegalTypeException e) {
             e.printStackTrace();
         }
-        for(Entity entity : transactions){
-            Frequency frequency = (Frequency)entity;
+        for (Entity entity : transactions) {
+            Frequency frequency = (Frequency) entity;
             Calendar currentDate = Calendar.getInstance();
             Calendar frequencyDate = Calendar.getInstance();
+            Calendar endFrequencyDate = Calendar.getInstance();
             frequencyDate.setTime(frequency.getDateFrequency());
-            switch (frequency.getFrequency()){
+            endFrequencyDate.setTime(frequency.getEndDateFrequency());
+            switch (frequency.getFrequency()) {
                 case DAILY:
                     handleFrequency(frequency);
                     break;
                 case WEEKLY:
-                    if(currentDate.get(Calendar.DAY_OF_WEEK) == frequencyDate.get(Calendar.DAY_OF_WEEK)){
+                    if (currentDate.get(Calendar.DAY_OF_WEEK) == frequencyDate.get(Calendar.DAY_OF_WEEK)) {
                         handleFrequency(frequency);
                     }
                 case MONTHLY:
-                    if(currentDate.get(Calendar.DAY_OF_MONTH) == frequencyDate.get(Calendar.DAY_OF_MONTH)){
+                    if (currentDate.get(Calendar.DAY_OF_MONTH) == frequencyDate.get(Calendar.DAY_OF_MONTH)) {
                         handleFrequency(frequency);
                     }
                     break;
                 case YEARLY:
-                    if(currentDate.get(Calendar.DAY_OF_YEAR) == frequencyDate.get(Calendar.DAY_OF_YEAR)){
+                    if (currentDate.get(Calendar.DAY_OF_YEAR) == frequencyDate.get(Calendar.DAY_OF_YEAR)) {
                         handleFrequency(frequency);
                     }
                     break;
+            }
+            if (currentDate.get(Calendar.DAY_OF_YEAR) == endFrequencyDate.get(Calendar.DAY_OF_YEAR)) {
+                mDataManager.delete(frequency);
             }
         }
 
         AlarmReceiver.completeWakefulIntent(intent);
     }
 
-    private void sendNotification(Frequency frequency){
+    private void sendNotification(Frequency frequency) {
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
         String msg = null;
-        switch (frequency.getTransactionType()){
+        switch (frequency.getTransactionType()) {
             case INCOME:
                 msg = frequency.getTotal() + getString(R.string.addWallet) + frequency.getLabel() + ")";
                 break;
@@ -95,9 +100,9 @@ public class SchedulingService extends IntentService {
         mNotificationManager.notify(0, mBuilder.build());
     }
 
-    private void handleFrequency(Frequency frequency){
+    private void handleFrequency(Frequency frequency) {
         sendNotification(frequency);
-        switch (frequency.getTransactionType()){
+        switch (frequency.getTransactionType()) {
             case INCOME:
                 Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), frequency.getTotal(), frequency.getLabel(), new Date());
                 mDataManager.insert(income);

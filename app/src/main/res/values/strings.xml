@@ -74,4 +74,6 @@
     <string name="HandleCategories">Gérer les catégories</string>
     <string name="validate">Valider</string>
     <string name="cantDeleteCat">Vous ne pouvez pas supprimer cette catégorie !</string>
+    <string name="endDate">Date de fin :</string>
+    <string name="until">Jusque :</string>
 </resources>

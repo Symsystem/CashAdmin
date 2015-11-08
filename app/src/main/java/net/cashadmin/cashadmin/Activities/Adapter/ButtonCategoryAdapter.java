@@ -39,9 +39,9 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Category> {
         return v;
     }
 
-    public synchronized void refreshAdapter(ArrayList<Category> categs){
+    /*public synchronized void refreshAdapter(ArrayList<Category> categs){
         mCategories.clear();
         mCategories.addAll(categs);
         notifyDataSetChanged();
-    }
+    }*/
 }

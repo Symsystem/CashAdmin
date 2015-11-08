@@ -81,7 +81,12 @@
 
         <service android:name=".Activities.Alarm.SchedulingService" />
 
-        <activity android:name=".Activities.Activities.EditCategoryActivity" >
+        <activity android:name=".Activities.Activities.EditCategoryActivity"
+            android:label="@string/HandleCategories"
+            android:parentActivityName=".Activities.Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
         </activity>
     </application>
 

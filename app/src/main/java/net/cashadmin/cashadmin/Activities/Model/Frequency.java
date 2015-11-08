@@ -40,6 +40,11 @@ public class Frequency extends Entity {
     protected Date dateFrequency;
 
     /**
+     * @var Date
+     */
+    protected Date endDateFrequency;
+
+    /**
      * @var Category
      */
     private Category category;
@@ -51,9 +56,10 @@ public class Frequency extends Entity {
      * @param label
      * @param frequency
      * @param dateFrequency
+     * @param endDateFrequency
      * @param category
      */
-    public Frequency(int id, TypeEnum type, float total, String label, FrequencyEnum frequency, Date dateFrequency, Category category){
+    public Frequency(int id, TypeEnum type, float total, String label, FrequencyEnum frequency, Date dateFrequency, Date endDateFrequency, Category category){
         this.id = id;
         mType = TypeEnum.FREQUENCY;
         this.total = total;
@@ -61,6 +67,7 @@ public class Frequency extends Entity {
         this.transactionType = type;
         this.frequency = frequency;
         this.dateFrequency = dateFrequency;
+        this.endDateFrequency = endDateFrequency;
         this.category = category;
     }
 
@@ -136,6 +143,20 @@ public class Frequency extends Entity {
     }
 
     /**
+     * @return Date
+     */
+    public Date getEndDateFrequency(){
+        return endDateFrequency;
+    }
+
+    /**
+     * @param endDateFrequency
+     */
+    public void setEndDateFrequency(Date endDateFrequency){
+        this.endDateFrequency = endDateFrequency;
+    }
+
+    /**
      * @return Category
      */
     public Category getCategory() {
@@ -164,6 +185,13 @@ public class Frequency extends Entity {
 //        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 //        return formater.format(date);
         return String.valueOf(dateFrequency.getTime());
+    }
+
+    /**
+     * @return String
+     */
+    public String getStringSQLEndDate(){
+        return String.valueOf(endDateFrequency.getTime());
     }
 
     /**

@@ -53,6 +53,8 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     LinearLayout mAmountLayout;
     @InjectView(R.id.recurrenceLayout)
     LinearLayout mRecurrenceLayout;
+    @InjectView(R.id.labelLayout)
+    LinearLayout mLabelLayout;
     @InjectView(R.id.whicheRecurrenceLayout)
     LinearLayout mWhichRecurrenceLayout;
     @InjectView(R.id.dateLayout)
@@ -63,6 +65,14 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     Button mAddIncomeButton;
     @InjectView(R.id.dateChoice)
     TextView mDateChoice;
+    @InjectView(R.id.endDateSwitchLayout)
+    LinearLayout mEndDateSwitchLayout;
+    @InjectView(R.id.endDateSwitch)
+    Switch mEndDateSwitch;
+    @InjectView(R.id.endDateLayout)
+    LinearLayout mEndDateLayout;
+    @InjectView(R.id.endDateChoice)
+    TextView mEndDateChoice;
 
     private DataManager mDataManager;
     private DateFormat date = new SimpleDateFormat("dd/MM/yy");
@@ -77,25 +87,71 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
 
         String currentDate = date.format(new Date());
         mDateChoice.setText(currentDate);
+        mEndDateChoice.setText(currentDate);
+
+        final Animation animShow = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_show_down);
+        final Animation animHide = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_hide_up);
 
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Animation animShow = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_show_down);
-                Animation animHide = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_hide_up);
-                float startY = mAmountLayout.getBottom();
+                float startY = mAmountLayout.getTop();
                 float endY = mRecurrenceLayout.getBottom();
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
                     mDateLayout.startAnimation(animShow);
                     mDateLayout.setVisibility(View.VISIBLE);
+                    mEndDateSwitchLayout.startAnimation(animShow);
+                    mEndDateSwitchLayout.setVisibility(View.VISIBLE);
                     makeAnim(startY - endY);
                 } else {
                     mWhichRecurrenceLayout.startAnimation(animHide);
-                    mWhichRecurrenceLayout.setVisibility(View.GONE);
                     mDateLayout.startAnimation(animHide);
-                    mDateLayout.setVisibility(View.GONE);
+                    mEndDateSwitchLayout.startAnimation(animHide);
+                    makeAnim(endY - startY);
+                    if (mEndDateSwitch.isChecked()){
+                        mEndDateLayout.startAnimation(animHide);
+                    }
+                    animHide.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mWhichRecurrenceLayout.setVisibility(View.GONE);
+                            mDateLayout.setVisibility(View.GONE);
+                            mEndDateSwitchLayout.setVisibility(View.GONE);
+                            mEndDateSwitch.setChecked(false);
+                            if (mEndDateSwitch.isChecked()) {
+                                mEndDateLayout.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+            }
+        });
+
+        final Animation sndAnimHide = AnimationUtils.loadAnimation(NewIncomeActivity.this, R.anim.popup_hide_up);
+        mEndDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                float startY = mAmountLayout.getBottom();
+                float endY = mLabelLayout.getBottom();
+                if (b) {
+                    mEndDateLayout.startAnimation(animShow);
+                    mEndDateLayout.setVisibility(View.VISIBLE);
+                    makeAnim(startY - endY);
+                } else {
+                    mEndDateLayout.startAnimation(sndAnimHide);
+                    mEndDateLayout.setVisibility(View.GONE);
                     makeAnim(endY - startY);
                 }
             }
@@ -118,15 +174,16 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
 
 
     @OnClick(R.id.addIncomeButton)
-    public void onClickIncomeButton(){
+    public void onClickIncomeButton() {
         String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
         Date dateFrequency = null;
-        if(!(stringAmount.toString().matches("-?\\d+(\\.\\d+)?"))) {
+        Date endDateFrequency = null;
+        if (!(stringAmount.toString().matches("-?\\d+(\\.\\d+)?"))) {
             Toast toast = Popup.toast(NewIncomeActivity.this, getString(R.string.validAmount));
             toast.show();
-        }else {
+        } else {
             if (label.isEmpty() || stringAmount.isEmpty()) {
                 Toast toast = Popup.toast(NewIncomeActivity.this, getString(R.string.fieldEmpty));
                 toast.show();
@@ -138,14 +195,22 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                     String frequencyDate = mDateChoice.getText().toString().trim();
                     try {
                         dateFrequency = date.parse(frequencyDate);
-                    }catch (ParseException e){
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (mEndDateSwitch.isChecked()) {
+                    String frequencyEndDate = mEndDateChoice.getText().toString().trim();
+                    try {
+                        endDateFrequency = date.parse(frequencyEndDate);
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
                 Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date());
-                if (mSwitch.isChecked() && !(frequency.equals(FrequencyEnum.values()[0].toString()))){
+                if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
                     Category cat = null;
-                    Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.INCOME, income.getTotal(), income.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, cat);
+                    Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.INCOME, income.getTotal(), income.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, cat);
                     mDataManager.insert(freq);
                 }
                 mDataManager.insert(income);
@@ -155,11 +220,11 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
     }
 
     @OnClick(R.id.dateChoice)
-    public void onClickDateChoice(){
+    public void onClickDateChoice() {
         final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
         final Dialog pop = Popup.popInfo(NewIncomeActivity.this, layout);
         pop.show();
-        Button cancelButton = (Button)layout.findViewById(R.id.cancelButton);
+        Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,15 +237,40 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View view) {
                 DatePicker datePicker = (DatePicker) layout.findViewById(R.id.dateSelection);
-                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth()));
+                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
                 mDateChoice.setText(choosenDate);
                 pop.dismiss();
             }
         });
     }
 
-    private void makeAnim(float moove){
-        Animation animSample = new TranslateAnimation(0 , 0, moove, 0);
+    @OnClick(R.id.endDateChoice)
+    public void onClickEndDateChoice() {
+        final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
+        final Dialog pop = Popup.popInfo(NewIncomeActivity.this, layout);
+        pop.show();
+        Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pop.dismiss();
+            }
+        });
+
+        Button okButton = (Button) layout.findViewById(R.id.dateButton);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePicker datePicker = (DatePicker) layout.findViewById(R.id.dateSelection);
+                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+                mEndDateChoice.setText(choosenDate);
+                pop.dismiss();
+            }
+        });
+    }
+
+    private void makeAnim(float moove) {
+        Animation animSample = new TranslateAnimation(0, 0, moove, 0);
         animSample.setDuration(200);
         animSample.setFillAfter(true);
         animSample.setInterpolator(new LinearInterpolator());

@@ -23,11 +23,12 @@ public class FrequencyHandler extends GenericHandler {
     protected static final String COLUMN_LABEL = "label";
     protected static final String COLUMN_FREQUENCY = "frequency";
     protected static final String COLUMN_DATE_FREQUENCY = "dateFrequency";
+    protected static final String COLUMN_END_DATE_FREQUENCY = "endDateFrequency";
     protected static final String COLUMN_CATEGORY = "category";
 
     protected final CategoryHandler mCategoryHandler;
 
-    public FrequencyHandler(DBHandler handler, CategoryHandler catHandler){
+    public FrequencyHandler(DBHandler handler, CategoryHandler catHandler) {
         mDBHandler = handler;
         mCategoryHandler = catHandler;
 
@@ -45,8 +46,9 @@ public class FrequencyHandler extends GenericHandler {
                 "','" + FrequencyEnum.values()[3].toString() +
                 "','" + FrequencyEnum.values()[4].toString() + "')), " +
                 COLUMN_DATE_FREQUENCY + " FLOAT NOT NULL, " +
+                COLUMN_END_DATE_FREQUENCY + " FLOAT, " +
                 COLUMN_CATEGORY + " INTEGER, " +
-                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME +")");
+                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + CategoryHandler.TABLE_NAME + ")");
     }
 
     @Override
@@ -58,7 +60,10 @@ public class FrequencyHandler extends GenericHandler {
         values.put(COLUMN_LABEL, frequency.getLabel());
         values.put(COLUMN_FREQUENCY, frequency.getFrequency().toString());
         values.put(COLUMN_DATE_FREQUENCY, frequency.getStringSQLDate());
-        values.put(COLUMN_CATEGORY, frequency.getCategory().getId());
+        values.put(COLUMN_END_DATE_FREQUENCY, frequency.getStringSQLEndDate());
+        if (frequency.getTransactionType().equals(TypeEnum.values()[2].toString())){
+            values.put(COLUMN_CATEGORY, frequency.getCategory().getId());
+        }
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
@@ -76,7 +81,10 @@ public class FrequencyHandler extends GenericHandler {
         values.put(COLUMN_LABEL, frequency.getLabel());
         values.put(COLUMN_FREQUENCY, frequency.getFrequency().toString());
         values.put(COLUMN_DATE_FREQUENCY, frequency.getStringSQLDate());
-        values.put(COLUMN_CATEGORY, frequency.getCategory().getId());
+        values.put(COLUMN_END_DATE_FREQUENCY, frequency.getStringSQLEndDate());
+        if (frequency.getTransactionType().equals(TypeEnum.values()[2].toString())){
+            values.put(COLUMN_CATEGORY, frequency.getCategory().getId());
+        }
 
         SQLiteDatabase db = mDBHandler.getWritableDatabase();
 
@@ -196,9 +204,10 @@ public class FrequencyHandler extends GenericHandler {
                     c.getString(c.getColumnIndex(COLUMN_LABEL)),
                     FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY))),
                     new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE_FREQUENCY))),
+                    new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_END_DATE_FREQUENCY))),
                     (Category) mCategoryHandler.findById(c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
             );
-        }catch (DataNotFoundException e){
+        } catch (DataNotFoundException e) {
             e.printStackTrace();
         }
         return null;

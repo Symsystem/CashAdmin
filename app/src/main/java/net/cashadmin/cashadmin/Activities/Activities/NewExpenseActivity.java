@@ -59,6 +59,14 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
     Spinner mSpinner;
     @InjectView(R.id.dateChoice)
     TextView mDateChoice;
+    @InjectView(R.id.endDateSwitchLayout)
+    LinearLayout mEndDateSwitchLayout;
+    @InjectView(R.id.endDateSwitch)
+    Switch mEndDateSwitch;
+    @InjectView(R.id.endDateLayout)
+    LinearLayout mEndDateLayout;
+    @InjectView(R.id.endDateChoice)
+    TextView mEndDateChoice;
 
     private Category mCategory;
     private boolean newCategory;
@@ -75,6 +83,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
 
         String currentDate = date.format(new Date());
         mDateChoice.setText(currentDate);
+        mEndDateChoice.setText(currentDate);
 
         Intent intent = getIntent();
         newCategory = intent.getBooleanExtra("newCategory", false);
@@ -82,21 +91,62 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mSubtitle.setText(mCategory.getLabel());
         mSubtitle.setBackgroundColor(mCategory.getColor());
 
+        final Animation animShow = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_show_down);
+        final Animation animHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide_up);
+
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Animation animShow = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_show_down);
-                Animation animHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide_up);
                 if (b) {
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
                     mDateLayout.startAnimation(animShow);
                     mDateLayout.setVisibility(View.VISIBLE);
+                    mEndDateSwitchLayout.startAnimation(animShow);
+                    mEndDateSwitchLayout.setVisibility(View.VISIBLE);
                 } else {
                     mWhichRecurrenceLayout.startAnimation(animHide);
-                    mWhichRecurrenceLayout.setVisibility(View.GONE);
                     mDateLayout.startAnimation(animHide);
-                    mDateLayout.setVisibility(View.GONE);
+                    mEndDateSwitchLayout.startAnimation(animHide);
+                    if (mEndDateSwitch.isChecked()){
+                        mEndDateLayout.startAnimation(animHide);
+                    }
+                    animHide.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mWhichRecurrenceLayout.setVisibility(View.GONE);
+                            mDateLayout.setVisibility(View.GONE);
+                            mEndDateSwitchLayout.setVisibility(View.GONE);
+                            mEndDateSwitch.setChecked(false);
+                            if (mEndDateSwitch.isChecked()){
+                                mEndDateLayout.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+            }
+        });
+
+        final Animation sndAnimHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide_up);
+        mEndDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mEndDateLayout.startAnimation(animShow);
+                    mEndDateLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mEndDateLayout.startAnimation(sndAnimHide);
+                    mEndDateLayout.setVisibility(View.GONE);
                 }
             }
         });
@@ -122,6 +172,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         String label = mLabel.getText().toString().trim();
         String frequency = FrequencyEnum.values()[0].toString();
         Date dateFrequency = null;
+        Date endDateFrequency = null;
         if (stringAmount.isEmpty()) {
             Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
             toast.show();
@@ -137,11 +188,19 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                     e.printStackTrace();
                 }
             }
+            if (mEndDateSwitch.isChecked()) {
+                String frequencyEndDate = mEndDateChoice.getText().toString().trim();
+                try {
+                    endDateFrequency = date.parse(frequencyEndDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
             Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory);
             if (newCategory)
                 mDataManager.insert(mCategory);
-            if (mSwitch.isChecked() && !(frequency.equals(FrequencyEnum.values()[0].toString()))) {
-                Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.EXPENSE, expense.getTotal(), expense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, expense.getCategory());
+            if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
+                Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.EXPENSE, expense.getTotal(), expense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, expense.getCategory());
                 mDataManager.insert(freq);
             }
             mDataManager.insert(expense);
@@ -168,8 +227,33 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View view) {
                 DatePicker datePicker = (DatePicker) layout.findViewById(R.id.dateSelection);
-                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth()));
+                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
                 mDateChoice.setText(choosenDate);
+                pop.dismiss();
+            }
+        });
+    }
+
+    @OnClick(R.id.endDateChoice)
+    public void onClickEndDateChoice() {
+        final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
+        final Dialog pop = Popup.popInfo(NewExpenseActivity.this, layout);
+        pop.show();
+        Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pop.dismiss();
+            }
+        });
+
+        Button okButton = (Button) layout.findViewById(R.id.dateButton);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePicker datePicker = (DatePicker) layout.findViewById(R.id.dateSelection);
+                String choosenDate = date.format(new Date(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth()));
+                mEndDateChoice.setText(choosenDate);
                 pop.dismiss();
             }
         });
