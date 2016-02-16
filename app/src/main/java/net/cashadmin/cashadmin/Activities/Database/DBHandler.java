@@ -6,10 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Utils.Counter;
-import net.cashadmin.cashadmin.R;
 
 import java.util.HashMap;
 
