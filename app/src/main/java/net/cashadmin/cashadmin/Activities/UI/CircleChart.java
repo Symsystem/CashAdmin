@@ -8,8 +8,8 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.PercentFormatter;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
@@ -42,7 +42,7 @@ public class CircleChart {
         this.mDataManager = dm;
         this.mTitle = title;
 
-        this.data = new ArrayList<Entity>();
+        this.data = new ArrayList<>();
 
         mChart.setUsePercentValues(true);
         mChart.setDescription(title);
@@ -68,50 +68,51 @@ public class CircleChart {
         this.setData();
     }
 
-    public void setData(Date from, Date to){
-        try{
+    public void setData(Date from, Date to) {
+        try {
             data = mDataManager.getByDate(TypeEnum.EXPENSE, from, to);
-        } catch (IllegalTypeException e){
+        } catch (IllegalTypeException e) {
             e.printStackTrace();
         }
         this.setData();
     }
 
-    private void setData(){
-        cats = new ArrayList<Category>();
+    private void setData() {
+        cats = new ArrayList<>();
 
-        try{
+        try {
             cats = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(TypeEnum.CATEGORY);
-        } catch (IllegalTypeException e){
+        } catch (IllegalTypeException e) {
             e.printStackTrace();
         }
 
-        ArrayList<String> categories = new ArrayList<>();
         HashMap<Integer, Counter> expenseByCategory = new HashMap<>();
-        ArrayList<Integer> colors = new ArrayList<Integer>();
 
-        for (Category cat : cats){
-            categories.add(cat.getLabel());
+        for (Category cat : cats) {
             expenseByCategory.put(cat.getId(), new Counter());
-            colors.add(cat.getColor());
         }
 
         float totalAmount = 0;
 
-        for (Entity ent : data){
+        for (Entity ent : data) {
             Expense exp = (Expense) ent;
             Counter c = expenseByCategory.get(exp.getCategory().getId());
             c.add(exp.getTotal());
             totalAmount += exp.getTotal();
         }
 
+        ArrayList<String> categories = new ArrayList<>();
         ArrayList<Entry> yVals = new ArrayList<>();
+        ArrayList<Integer> colors = new ArrayList<>();
         int i = 0;
-        for (Entity entity : cats)
-        {
-            Category cat = (Category)entity;
-            yVals.add(new Entry(expenseByCategory.get(cat.getId()).getCounterFloat(), i));
-            i++;
+        for (Category cat : cats) {
+            float count = expenseByCategory.get(cat.getId()).getCounterFloat();
+            if (count != 0) {
+                yVals.add(new Entry(count, i));
+                categories.add(cat.getLabel());
+                colors.add(cat.getColor());
+                i++;
+            }
         }
 
         PieDataSet dataSet = new PieDataSet(yVals, mContext.getString(R.string.labelCategory));
@@ -131,6 +132,7 @@ public class CircleChart {
 
         mChart.setExtraOffsets(0, 0, 75f, 0);
         mChart.setCenterText("Total " + totalAmount);
+        mChart.setDrawSliceText(false);
 
         Legend legend = mChart.getLegend();
         legend.setWordWrapEnabled(true);
