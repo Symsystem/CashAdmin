@@ -255,7 +255,7 @@ public class IncomeActivity extends AppCompatActivity implements AdapterView.OnI
                 } else if (transactionEntry == TransactionEntryEnum.New) {
                     mIncome = new Income(mDataManager.getNextId(Income.class), amount, label, new Date());
                     if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
-                        Category cat = null;
+                        Category cat = new Category(0, getString(R.string.income), R.color.green);
                         Frequency freq = new Frequency(mDataManager.getNextId(Frequency.class), TypeEnum.INCOME, mIncome.getTotal(), mIncome.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, cat);
                         mDataManager.insert(freq);
                     }

@@ -3,7 +3,7 @@ package net.cashadmin.cashadmin.Activities.Model.Enum;
 import android.content.Intent;
 
 public enum TransactionEntryEnum {
-    New, Edit;
+    New, Edit, FrequencyEdit;
 
     private static final String name = HistoricEntryEnum.class.getName();
 

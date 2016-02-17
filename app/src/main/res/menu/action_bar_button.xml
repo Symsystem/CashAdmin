@@ -9,4 +9,8 @@
     <item android:id="@+id/settings"
           android:title="@string/settings"
           app:showAsAction="never"/>
+
+    <item android:id="@+id/permanentOrder"
+          android:title="@string/permanentOrders"
+          app:showAsAction="never"/>
 </menu>

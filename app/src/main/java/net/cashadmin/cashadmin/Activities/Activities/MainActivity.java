@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
+            case R.id.permanentOrder:
+                startActivity(new Intent(MainActivity.this, FrequencyTransactionActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 

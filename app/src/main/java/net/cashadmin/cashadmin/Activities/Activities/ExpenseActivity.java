@@ -84,6 +84,7 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
     private DateFormat date = new SimpleDateFormat("dd/MM/yy");
     private TransactionEntryEnum transactionEntry;
     private Expense mExpense;
+    private Frequency mFrequency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,17 +104,51 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
         Intent intent = getIntent();
         transactionEntry = TransactionEntryEnum.detachFrom(intent);
 
+        mSpinner.setOnItemSelectedListener(this);
+
+        List<String> listSpinner = new ArrayList<>();
+        listSpinner.add(getString(R.string.Never));
+        listSpinner.add(getString(R.string.Days));
+        listSpinner.add(getString(R.string.Weeks));
+        listSpinner.add(getString(R.string.Months));
+        listSpinner.add(getString(R.string.Years));
+
+        Map<String, Integer> recurrenceMap = new HashMap<>();
+        recurrenceMap.put(FrequencyEnum.NEVER.toString(), 0);
+        recurrenceMap.put(FrequencyEnum.DAILY.toString(), 1);
+        recurrenceMap.put(FrequencyEnum.WEEKLY.toString(), 2);
+        recurrenceMap.put(FrequencyEnum.MONTHLY.toString(), 3);
+        recurrenceMap.put(FrequencyEnum.YEARLY.toString(), 4);
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(spinnerAdapter);
+
         if (transactionEntry == TransactionEntryEnum.New) {
             newCategory = intent.getBooleanExtra("newCategory", false);
             mCategory = (Category) intent.getSerializableExtra("category");
         } else {
             try {
-                mExpense = (Expense) mDataManager.getById(Expense.class, intent.getIntExtra("expenseId", 0));
-                mRecurrenceLayout.setVisibility(View.GONE);
+                if(transactionEntry == TransactionEntryEnum.FrequencyEdit){
+                    mFrequency = (Frequency) mDataManager.getById(Frequency.class, intent.getIntExtra("frequencyId", 0));
+                    mAmount.setText(String.valueOf(mFrequency.getTotal()));
+                    mLabel.setText(mFrequency.getLabel());
+                    mCategory = mFrequency.getCategory();
+                    mEndDateSwitchLayout.setVisibility(View.GONE);
+                    mDateLayout.setVisibility(View.VISIBLE);
+                    mDateChoice.setText(date.format(mFrequency.getDateFrequency()));
+                    mSpinner.setSelection(recurrenceMap.get(mFrequency.getFrequency()));
+                    mEndDateChoice.setText(date.format(mFrequency.getEndDateFrequency()));
+                    mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
+                    mEndDateLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mExpense = (Expense) mDataManager.getById(Expense.class, intent.getIntExtra("expenseId", 0));
+                    mAmount.setText(String.valueOf(mExpense.getTotal()));
+                    mLabel.setText(mExpense.getLabel());
+                    mCategory = mExpense.getCategory();
+                }
                 mAddExpenseButton.setText(R.string.saveChanges);
-                mAmount.setText(String.valueOf(mExpense.getTotal()));
-                mLabel.setText(mExpense.getLabel());
-                mCategory = mExpense.getCategory();
+                mRecurrenceLayout.setVisibility(View.GONE);
                 mCategoryLayout.setVisibility(View.VISIBLE);
                 List<Category> categories = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(Category.class);
                 Map<String, Integer> catLabels = new HashMap<>();
@@ -204,18 +239,6 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
             }
         });
 
-        mSpinner.setOnItemSelectedListener(this);
-
-        List<String> listSpinner = new ArrayList<>();
-        listSpinner.add(getString(R.string.Never));
-        listSpinner.add(getString(R.string.Days));
-        listSpinner.add(getString(R.string.Weeks));
-        listSpinner.add(getString(R.string.Months));
-        listSpinner.add(getString(R.string.Years));
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(dataAdapter);
     }
 
     @OnClick(R.id.addExpenseButton)

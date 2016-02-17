@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.swipe.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeHistoricLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/editItemButton"
+            android:layout_weight="1"
+            android:background="@color/primary">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/edit_icon"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/deleteItemButton"
+            android:layout_weight="1"
+            android:background="@color/red_dark">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/bin_icon"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/colored_bar"
+            tools:background="@color/red"
+            android:layout_alignParentTop="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label"
+            tools:text="Libellé"
+            android:textSize="16sp"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/colored_bar"
+            android:layout_toEndOf="@+id/colored_bar"
+            android:layout_margin="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category"
+            android:paddingBottom="8dp"
+            tools:text="Category"
+            android:layout_below="@+id/label"
+            android:layout_alignLeft="@+id/label"
+            android:layout_alignStart="@+id/label"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/frequency"
+            android:paddingBottom="8dp"
+            tools:text="Frequence"
+            android:layout_below="@+id/category"
+            android:layout_alignLeft="@+id/category"
+            android:layout_alignStart="@+id/category"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/end_date"
+            android:id="@+id/endDateIcon"
+            android:layout_below="@+id/category"
+            android:layout_toLeftOf="@+id/endDateFrequency"
+            android:layout_toStartOf="@+id/endDateFrequency"
+            android:layout_marginRight="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/endDateFrequency"
+            android:paddingBottom="8dp"
+            tools:text="Date de fin"
+            android:layout_alignTop="@+id/frequency"
+            android:layout_alignRight="@+id/amount"
+            android:layout_alignEnd="@+id/amount"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/amount"
+            tools:text="10 €"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/greyBackground"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+</com.daimajia.swipe.SwipeLayout>

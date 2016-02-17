@@ -122,10 +122,41 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/recurrenceLayout"
+                android:id="@+id/categoryLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
                 android:layout_below="@id/labelLayout"
+                android:layout_margin="8dp"
+                android:background="@color/White"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:text="@string/labelCategory"
+                    android:textColor="@color/Black"
+                    android:textSize="14dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:spinnerMode="dropdown">
+                </Spinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recurrenceLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:layout_below="@id/categoryLayout"
                 android:layout_margin="8dp"
                 android:background="@color/White"
                 android:orientation="horizontal"
@@ -278,36 +309,6 @@
                     android:textSize="14dp"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/categoryLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="54dp"
-                android:layout_below="@id/labelLayout"
-                android:layout_margin="8dp"
-                android:background="@color/White"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:text="@string/labelCategory"
-                    android:textColor="@color/Black"
-                    android:textSize="14dp"
-                    />
-
-                <Spinner
-                    android:id="@+id/categorySpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:spinnerMode="dropdown">
-                </Spinner>
-
-            </LinearLayout>
 
         </RelativeLayout>
 

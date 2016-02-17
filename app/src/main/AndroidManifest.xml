@@ -97,6 +97,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity"/>
         </activity>
+        <activity android:name=".Activities.Activities.FrequencyTransactionActivity">
+        </activity>
     </application>
 
 </manifest>

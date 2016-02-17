@@ -7,6 +7,7 @@ import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -174,7 +175,7 @@ public class Frequency extends Entity {
                     FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY))),
                     new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE_FREQUENCY))),
                     new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_END_DATE_FREQUENCY))),
-                    (Category) DataManager.getDataManager().getById(Category.class, c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
+                    (TypeEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_TYPE_TRANSACTION))) == TypeEnum.EXPENSE) ? (Category) DataManager.getDataManager().getById(Category.class, c.getInt(c.getColumnIndex(COLUMN_CATEGORY))) : new Category(0, "Revenu", R.color.green)
             );
         } catch (DataNotFoundException e) {
             e.printStackTrace();
