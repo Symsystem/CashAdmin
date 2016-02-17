@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 
@@ -23,14 +22,16 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
     private HashMap<Transaction, Integer> mIdMap = new HashMap<Transaction, Integer>();
     private ArrayList<Transaction> mTransactions;
     private View.OnClickListener mOnClickDeleteListener;
+    private View.OnClickListener mOnClickEditListener;
 
-    public TransactionHistoryAdapter(Context context, ArrayList<Transaction> objects, View.OnClickListener onClickDeleteListener) {
+    public TransactionHistoryAdapter(Context context, ArrayList<Transaction> objects, View.OnClickListener onClickDeleteListener, View.OnClickListener onClickEditListener) {
         super(context, R.layout.historic_item, objects);
         for(int i = 0; i < objects.size(); ++i){
             mIdMap.put(objects.get(i), i);
         }
         mTransactions = objects;
         mOnClickDeleteListener = onClickDeleteListener;
+        mOnClickEditListener = onClickEditListener;
     }
 
     @Override
@@ -85,12 +86,7 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
         }
         holder.mLabel.setText(t.getLabel());
 
-        holder.mEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(TransactionHistoryAdapter.this.getContext(), "EDIT", Toast.LENGTH_LONG).show();
-            }
-        });
+        holder.mEditButton.setOnClickListener(mOnClickEditListener);
 
         holder.mDeleteButton.setOnClickListener(mOnClickDeleteListener);
 

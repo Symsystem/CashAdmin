@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,8 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TransactionEntryEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
@@ -35,20 +35,26 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class NewExpenseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ExpenseActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @InjectView(R.id.subtitle)
     TextView mSubtitle;
     @InjectView(R.id.amount)
     EditText mAmount;
+    @InjectView(R.id.addExpenseButton)
+    Button mAddExpenseButton;
     @InjectView(R.id.label)
     EditText mLabel;
+    @InjectView(R.id.recurrenceLayout)
+    LinearLayout mRecurrenceLayout;
     @InjectView(R.id.mySwitch)
     Switch mSwitch;
     @InjectView(R.id.whicheRecurrenceLayout)
@@ -67,16 +73,22 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
     LinearLayout mEndDateLayout;
     @InjectView(R.id.endDateChoice)
     TextView mEndDateChoice;
+    @InjectView(R.id.categoryLayout)
+    LinearLayout mCategoryLayout;
+    @InjectView(R.id.categorySpinner)
+    Spinner mCategorySpinner;
 
     private Category mCategory;
     private boolean newCategory;
     private DataManager mDataManager;
     private DateFormat date = new SimpleDateFormat("dd/MM/yy");
+    private TransactionEntryEnum transactionEntry;
+    private Expense mExpense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_expense);
+        setContentView(R.layout.activity_expense);
         mDataManager = DataManager.getDataManager();
 
         ButterKnife.inject(this);
@@ -85,14 +97,43 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mDateChoice.setText(currentDate);
         mEndDateChoice.setText(currentDate);
 
+        final Animation animHide = AnimationUtils.loadAnimation(ExpenseActivity.this, R.anim.popup_hide_up);
+        final Animation animShow = AnimationUtils.loadAnimation(ExpenseActivity.this, R.anim.popup_show_down);
+
         Intent intent = getIntent();
-        newCategory = intent.getBooleanExtra("newCategory", false);
-        mCategory = (Category) intent.getSerializableExtra("category");
+        transactionEntry = TransactionEntryEnum.detachFrom(intent);
+
+        if (transactionEntry == TransactionEntryEnum.New) {
+            newCategory = intent.getBooleanExtra("newCategory", false);
+            mCategory = (Category) intent.getSerializableExtra("category");
+        } else {
+            try {
+                mExpense = (Expense) mDataManager.getById(Expense.class, intent.getIntExtra("expenseId", 0));
+                mRecurrenceLayout.setVisibility(View.GONE);
+                mAddExpenseButton.setText(R.string.saveChanges);
+                mAmount.setText(String.valueOf(mExpense.getTotal()));
+                mLabel.setText(mExpense.getLabel());
+                mCategory = mExpense.getCategory();
+                mCategoryLayout.setVisibility(View.VISIBLE);
+                List<Category> categories = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(Category.class);
+                Map<String, Integer> catLabels = new HashMap<>();
+                int i = 0;
+                for (Category cat : categories) {
+                    catLabels.put(cat.getLabel(), i);
+                    i++;
+                }
+                List<String> listCatLabels = new ArrayList<>();
+                listCatLabels.addAll(catLabels.keySet());
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listCatLabels);
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                mCategorySpinner.setAdapter(dataAdapter);
+                mCategorySpinner.setSelection(catLabels.get(mCategory.getLabel()));
+            } catch (DataNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         mSubtitle.setText(mCategory.getLabel());
         mSubtitle.setBackgroundColor(mCategory.getColor());
-
-        final Animation animShow = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_show_down);
-        final Animation animHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide_up);
 
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -134,7 +175,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
             }
         });
 
-        final Animation sndAnimHide = AnimationUtils.loadAnimation(NewExpenseActivity.this, R.anim.popup_hide_up);
+        final Animation sndAnimHide = AnimationUtils.loadAnimation(ExpenseActivity.this, R.anim.popup_hide_up);
         mEndDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -166,16 +207,15 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         mSpinner.setOnItemSelectedListener(this);
 
         List<String> listSpinner = new ArrayList<>();
-        listSpinner.add(0, getString(R.string.Never));
-        listSpinner.add(1, getString(R.string.Days));
-        listSpinner.add(2, getString(R.string.Weeks));
-        listSpinner.add(3, getString(R.string.Months));
-        listSpinner.add(4, getString(R.string.Years));
+        listSpinner.add(getString(R.string.Never));
+        listSpinner.add(getString(R.string.Days));
+        listSpinner.add(getString(R.string.Weeks));
+        listSpinner.add(getString(R.string.Months));
+        listSpinner.add(getString(R.string.Years));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
-
     }
 
     @OnClick(R.id.addExpenseButton)
@@ -186,7 +226,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
         Date dateFrequency = null;
         Date endDateFrequency = null;
         if (stringAmount.isEmpty()) {
-            Toast toast = Popup.toast(NewExpenseActivity.this, getString(R.string.fieldEmpty));
+            Toast toast = Popup.toast(ExpenseActivity.this, getString(R.string.fieldEmpty));
             toast.show();
         } else {
             float amount = Float.valueOf(stringAmount);
@@ -209,19 +249,26 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                 }
             }
             if ((!(dateFrequency == null)) && (!(endDateFrequency == null)) && (dateFrequency.after(endDateFrequency))) {
-                Popup.toast(NewExpenseActivity.this, getString(R.string.failDate)).show();
+                Popup.toast(ExpenseActivity.this, getString(R.string.failDate)).show();
+            } else if (transactionEntry == TransactionEntryEnum.Edit) {
+                Category categorySelected = (Category) mDataManager.getWhere(Category.class, Category.COLUMN_LABEL + " = '" + mCategorySpinner.getSelectedItem().toString() + "'").get(0);
+                mExpense.setLabel(label);
+                mExpense.setTotal(Float.valueOf(stringAmount));
+                mExpense.setCategory(categorySelected);
+                mDataManager.update(mExpense);
+                startActivity(new Intent(ExpenseActivity.this, MainActivity.class));
             } else {
-                Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory);
+                mExpense = new Expense(mDataManager.getNextId(Expense.class), amount, label, new Date(), mCategory);
                 if (newCategory)
                     mDataManager.insert(mCategory);
                 if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
-                    Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.EXPENSE, expense.getTotal(), expense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, expense.getCategory());
+                    Frequency freq = new Frequency(mDataManager.getNextId(Frequency.class), TypeEnum.EXPENSE, mExpense.getTotal(), mExpense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, mExpense.getCategory());
                     mDataManager.insert(freq);
                 }
                 if (!mSwitch.isChecked()) {
-                    mDataManager.insert(expense);
+                    mDataManager.insert(mExpense);
                 }
-                startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
+                startActivity(new Intent(ExpenseActivity.this, MainActivity.class));
             }
         }
 
@@ -230,7 +277,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
     @OnClick(R.id.dateChoice)
     public void onClickDateChoice() {
         final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
-        final Dialog pop = Popup.popInfo(NewExpenseActivity.this, layout);
+        final Dialog pop = Popup.popInfo(ExpenseActivity.this, layout);
         pop.show();
         Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -255,7 +302,7 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
     @OnClick(R.id.endDateChoice)
     public void onClickEndDateChoice() {
         final View layout = getLayoutInflater().inflate(R.layout.date_choice_popup, null);
-        final Dialog pop = Popup.popInfo(NewExpenseActivity.this, layout);
+        final Dialog pop = Popup.popInfo(ExpenseActivity.this, layout);
         pop.show();
         Button cancelButton = (Button) layout.findViewById(R.id.cancelButton);
         cancelButton.setOnClickListener(new View.OnClickListener() {

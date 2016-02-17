@@ -95,7 +95,7 @@ public class CircleChart {
             }
         }
 
-        PieDataSet dataSet = new PieDataSet(yVals, mContext.getString(R.string.labelCategory));
+        PieDataSet dataSet = new PieDataSet(yVals, "");
 
         dataSet.setColors(colors);
 

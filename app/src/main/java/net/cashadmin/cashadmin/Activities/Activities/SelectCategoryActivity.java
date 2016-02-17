@@ -25,7 +25,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import net.cashadmin.cashadmin.Activities.Adapter.ButtonCategoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TransactionEntryEnum;
 import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
@@ -115,10 +115,11 @@ public class SelectCategoryActivity extends ActionBarActivity {
                                  Toast toast = Popup.toast(SelectCategoryActivity.this, getString(R.string.emptyName));
                                  toast.show();
                              } else {
-                                 Category cat = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), name, color);
-                                 Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                                 Category cat = new Category(mDataManager.getNextId(Category.class), name, color);
+                                 Intent intent = new Intent(SelectCategoryActivity.this, ExpenseActivity.class);
                                  intent.putExtra("category", cat);
                                  intent.putExtra("newCategory", true);
+                                 TransactionEntryEnum.New.attachTo(intent);
                                  pop.dismiss();
                                  startActivity(intent);
                              }
@@ -126,8 +127,9 @@ public class SelectCategoryActivity extends ActionBarActivity {
                      });
                  } else {
                      Category cat = (Category) list.get(position);
-                     Intent intent = new Intent(SelectCategoryActivity.this, NewExpenseActivity.class);
+                     Intent intent = new Intent(SelectCategoryActivity.this, ExpenseActivity.class);
                      intent.putExtra("category", cat);
+                     TransactionEntryEnum.New.attachTo(intent);
                      startActivity(intent);
                  }
              }

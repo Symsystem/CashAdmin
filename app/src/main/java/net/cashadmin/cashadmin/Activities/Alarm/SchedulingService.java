@@ -10,7 +10,6 @@ import android.support.v4.app.NotificationCompat;
 import net.cashadmin.cashadmin.Activities.Activities.MainActivity;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.Model.Income;
@@ -99,11 +98,11 @@ public class SchedulingService extends IntentService {
         sendNotification(frequency);
         switch (frequency.getTransactionType()) {
             case INCOME:
-                Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), frequency.getTotal(), frequency.getLabel(), new Date());
+                Income income = new Income(mDataManager.getNextId(Income.class), frequency.getTotal(), frequency.getLabel(), new Date());
                 mDataManager.insert(income);
                 break;
             case EXPENSE:
-                Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), frequency.getTotal(), frequency.getLabel(), new Date(), frequency.getCategory());
+                Expense expense = new Expense(mDataManager.getNextId(Expense.class), frequency.getTotal(), frequency.getLabel(), new Date(), frequency.getCategory());
                 mDataManager.insert(expense);
                 break;
         }

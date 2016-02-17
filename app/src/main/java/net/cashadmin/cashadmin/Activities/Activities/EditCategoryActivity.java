@@ -24,7 +24,6 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import net.cashadmin.cashadmin.Activities.Adapter.ButtonCategoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.UI.Popup;
 import net.cashadmin.cashadmin.R;
 
@@ -114,7 +113,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                                  Toast toast = Popup.toast(EditCategoryActivity.this, getString(R.string.emptyName));
                                  toast.show();
                              } else {
-                                 Category cat = new Category(mDataManager.getNextId(TypeEnum.CATEGORY), name, color);
+                                 Category cat = new Category(mDataManager.getNextId(Category.class), name, color);
                                  mDataManager.insert(cat);
                                  list.add(cat);
                                  adapter.notifyDataSetChanged();

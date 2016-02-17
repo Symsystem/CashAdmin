@@ -15,6 +15,7 @@ import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TransactionEntryEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
@@ -90,7 +91,7 @@ public class HistoricActivity extends AppCompatActivity {
                 break;
         }
         transactions = mergeExpenseIncome(mExpenses, mIncomes);
-        mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener);
+        mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener, mOnClickEditListener);
 
         checkedChange(mCheckExpense);
         mHistoryList.setAdapter(mAdapter);
@@ -111,6 +112,26 @@ public class HistoricActivity extends AppCompatActivity {
                 }
             };
             r.run();
+        }
+    };
+
+    private View.OnClickListener mOnClickEditListener = new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            Transaction t = mAdapter.getItem(mHistoryList.getPositionForView(view));
+            Intent intent = null;
+            switch (t.getType()) {
+                case EXPENSE :
+                    intent = new Intent(HistoricActivity.this, ExpenseActivity.class);
+                    intent.putExtra("expenseId", t.getId());
+                    break;
+                case INCOME :
+                    intent = new Intent(HistoricActivity.this, IncomeActivity.class);
+                    intent.putExtra("incomeId", t.getId());
+                    break;
+            }
+            TransactionEntryEnum.Edit.attachTo(intent);
+            startActivity(intent);
         }
     };
 
@@ -153,7 +174,6 @@ public class HistoricActivity extends AppCompatActivity {
         observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 observer.removeOnPreDrawListener(this);
-                boolean firstAnimation = true;
                 int firstVisiblePosition = listview.getFirstVisiblePosition();
                 for (int i = position; i < listview.getChildCount(); ++i) {
                     final View child = listview.getChildAt(i);

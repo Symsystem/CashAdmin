@@ -16,6 +16,7 @@ import net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TransactionEntryEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
@@ -76,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.addIncomeButton)
     public void onClickIncomeButton(){
-        startActivity(new Intent(MainActivity.this, NewIncomeActivity.class));
+        Intent intent = new Intent(MainActivity.this, IncomeActivity.class);
+        TransactionEntryEnum.New.attachTo(intent);
+        startActivity(intent);
     }
 
     @OnClick(R.id.historyButton)

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.Model.Income;
@@ -24,9 +23,12 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "cashAdminDB.db";
 
+    private Context mContext;
+
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
+        mContext = context;
         handlers.put("category", Category.getTableCreator());
         handlers.put("income", Income.getTableCreator());
         handlers.put("expense", Expense.getTableCreator());
@@ -39,7 +41,7 @@ public class DBHandler extends SQLiteOpenHelper {
             db.execSQL(handlers.get(key));
         }
         ContentValues values = new ContentValues();
-        values.put(Category.COLUMN_LABEL, R.string.others);
+        values.put(Category.COLUMN_LABEL, mContext.getString(R.string.others));
         values.put(Category.COLUMN_COLOR, "#c4c4c4");
         db.insert(Category.TABLE_NAME, null, values);
     }
@@ -51,27 +53,27 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    public HashMap<TypeEnum, Counter> getAutoIncrementNumbers() {
+    public HashMap<String, Counter> getAutoIncrementNumbers() {
         String query = "SELECT * FROM SQLITE_SEQUENCE";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        HashMap<TypeEnum, Counter> autoIncList = new HashMap<>();
+        HashMap<String, Counter> autoIncList = new HashMap<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 switch (cursor.getString(cursor.getColumnIndex("name"))) {
                     case Category.TABLE_NAME:
-                        autoIncList.put(TypeEnum.CATEGORY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
+                        autoIncList.put(Category.class.getName(), new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
                     case Expense.TABLE_NAME:
-                        autoIncList.put(TypeEnum.EXPENSE, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
+                        autoIncList.put(Expense.class.getName(), new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
                     case Income.TABLE_NAME:
-                        autoIncList.put(TypeEnum.INCOME, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
+                        autoIncList.put(Income.class.getName(), new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
                     case Frequency.TABLE_NAME:
-                        autoIncList.put(TypeEnum.FREQUENCY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) +1 ));
+                        autoIncList.put(Frequency.class.getName(), new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) +1 ));
                         break;
                 }
             } while (cursor.moveToNext());

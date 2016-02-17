@@ -67,6 +67,13 @@ public abstract class Transaction extends Entity implements Serializable{
     }
 
     /**
+     * @param total
+     */
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    /**
      * @return java.util.Date
      */
     public Date getDate(){

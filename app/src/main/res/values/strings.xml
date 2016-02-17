@@ -49,11 +49,12 @@
     <string name="label">Libellé :</string>
     <string name="recurrence">Récurrence :</string>
     <string name="each">Tous les :</string>
+    <string name="labelCategory">Catégories :</string>
+    <string name="saveChanges">Enregistrer</string>
 
     <string name="title_activity_new_income">Nouveau revenu</string>
 
     <string name="addIncome">Ajouter un revenu</string>
-    <string name="labelCategory">Catégories</string>
     <string name="transactionLabel">Transactions</string>
     <string name="fieldEmpty">Il faut remplir tous les champs !</string>
 

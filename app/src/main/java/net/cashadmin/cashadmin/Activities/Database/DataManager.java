@@ -4,7 +4,6 @@ import android.content.Context;
 
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.Activities.Utils.Counter;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class DataManager {
 
     private static DataManager dataManager = null;
-    private HashMap<TypeEnum, Counter> mAutoIncrementNumbers;
+    private HashMap<String, Counter> mAutoIncrementNumbers;
     private DBHandler db;
 
     private DataManager(Context context) {
@@ -38,14 +37,20 @@ public class DataManager {
         return dataManager;
     }
 
-    public int getNextId(TypeEnum type) {
-        if (mAutoIncrementNumbers.get(type) != null)
-            return mAutoIncrementNumbers.get(type).getCounterInt();
+    public int getNextId(Class<? extends Entity> classe) {
+        if (mAutoIncrementNumbers.get(classe.getName()) != null)
+            return mAutoIncrementNumbers.get(classe.getName()).getCounterInt();
         else
             return 1;
     }
 
     public void insert(Entity data) {
+        String classe = data.getClass().getName();
+        if (mAutoIncrementNumbers.get(classe) != null) {
+            mAutoIncrementNumbers.get(classe).addOne();
+        } else {
+            mAutoIncrementNumbers.put(classe, new Counter(2f));
+        }
         data.insert(db);
     }
 
