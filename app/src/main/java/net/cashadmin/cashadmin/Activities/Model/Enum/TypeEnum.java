@@ -5,4 +5,5 @@ public enum TypeEnum {
     INCOME,
     EXPENSE,
     FREQUENCY,
+    SETTING
 }

@@ -23,7 +23,7 @@ public class Expense extends Transaction implements Serializable {
                 TABLE_NAME + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
-                COLUMN_LABEL + " VARCHAR(127), " +
+                COLUMN_LABEL + " VARCHAR(128), " +
                 COLUMN_DATE + " FLOAT NOT NULL, " +
                 COLUMN_CATEGORY + " INTEGER DEFAULT 1 REFERENCES " + Category.TABLE_NAME + "(" + Category.COLUMN_ID + ")" + " ON DELETE SET DEFAULT)";
     }

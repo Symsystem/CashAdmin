@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import net.cashadmin.cashadmin.Activities.Model.Category;
+import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.Model.Income;
+import net.cashadmin.cashadmin.Activities.Model.Setting;
 import net.cashadmin.cashadmin.Activities.Utils.Counter;
 import net.cashadmin.cashadmin.R;
 
@@ -33,6 +35,7 @@ public class DBHandler extends SQLiteOpenHelper {
         handlers.put("income", Income.getTableCreator());
         handlers.put("expense", Expense.getTableCreator());
         handlers.put("frequency", Frequency.getTableCreator());
+        handlers.put("setting", Setting.getTableCreator());
     }
 
     @Override
@@ -44,6 +47,14 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(Category.COLUMN_LABEL, mContext.getString(R.string.others));
         values.put(Category.COLUMN_COLOR, "#c4c4c4");
         db.insert(Category.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Setting.COLUMN_KEY, "CYCLEFREQUENCY");
+        values.put(Setting.COLUMN_VALUE, "MONTHLY");
+        db.insert(Setting.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(Setting.COLUMN_KEY, "CYCLEDATE");
+        values.put(Setting.COLUMN_VALUE, "1");
+        db.insert(Setting.TABLE_NAME, null, values);
     }
 
     @Override
@@ -74,6 +85,9 @@ public class DBHandler extends SQLiteOpenHelper {
                         break;
                     case Frequency.TABLE_NAME:
                         autoIncList.put(Frequency.class.getName(), new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) +1 ));
+                        break;
+                    case Setting.TABLE_NAME:
+                        autoIncList.put(Setting.class.getName(), new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
                 }
             } while (cursor.moveToNext());
