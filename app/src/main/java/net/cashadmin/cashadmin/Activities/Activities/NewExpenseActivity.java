@@ -108,9 +108,10 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mDateLayout.startAnimation(animHide);
                     mEndDateSwitchLayout.startAnimation(animHide);
-                    if (mEndDateSwitch.isChecked()){
+                    if (mEndDateSwitch.isChecked()) {
                         mEndDateLayout.startAnimation(animHide);
                     }
+                    mEndDateSwitch.setChecked(false);
                     animHide.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -122,10 +123,6 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                             mWhichRecurrenceLayout.setVisibility(View.GONE);
                             mDateLayout.setVisibility(View.GONE);
                             mEndDateSwitchLayout.setVisibility(View.GONE);
-                            mEndDateSwitch.setChecked(false);
-                            if (mEndDateSwitch.isChecked()){
-                                mEndDateLayout.setVisibility(View.GONE);
-                            }
                         }
 
                         @Override
@@ -146,7 +143,22 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                     mEndDateLayout.setVisibility(View.VISIBLE);
                 } else {
                     mEndDateLayout.startAnimation(sndAnimHide);
-                    mEndDateLayout.setVisibility(View.GONE);
+                    sndAnimHide.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mEndDateLayout.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
                 }
             }
         });
@@ -196,15 +208,21 @@ public class NewExpenseActivity extends AppCompatActivity implements AdapterView
                     e.printStackTrace();
                 }
             }
-            Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory);
-            if (newCategory)
-                mDataManager.insert(mCategory);
-            if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
-                Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.EXPENSE, expense.getTotal(), expense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, expense.getCategory());
-                mDataManager.insert(freq);
+            if ((!(dateFrequency == null)) && (!(endDateFrequency == null)) && (dateFrequency.after(endDateFrequency))) {
+                Popup.toast(NewExpenseActivity.this, getString(R.string.failDate)).show();
+            } else {
+                Expense expense = new Expense(mDataManager.getNextId(TypeEnum.EXPENSE), amount, label, new Date(), mCategory);
+                if (newCategory)
+                    mDataManager.insert(mCategory);
+                if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
+                    Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.EXPENSE, expense.getTotal(), expense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, expense.getCategory());
+                    mDataManager.insert(freq);
+                }
+                if (!mSwitch.isChecked()) {
+                    mDataManager.insert(expense);
+                }
+                startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
             }
-            mDataManager.insert(expense);
-            startActivity(new Intent(NewExpenseActivity.this, MainActivity.class));
         }
 
     }

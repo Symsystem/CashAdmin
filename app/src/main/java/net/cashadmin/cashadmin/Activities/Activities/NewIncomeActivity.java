@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -98,6 +99,9 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                 float startY = mAmountLayout.getTop();
                 float endY = mRecurrenceLayout.getBottom();
                 if (b) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mAddIncomeButton.getLayoutParams();
+                    params.addRule(RelativeLayout.BELOW, R.id.endDateSwitchLayout);
+                    mAddIncomeButton.setLayoutParams(params);
                     mWhichRecurrenceLayout.startAnimation(animShow);
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
                     mDateLayout.startAnimation(animShow);
@@ -106,11 +110,15 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                     mEndDateSwitchLayout.setVisibility(View.VISIBLE);
                     makeAnim(startY - endY);
                 } else {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mAddIncomeButton.getLayoutParams();
+                    params.addRule(RelativeLayout.BELOW, R.id.recurrenceLayout);
+                    mAddIncomeButton.setLayoutParams(params);
+                    makeAnim(endY - startY);
+                    mEndDateSwitch.setChecked(false);
                     mWhichRecurrenceLayout.startAnimation(animHide);
                     mDateLayout.startAnimation(animHide);
                     mEndDateSwitchLayout.startAnimation(animHide);
-                    makeAnim(endY - startY);
-                    if (mEndDateSwitch.isChecked()){
+                    if (mEndDateSwitch.isChecked()) {
                         mEndDateLayout.startAnimation(animHide);
                     }
                     animHide.setAnimationListener(new Animation.AnimationListener() {
@@ -124,10 +132,6 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                             mWhichRecurrenceLayout.setVisibility(View.GONE);
                             mDateLayout.setVisibility(View.GONE);
                             mEndDateSwitchLayout.setVisibility(View.GONE);
-                            mEndDateSwitch.setChecked(false);
-                            if (mEndDateSwitch.isChecked()) {
-                                mEndDateLayout.setVisibility(View.GONE);
-                            }
                         }
 
                         @Override
@@ -146,13 +150,34 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                 float startY = mAmountLayout.getBottom();
                 float endY = mLabelLayout.getBottom();
                 if (b) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mAddIncomeButton.getLayoutParams();
+                    params.addRule(RelativeLayout.BELOW, R.id.endDateLayout);
+                    mAddIncomeButton.setLayoutParams(params);
                     mEndDateLayout.startAnimation(animShow);
                     mEndDateLayout.setVisibility(View.VISIBLE);
                     makeAnim(startY - endY);
                 } else {
-                    mEndDateLayout.startAnimation(sndAnimHide);
-                    mEndDateLayout.setVisibility(View.GONE);
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mAddIncomeButton.getLayoutParams();
+                    params.addRule(RelativeLayout.BELOW, R.id.endDateSwitchLayout);
+                    mAddIncomeButton.setLayoutParams(params);
                     makeAnim(endY - startY);
+                    mEndDateLayout.startAnimation(sndAnimHide);
+                    sndAnimHide.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            mEndDateLayout.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
                 }
             }
         });
@@ -180,7 +205,7 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
         String frequency = FrequencyEnum.values()[0].toString();
         Date dateFrequency = null;
         Date endDateFrequency = null;
-        if (!(stringAmount.toString().matches("-?\\d+(\\.\\d+)?"))) {
+        if (!(stringAmount.matches("-?\\d+(\\.\\d+)?"))) {
             Toast toast = Popup.toast(NewIncomeActivity.this, getString(R.string.validAmount));
             toast.show();
         } else {
@@ -207,14 +232,20 @@ public class NewIncomeActivity extends AppCompatActivity implements AdapterView.
                         e.printStackTrace();
                     }
                 }
-                Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date());
-                if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
-                    Category cat = null;
-                    Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.INCOME, income.getTotal(), income.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, cat);
-                    mDataManager.insert(freq);
+                if ((!(dateFrequency == null)) && (!(endDateFrequency == null)) && (dateFrequency.after(endDateFrequency))) {
+                    Popup.toast(NewIncomeActivity.this, getString(R.string.failDate)).show();
+                } else {
+                    Income income = new Income(mDataManager.getNextId(TypeEnum.INCOME), amount, label, new Date());
+                    if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
+                        Category cat = null;
+                        Frequency freq = new Frequency(mDataManager.getNextId(TypeEnum.FREQUENCY), TypeEnum.INCOME, income.getTotal(), income.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, cat);
+                        mDataManager.insert(freq);
+                    }
+                    if (!mSwitch.isChecked()) {
+                        mDataManager.insert(income);
+                    }
+                    startActivity(new Intent(NewIncomeActivity.this, MainActivity.class));
                 }
-                mDataManager.insert(income);
-                startActivity(new Intent(NewIncomeActivity.this, MainActivity.class));
             }
         }
     }

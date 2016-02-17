@@ -1,92 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.cashadmin.cashadmin" >
+<manifest package="net.cashadmin.cashadmin"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.Activities.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.Activities.AccountConnexionActivity"
             android:label="@string/title_activity_account_connexion"
-            android:parentActivityName=".Activities.Activities.MainActivity" >
+            android:parentActivityName=".Activities.Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.Activities.MainActivity" />
+                android:value=".Activities.Activities.MainActivity"/>
         </activity>
         <activity
             android:name=".Activities.Activities.ForgetPasswordActivity"
             android:label="@string/title_activity_forget_password"
-            android:parentActivityName=".Activities.Activities.AccountConnexionActivity" >
+            android:parentActivityName=".Activities.Activities.AccountConnexionActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cashadmin.cashadmin.Activities.Activities.AccountConnexionActivity" />
+                android:value="net.cashadmin.cashadmin.Activities.Activities.AccountConnexionActivity"/>
         </activity>
         <activity
             android:name=".Activities.Activities.SelectCategoryActivity"
             android:label="@string/title_activity_select_category"
-            android:parentActivityName=".Activities.Activities.MainActivity" >
+            android:parentActivityName=".Activities.Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity"/>
         </activity>
         <activity
             android:name=".Activities.Activities.NewExpenseActivity"
             android:label="@string/title_activity_new_expense"
             android:parentActivityName=".Activities.Activities.SelectCategoryActivity"
-            android:windowSoftInputMode="stateVisible" >
+            android:windowSoftInputMode="stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cashadmin.cashadmin.Activities.Activities.SelectCategoryActivity" />
+                android:value="net.cashadmin.cashadmin.Activities.Activities.SelectCategoryActivity"/>
         </activity>
         <activity
             android:name=".Activities.Activities.NewIncomeActivity"
             android:label="@string/title_activity_new_income"
-            android:parentActivityName=".Activities.Activities.MainActivity" >
+            android:parentActivityName=".Activities.Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity"/>
         </activity>
         <activity
             android:name=".Activities.Activities.HistoricActivity"
             android:label="@string/title_activity_history"
-            android:parentActivityName=".Activities.Activities.MainActivity" >
+            android:parentActivityName=".Activities.Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity"/>
         </activity>
 
-        <receiver android:name=".Activities.Alarm.AlarmReceiver" />
+        <receiver android:name=".Activities.Alarm.AlarmReceiver"/>
         <receiver
             android:name=".Activities.Alarm.BootReceiver"
-            android:enabled="false" >
+            android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".Activities.Alarm.SchedulingService" />
+        <service android:name=".Activities.Alarm.SchedulingService"/>
 
-        <activity android:name=".Activities.Activities.EditCategoryActivity"
+        <activity
+            android:name=".Activities.Activities.EditCategoryActivity"
             android:label="@string/HandleCategories"
             android:parentActivityName=".Activities.Activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity" />
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".Activities.Activities.SettingsActivity"
+            android:label="@string/settings"
+            android:parentActivityName=".Activities.Activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.cashadmin.cashadmin.Activities.Activities.MainActivity"/>
         </activity>
     </application>
 

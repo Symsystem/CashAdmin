@@ -258,7 +258,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/endDateLayout"
+                android:layout_below="@id/recurrenceLayout"
                 android:layout_centerHorizontal="true"
                 android:text="@string/addIncome"
                 android:textSize="16dp"/>
