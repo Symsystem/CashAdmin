@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import net.cashadmin.cashadmin.Activities.Adapter.EndlessScrollListener;
 import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Model.Category;
@@ -18,6 +19,7 @@ import net.cashadmin.cashadmin.Activities.Model.Enum.TransactionEntryEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
+import net.cashadmin.cashadmin.Activities.Utils.Counter;
 import net.cashadmin.cashadmin.Activities.Utils.Utils;
 import net.cashadmin.cashadmin.R;
 
@@ -29,11 +31,16 @@ import butterknife.InjectView;
 
 public class HistoricActivity extends AppCompatActivity {
 
+    public static final int NUMBER_LOADED = 12;
+
     private DataManager mDataManager;
     private TransactionHistoryAdapter mAdapter;
-    private ArrayList<Transaction> mExpenses;
-    private ArrayList<Transaction> mIncomes;
-    private ArrayList<Transaction> transactions;
+    private List<Transaction> mExpenses;
+    private List<Transaction> mIncomes;
+    private List<Transaction> transactions;
+
+    private Counter mExpenseCounter, mIncomeCounter;
+    private HistoricEntryEnum entryType;
 
     @InjectView(R.id.topBar)
     RelativeLayout relativeLayoutTopBar;
@@ -54,45 +61,63 @@ public class HistoricActivity extends AppCompatActivity {
 
         ButterKnife.inject(this);
 
-        mCheckExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                checkedChange(mCheckExpense);
-            }
-        });
-        mCheckIncome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                checkedChange(mCheckIncome);
-            }
-        });
-
         mDataManager = DataManager.getDataManager();
         Intent intent = getIntent();
 
-        HistoricEntryEnum entryType = HistoricEntryEnum.detachFrom(intent);
+        transactions = new ArrayList<>();
 
+        entryType = HistoricEntryEnum.detachFrom(intent);
         switch (entryType) {
-            case All:
-                mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(Expense.class);
-                mIncomes = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(Income.class);
-                break;
-            case ByCategory:
-                mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getWhere(Expense.class, intent.getStringExtra("expenseCondition"));
-                mIncomes = new ArrayList<>();
+
+            case ByCategory :
                 Category c = (Category) intent.getSerializableExtra("category");
                 relativeLayoutTopBar.setVisibility(View.GONE);
                 categoryLabelTopBar.setVisibility(View.VISIBLE);
                 categoryLabelTopBar.setText(c.getLabel());
                 categoryLabelTopBar.setBackgroundColor(c.getColor());
+                mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getWhere(Expense.class, intent.getStringExtra("expenseCondition"));
+                mIncomes = new ArrayList<>();
+                transactions.addAll(mExpenses);
+                break;
+
+            case All :
+                mExpenseCounter = new Counter();
+                mIncomeCounter = new Counter();
+                transactions.addAll(getTransactions(NUMBER_LOADED));
+                mCheckExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        checkedChange(mCheckExpense);
+                    }
+                });
+                mCheckIncome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        checkedChange(mCheckIncome);
+                    }
+                });
                 break;
         }
-        transactions = mergeExpenseIncome(mExpenses, mIncomes);
+
         mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener, mOnClickEditListener);
 
-        checkedChange(mCheckExpense);
         mHistoryList.setAdapter(mAdapter);
+        mHistoryList.setOnScrollListener(mEndlessScrollListener);
     }
+
+    private EndlessScrollListener mEndlessScrollListener = new EndlessScrollListener() {
+        @Override
+        public boolean onLoadMore(int page, int totalItemsCount) {
+            if (entryType != HistoricEntryEnum.All) {
+                // Doesn't load something more if we don't want to display the all list
+                return false;
+            }
+            List<Transaction> newTrans = getTransactions(totalItemsCount + NUMBER_LOADED);
+            transactions.addAll(newTrans);
+            mAdapter.notifyDataSetChanged();
+            return true;
+        }
+    };
 
     private View.OnClickListener mOnClickDeleteListener = new View.OnClickListener() {
         @Override
@@ -132,27 +157,47 @@ public class HistoricActivity extends AppCompatActivity {
         }
     };
 
-    private void checkedChange(CheckBox c){
-        if (mCheckExpense.isChecked() && mCheckIncome.isChecked()){
-            mAdapter.refreshAdapter(mergeExpenseIncome(mExpenses, mIncomes));
-        } else if (mCheckExpense.isChecked()){
-            mAdapter.refreshAdapter(mExpenses);
-        } else if (mCheckIncome.isChecked()){
-            mAdapter.refreshAdapter(mIncomes);
-        } else {
-            if (c == mCheckExpense)
-                mCheckIncome.setChecked(true);
-            else
-                mCheckExpense.setChecked(true);
+    private List<Transaction> getTransactions(int numberLoaded) {
+        List<Transaction> t = new ArrayList<>();
+
+        if (entryType == HistoricEntryEnum.All) {
+            if (mCheckExpense.isChecked() && mCheckIncome.isChecked()) {
+                mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getFromTo(Expense.class, mExpenseCounter.getCounterInt(), mExpenseCounter.getCounterInt() + NUMBER_LOADED);
+                mIncomes = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getFromTo(Income.class, mIncomeCounter.getCounterInt(), mIncomeCounter.getCounterInt() + NUMBER_LOADED);
+                t = mergeExpenseIncome(mExpenses, mIncomes, numberLoaded - (mExpenseCounter.getCounterInt() + mIncomeCounter.getCounterInt()));
+            } else if (mCheckExpense.isChecked()) {
+                t = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getFromTo(Expense.class, mExpenseCounter.getCounterInt(), mExpenseCounter.getCounterInt() + NUMBER_LOADED);
+                mExpenseCounter.add(NUMBER_LOADED);
+            } else if (mCheckIncome.isChecked()) {
+                t = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getFromTo(Income.class, mIncomeCounter.getCounterInt(), mIncomeCounter.getCounterInt() + NUMBER_LOADED);
+                mIncomeCounter.add(NUMBER_LOADED);
+            }
         }
+        return t;
     }
 
-    private ArrayList<Transaction> mergeExpenseIncome(List<Transaction> l1, List<Transaction> l2){
-        ArrayList<Transaction> transactions = new ArrayList<>();
+    private synchronized void checkedChange(CheckBox c) {
+        mExpenseCounter = new Counter();
+        mIncomeCounter = new Counter();
+        mEndlessScrollListener.reset();
+        if (!mCheckExpense.isChecked() && !mCheckIncome.isChecked()) {
+            if (c == mCheckExpense) {
+                mCheckIncome.setChecked(true);
+            }
+            else {
+                mCheckExpense.setChecked(true);
+            }
+            return;
+        }
+        mAdapter.refreshAdapter(getTransactions(NUMBER_LOADED));
+    }
+
+    private List<Transaction> mergeExpenseIncome(List<Transaction> l1, List<Transaction> l2, int numberToLoad){
+        List<Transaction> transactions = new ArrayList<>();
         Transaction t1, t2;
         int i1 = 0, i2 = 0;
 
-        while(i1 < l1.size() && i2 < l2.size()){
+        while(i1 < l1.size() && i2 < l2.size() && ((i1 + i2) < numberToLoad || numberToLoad < 0)){
             t1 = l1.get(i1);
             t2 = l2.get(i2);
 
@@ -166,12 +211,15 @@ public class HistoricActivity extends AppCompatActivity {
             }
         }
 
-        for(; i1 < l1.size(); i1++)
-            transactions.add((Transaction) l1.get(i1));
+        if (i1 + i2 < numberToLoad || numberToLoad < 0) {
+            for (; i1 < l1.size(); i1++)
+                transactions.add(l1.get(i1));
 
-        for(;i2 < l2.size(); i2++)
-            transactions.add((Transaction) l2.get(i2));
-
+            for (; i2 < l2.size(); i2++)
+                transactions.add(l2.get(i2));
+        }
+        mExpenseCounter.add(i1);
+        mIncomeCounter.add(i2);
         return transactions;
     }
 }

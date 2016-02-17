@@ -14,17 +14,17 @@ import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.R;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
 
     private HashMap<Transaction, Integer> mIdMap = new HashMap<Transaction, Integer>();
-    private ArrayList<Transaction> mTransactions;
+    private List<Transaction> mTransactions;
     private View.OnClickListener mOnClickDeleteListener;
     private View.OnClickListener mOnClickEditListener;
 
-    public TransactionHistoryAdapter(Context context, ArrayList<Transaction> objects, View.OnClickListener onClickDeleteListener, View.OnClickListener onClickEditListener) {
+    public TransactionHistoryAdapter(Context context, List<Transaction> objects, View.OnClickListener onClickDeleteListener, View.OnClickListener onClickEditListener) {
         super(context, R.layout.historic_item, objects);
         for(int i = 0; i < objects.size(); ++i){
             mIdMap.put(objects.get(i), i);
@@ -36,8 +36,9 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
 
     @Override
     public long getItemId(int position) {
-        Transaction item = getItem(position);
-        return mIdMap.get(item);
+        //Transaction item = getItem(position);
+        //return mIdMap.get(item);
+        return 0;
     }
 
     @Override
@@ -93,7 +94,7 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
         return convertView;
     }
 
-    public synchronized void refreshAdapter(ArrayList<Transaction> transactions){
+    public void refreshAdapter(List<Transaction> transactions){
         mTransactions.clear();
         mTransactions.addAll(transactions);
         notifyDataSetChanged();

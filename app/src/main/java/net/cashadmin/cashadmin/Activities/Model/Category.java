@@ -65,6 +65,8 @@ public class Category extends Entity {
         this.id = id;
         this.label = label;
         this.color = Color.parseColor(color);
+        COLUMNS = new String[]{COLUMN_ID, COLUMN_LABEL, COLUMN_COLOR};
+        COLUMN_ID_INDEX = 0;
     }
 
     @Override

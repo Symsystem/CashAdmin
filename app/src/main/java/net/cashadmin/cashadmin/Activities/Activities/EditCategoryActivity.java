@@ -79,7 +79,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                                      .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                                      .density(6)
                                      .showAlphaSlider(false)
-                                     .setPositiveButton("Ok", new ColorPickerClickListener() {
+                                     .setPositiveButton(getString(R.string.ok), new ColorPickerClickListener() {
                                          @Override
                                          public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
                                              colorChoice.setBackgroundColor(i);
@@ -128,7 +128,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                      Window window = pop.getWindow();
                      window.setLayout((6 * getResources().getDisplayMetrics().widthPixels) / 7, LinearLayout.LayoutParams.WRAP_CONTENT);
                      pop.show();
-                     final Category cat = (Category) list.get(position);
+                     final Category cat = list.get(position);
                      color = cat.getColor();
                      final TextView colorChoice = (TextView) layout.findViewById(R.id.colorChoice);
                      colorChoice.setBackgroundColor(cat.getColor());
@@ -142,7 +142,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                                      .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                                      .density(6)
                                      .showAlphaSlider(false)
-                                     .setPositiveButton("Ok", new ColorPickerClickListener() {
+                                     .setPositiveButton(getString(R.string.ok), new ColorPickerClickListener() {
                                          @Override
                                          public void onClick(DialogInterface dialogInterface, int i, Integer[] integers) {
                                              colorChoice.setBackgroundColor(i);

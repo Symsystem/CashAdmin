@@ -167,5 +167,6 @@
     <string name="november">novembre</string>
     <string name="december">décembre</string>
     <string name="availableDate">Sélectionnez une date valide</string>
+    <string name="ok">Ok</string>
     <string name="permanentOrders">Ordres permanents</string>
 </resources>
