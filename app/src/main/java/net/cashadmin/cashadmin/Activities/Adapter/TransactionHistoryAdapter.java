@@ -12,23 +12,22 @@ import com.daimajia.swipe.SwipeLayout;
 
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
+import net.cashadmin.cashadmin.Activities.Utils.Utils;
 import net.cashadmin.cashadmin.R;
 
-import java.util.HashMap;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
 
-    private HashMap<Transaction, Integer> mIdMap = new HashMap<Transaction, Integer>();
     private List<Transaction> mTransactions;
     private View.OnClickListener mOnClickDeleteListener;
     private View.OnClickListener mOnClickEditListener;
 
     public TransactionHistoryAdapter(Context context, List<Transaction> objects, View.OnClickListener onClickDeleteListener, View.OnClickListener onClickEditListener) {
         super(context, R.layout.historic_item, objects);
-        for(int i = 0; i < objects.size(); ++i){
-            mIdMap.put(objects.get(i), i);
-        }
         mTransactions = objects;
         mOnClickDeleteListener = onClickDeleteListener;
         mOnClickEditListener = onClickEditListener;
@@ -36,8 +35,6 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
 
     @Override
     public long getItemId(int position) {
-        //Transaction item = getItem(position);
-        //return mIdMap.get(item);
         return 0;
     }
 
@@ -62,12 +59,16 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
             holder.mLabel = (TextView) convertView.findViewById(R.id.label);
             holder.mCategory = (TextView) convertView.findViewById(R.id.category);
             holder.mAmount = (TextView) convertView.findViewById(R.id.amount);
+            holder.mDate = (TextView) convertView.findViewById(R.id.dateTransaction);
 
             convertView.setTag(holder);
 
         } else {
             holder = (Holder) convertView.getTag();
         }
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm");
 
         final Transaction t = mTransactions.get(position);
         switch (t.getType()) {
@@ -86,7 +87,11 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
                 break;
         }
         holder.mLabel.setText(t.getLabel());
-
+        if (Math.abs(t.getDate().getTime() - new Date().getTime()) > Utils.MILLIS_PER_DAY) {
+            holder.mDate.setText(dateFormat.format(t.getDate()));
+        } else {
+            holder.mDate.setText(hourFormat.format(t.getDate()));
+        }
         holder.mEditButton.setOnClickListener(mOnClickEditListener);
 
         holder.mDeleteButton.setOnClickListener(mOnClickDeleteListener);
@@ -108,5 +113,6 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
         private TextView mLabel;
         private TextView mCategory;
         private TextView mAmount;
+        private TextView mDate;
     }
 }

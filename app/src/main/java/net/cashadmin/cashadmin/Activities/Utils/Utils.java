@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class Utils {
 
+    public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
     private static final int MOVE_DURATION = 250;
 
     /**

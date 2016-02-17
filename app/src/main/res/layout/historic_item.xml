@@ -89,6 +89,16 @@
             android:layout_alignParentEnd="true"
             android:layout_margin="8dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateTransaction"
+            android:paddingBottom="8dp"
+            tools:text="Date"
+            android:layout_below="@+id/amount"
+            android:layout_alignRight="@+id/amount"
+            android:layout_alignEnd="@+id/amount"/>
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
