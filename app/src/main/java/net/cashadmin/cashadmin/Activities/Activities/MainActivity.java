@@ -14,9 +14,9 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import net.cashadmin.cashadmin.Activities.Alarm.AlarmReceiver;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Database.ExpenseHandler;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
+import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.UI.CircleChart;
 import net.cashadmin.cashadmin.R;
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 HistoricEntryEnum.ByCategory.attachTo(intent);
                 Category c = mHistoryChart.getCategories().get(e.getXIndex());
                 intent.putExtra("category", c);
-                intent.putExtra("expenseCondition", ExpenseHandler.COLUMN_CATEGORY + " = " + c.getId());
+                intent.putExtra("expenseCondition", Expense.COLUMN_CATEGORY + " = " + c.getId());
                 startActivity(intent);
             }
 

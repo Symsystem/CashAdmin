@@ -12,10 +12,8 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Utils.Counter;
 import net.cashadmin.cashadmin.R;
@@ -51,40 +49,22 @@ public class CircleChart {
     }
 
     public void setData(int numberLoaded){
-        try {
-            data = mDataManager.getFromTo(TypeEnum.EXPENSE, 0, numberLoaded);
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
-        }
+        data = mDataManager.getFromTo(Expense.class, 0, numberLoaded);
         this.setData();
     }
 
     public void setData(int from, int to){
-        try {
-            data = mDataManager.getFromTo(TypeEnum.EXPENSE, from, to);
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
-        }
+        data = mDataManager.getFromTo(Expense.class, from, to);
         this.setData();
     }
 
     public void setData(Date from, Date to) {
-        try {
-            data = mDataManager.getByDate(TypeEnum.EXPENSE, from, to);
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
-        }
+        data = mDataManager.getByDate(Expense.class, from, to);
         this.setData();
     }
 
     private void setData() {
-        cats = new ArrayList<>();
-
-        try {
-            cats = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(TypeEnum.CATEGORY);
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
-        }
+        cats = (ArrayList<Category>) (ArrayList<?>) mDataManager.getAll(Category.class);
 
         HashMap<Integer, Counter> expenseByCategory = new HashMap<>();
 

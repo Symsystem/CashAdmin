@@ -6,41 +6,42 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Model.Expense;
+import net.cashadmin.cashadmin.Activities.Model.Frequency;
+import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.Activities.Utils.Counter;
+import net.cashadmin.cashadmin.R;
 
 import java.util.HashMap;
 
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    HashMap<String, GenericHandler> handlers = new HashMap<>();
+    HashMap<String, String> handlers = new HashMap<>();
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "cashAdminDB.db";
-    public static final String TABLE_NAME = "categories";
-    private static final String COLUMN_LABEL = "label";
-    private static final String COLUMN_COLOR = "color";
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-        CategoryHandler catHandler = new CategoryHandler(this);
-        handlers.put("category", catHandler);
-        handlers.put("income", new IncomeHandler(this));
-        handlers.put("expense", new ExpenseHandler(this, catHandler));
-        handlers.put("frequencies", new FrequencyHandler(this, catHandler));
+        handlers.put("category", Category.getTableCreator());
+        handlers.put("income", Income.getTableCreator());
+        handlers.put("expense", Expense.getTableCreator());
+        handlers.put("frequency", Frequency.getTableCreator());
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         for (String key : handlers.keySet()) {
-            db.execSQL(handlers.get(key).getTableCreator());
+            db.execSQL(handlers.get(key));
         }
         ContentValues values = new ContentValues();
-        values.put(COLUMN_LABEL, "Autres");
-        values.put(COLUMN_COLOR, "#c4c4c4");
-        db.insert(TABLE_NAME, null, values);
+        values.put(Category.COLUMN_LABEL, R.string.others);
+        values.put(Category.COLUMN_COLOR, "#c4c4c4");
+        db.insert(Category.TABLE_NAME, null, values);
     }
 
     @Override
@@ -49,10 +50,6 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-
-    public GenericHandler getHandler(String key) {
-        return handlers.get(key);
-    }
 
     public HashMap<TypeEnum, Counter> getAutoIncrementNumbers() {
         String query = "SELECT * FROM SQLITE_SEQUENCE";
@@ -64,16 +61,16 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 switch (cursor.getString(cursor.getColumnIndex("name"))) {
-                    case CategoryHandler.TABLE_NAME:
+                    case Category.TABLE_NAME:
                         autoIncList.put(TypeEnum.CATEGORY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
-                    case ExpenseHandler.TABLE_NAME:
+                    case Expense.TABLE_NAME:
                         autoIncList.put(TypeEnum.EXPENSE, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
-                    case IncomeHandler.TABLE_NAME:
+                    case Income.TABLE_NAME:
                         autoIncList.put(TypeEnum.INCOME, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) + 1));
                         break;
-                    case FrequencyHandler.TABLE_NAME:
+                    case Frequency.TABLE_NAME:
                         autoIncList.put(TypeEnum.FREQUENCY, new Counter(Integer.valueOf(cursor.getString(cursor.getColumnIndex("seq"))) +1 ));
                         break;
                 }

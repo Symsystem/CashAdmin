@@ -1,11 +1,22 @@
 package net.cashadmin.cashadmin.Activities.Model;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-public class Transaction extends Entity implements Serializable{
+public abstract class Transaction extends Entity implements Serializable{
+
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_TOTAL = "total";
+    public static final String COLUMN_LABEL = "label";
+    public static final String COLUMN_DATE = "date";
 
     /**
      * @var int
@@ -84,5 +95,30 @@ public class Transaction extends Entity implements Serializable{
      */
     public java.sql.Date getSQLDate(){
         return new java.sql.Date(this.date.getTime());
+    }
+
+    public List<Entity> getByDate(SQLiteOpenHelper db, Date startDate, Date endDate) {
+        String query = "SELECT * FROM " + getTableName()
+                + " WHERE " + COLUMN_DATE
+                + " BETWEEN '" + startDate.getTime() + "' and '" + endDate.getTime()
+                + "' ORDER BY " + COLUMN_DATE + " DESC";
+        SQLiteDatabase database = db.getReadableDatabase();
+        Cursor cursor = database.rawQuery(query, null);
+        List<Entity> list = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                list.add(createEntityFromCursor(cursor));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return list;
+    }
+
+    @Override
+    protected String getOrderByCondition() {
+        return " ORDER BY " + COLUMN_DATE + " DESC";
     }
 }

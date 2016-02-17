@@ -28,7 +28,7 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Category> {
             LayoutInflater vi = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             v = vi.inflate(R.layout.list_category, null);
         }
-            Category category = (Category) this.getItem(position);
+            Category category = this.getItem(position);
             if (category != null) {
                 Button buttonCategory = (Button) v.findViewById(R.id.buttonCat);
                 buttonCategory.setText(category.getLabel());
@@ -38,10 +38,4 @@ public class ButtonCategoryAdapter extends ArrayAdapter<Category> {
             }
         return v;
     }
-
-    /*public synchronized void refreshAdapter(ArrayList<Category> categs){
-        mCategories.clear();
-        mCategories.addAll(categs);
-        notifyDataSetChanged();
-    }*/
 }

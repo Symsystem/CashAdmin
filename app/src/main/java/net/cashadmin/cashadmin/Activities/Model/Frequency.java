@@ -1,5 +1,10 @@
 package net.cashadmin.cashadmin.Activities.Model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import net.cashadmin.cashadmin.Activities.Database.DataManager;
+import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 
@@ -8,6 +13,38 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Frequency extends Entity {
+
+    public static final String TABLE_NAME = "frequencies";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_TYPE_TRANSACTION = "typeTransaction";
+    public static final String COLUMN_TOTAL = "total";
+    public static final String COLUMN_LABEL = "label";
+    public static final String COLUMN_FREQUENCY = "frequency";
+    public static final String COLUMN_DATE_FREQUENCY = "dateFrequency";
+    public static final String COLUMN_END_DATE_FREQUENCY = "endDateFrequency";
+    public static final String COLUMN_CATEGORY = "category";
+
+    public static final TypeEnum TYPE = TypeEnum.FREQUENCY;
+
+    public static String getTableCreator() {
+        return "CREATE TABLE " +
+                TABLE_NAME + "(" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_TYPE_TRANSACTION + " VARCHAR(16) NOT NULL CHECK(" + COLUMN_TYPE_TRANSACTION + " in " +
+                "('" + TypeEnum.values()[1].toString() +
+                "','" + TypeEnum.values()[2].toString() + "')), " +
+                COLUMN_TOTAL + " INTEGER NOT NULL, " +
+                COLUMN_LABEL + " VARCHAR(127), " +
+                COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL CHECK(" + COLUMN_FREQUENCY + " in " +
+                "('" + FrequencyEnum.values()[1].toString() +
+                "','" + FrequencyEnum.values()[2].toString() +
+                "','" + FrequencyEnum.values()[3].toString() +
+                "','" + FrequencyEnum.values()[4].toString() + "')), " +
+                COLUMN_DATE_FREQUENCY + " FLOAT NOT NULL, " +
+                COLUMN_END_DATE_FREQUENCY + " FLOAT, " +
+                COLUMN_CATEGORY + " INTEGER, " +
+                "FOREIGN KEY(" + COLUMN_CATEGORY + ") REFERENCES " + Category.TABLE_NAME + ")";
+    }
 
     /**
      * @var int
@@ -49,6 +86,12 @@ public class Frequency extends Entity {
      */
     private Category category;
 
+    public Frequency() {
+        COLUMNS = new String[]{COLUMN_ID, COLUMN_TYPE_TRANSACTION, COLUMN_TOTAL, COLUMN_LABEL,
+                COLUMN_FREQUENCY, COLUMN_DATE_FREQUENCY, COLUMN_END_DATE_FREQUENCY, COLUMN_CATEGORY};
+        COLUMN_ID_INDEX = 0;
+    }
+
     /**
      * @param id
      * @param type
@@ -61,7 +104,6 @@ public class Frequency extends Entity {
      */
     public Frequency(int id, TypeEnum type, float total, String label, FrequencyEnum frequency, Date dateFrequency, Date endDateFrequency, Category category){
         this.id = id;
-        mType = TypeEnum.FREQUENCY;
         this.total = total;
         this.label = label;
         this.transactionType = type;
@@ -69,6 +111,29 @@ public class Frequency extends Entity {
         this.dateFrequency = dateFrequency;
         this.endDateFrequency = endDateFrequency;
         this.category = category;
+        COLUMNS = new String[]{COLUMN_ID, COLUMN_TYPE_TRANSACTION, COLUMN_TOTAL, COLUMN_LABEL,
+            COLUMN_FREQUENCY, COLUMN_DATE_FREQUENCY, COLUMN_END_DATE_FREQUENCY, COLUMN_CATEGORY};
+        COLUMN_ID_INDEX = 0;
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return COLUMNS;
+    }
+
+    @Override
+    public TypeEnum getType() {
+        return TYPE;
+    }
+
+    @Override
+    public String getColumnId() {
+        return COLUMNS[COLUMN_ID_INDEX];
     }
 
     /**
@@ -76,6 +141,45 @@ public class Frequency extends Entity {
      */
     public int getId() {
         return id;
+    }
+
+    @Override
+    public ContentValues getValues() {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TYPE_TRANSACTION, transactionType.toString());
+        values.put(COLUMN_TOTAL, total);
+        values.put(COLUMN_LABEL, label);
+        values.put(COLUMN_FREQUENCY, frequency.toString());
+        values.put(COLUMN_DATE_FREQUENCY, getStringSQLDate());
+        values.put(COLUMN_END_DATE_FREQUENCY, getStringSQLEndDate());
+        if (transactionType.equals(TypeEnum.values()[2].toString())){
+            values.put(COLUMN_CATEGORY, category.getId());
+        }
+        return values;
+    }
+
+    @Override
+    protected String getOrderByCondition() {
+        return  " ORDER BY " + COLUMN_DATE_FREQUENCY + " DESC";
+    }
+
+    @Override
+    protected Entity createEntityFromCursor(Cursor c) {
+        try {
+            return new Frequency(
+                    c.getInt(c.getColumnIndex(COLUMN_ID)),
+                    TypeEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_TYPE_TRANSACTION))),
+                    c.getFloat(c.getColumnIndex(COLUMN_TOTAL)),
+                    c.getString(c.getColumnIndex(COLUMN_LABEL)),
+                    FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY))),
+                    new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE_FREQUENCY))),
+                    new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_END_DATE_FREQUENCY))),
+                    (Category) DataManager.getDataManager().getById(Category.class, c.getInt(c.getColumnIndex(COLUMN_CATEGORY)))
+            );
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -182,8 +286,6 @@ public class Frequency extends Entity {
      * @return String
      */
     public String getStringSQLDate(){
-//        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-//        return formater.format(date);
         return String.valueOf(dateFrequency.getTime());
     }
 

@@ -13,10 +13,10 @@ import android.widget.TextView;
 
 import net.cashadmin.cashadmin.Activities.Adapter.TransactionHistoryAdapter;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
 import net.cashadmin.cashadmin.Activities.Model.Enum.HistoricEntryEnum;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
+import net.cashadmin.cashadmin.Activities.Model.Expense;
+import net.cashadmin.cashadmin.Activities.Model.Income;
 import net.cashadmin.cashadmin.Activities.Model.Transaction;
 import net.cashadmin.cashadmin.R;
 
@@ -72,26 +72,22 @@ public class HistoricActivity extends AppCompatActivity {
         mDataManager = DataManager.getDataManager();
         Intent intent = getIntent();
 
-        try {
-            HistoricEntryEnum entryType = HistoricEntryEnum.detachFrom(intent);
+        HistoricEntryEnum entryType = HistoricEntryEnum.detachFrom(intent);
 
-            switch (entryType){
-                case All:
-                    mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(TypeEnum.EXPENSE);
-                    mIncomes = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(TypeEnum.INCOME);
-                    break;
-                case ByCategory:
-                    mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getWhere(TypeEnum.EXPENSE, intent.getStringExtra("expenseCondition"));
-                    mIncomes = new ArrayList<>();
-                    Category c = (Category) intent.getSerializableExtra("category");
-                    relativeLayoutTopBar.setVisibility(View.GONE);
-                    categoryLabelTopBar.setVisibility(View.VISIBLE);
-                    categoryLabelTopBar.setText(c.getLabel());
-                    categoryLabelTopBar.setBackgroundColor(c.getColor());
-                    break;
-            }
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
+        switch (entryType) {
+            case All:
+                mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(Expense.class);
+                mIncomes = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getAll(Income.class);
+                break;
+            case ByCategory:
+                mExpenses = (ArrayList<Transaction>) (ArrayList<?>) mDataManager.getWhere(Expense.class, intent.getStringExtra("expenseCondition"));
+                mIncomes = new ArrayList<>();
+                Category c = (Category) intent.getSerializableExtra("category");
+                relativeLayoutTopBar.setVisibility(View.GONE);
+                categoryLabelTopBar.setVisibility(View.VISIBLE);
+                categoryLabelTopBar.setText(c.getLabel());
+                categoryLabelTopBar.setBackgroundColor(c.getColor());
+                break;
         }
         transactions = mergeExpenseIncome(mExpenses, mIncomes);
         mAdapter = new TransactionHistoryAdapter(HistoricActivity.this, transactions, mOnClickDeleteListener);

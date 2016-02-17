@@ -9,7 +9,6 @@ import android.support.v4.app.NotificationCompat;
 
 import net.cashadmin.cashadmin.Activities.Activities.MainActivity;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
-import net.cashadmin.cashadmin.Activities.Exception.IllegalTypeException;
 import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
@@ -35,11 +34,7 @@ public class SchedulingService extends IntentService {
         mDataManager = DataManager.getDataManager(this);
         List<Entity> transactions = new ArrayList<>();
 
-        try {
-            transactions = mDataManager.getAll(TypeEnum.FREQUENCY);
-        } catch (IllegalTypeException e) {
-            e.printStackTrace();
-        }
+        transactions = mDataManager.getAll(Frequency.class);
         for (Entity entity : transactions) {
             Frequency frequency = (Frequency) entity;
             Calendar currentDate = Calendar.getInstance();

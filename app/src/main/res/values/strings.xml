@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Ca$hAdmin</string>
     <string name="action_settings">Gérer les catégories</string>
-    <string name="hello_world">Hello world!</string>
 
     <string name="title_activity_new_expense">Nouvelle dépense</string>
     <string name="emptyAmount">Il faut remplir d\'un montant !</string>
@@ -25,7 +24,6 @@
     <string name="rememberMe">Se souvenir de moi</string>
     <string name="emptyField">Il faut remplir tous les champs !</string>
 
-
     <string name="title_activity_forget_password">Mot de passe oublié</string>
 
     <string name="enterMail">Adresse e-mail</string>
@@ -38,6 +36,7 @@
 
     <string name="CategoryName">Nom de la catégorie :</string>
     <string name="Name">Nom</string>
+    <string name="others">Autres</string>
     <string name="CategoryColor">Couleur choisie :</string>
     <string name="ChooseColor">Choisissez une couleur</string>
     <string name="lastIncomeLabel">Dernier revenu :</string>
@@ -50,12 +49,14 @@
     <string name="each">Tous les :</string>
 
     <string name="title_activity_new_income">Nouveau revenu</string>
+
     <string name="addIncome">Ajouter un revenu</string>
     <string name="labelCategory">Catégories</string>
     <string name="transactionLabel">Transactions</string>
     <string name="fieldEmpty">Il faut remplir tous les champs !</string>
 
     <string name="title_activity_history">Historique</string>
+
     <string name="validAmount">Le montant doit être valide !</string>
     <string name="from">A partir de :</string>
     <string name="emptyName">Vous devez entrer un nom !</string>
@@ -68,8 +69,8 @@
     <string name="Months">Mois</string>
     <string name="Years">Années</string>
 
-
     <string name="title_activity_edit_category">Catégories</string>
+
     <string name="deleteCategory">Supprimer</string>
     <string name="HandleCategories">Gérer les catégories</string>
     <string name="validate">Valider</string>
