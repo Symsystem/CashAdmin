@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import net.cashadmin.cashadmin.Activities.Model.Category;
-import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
 import net.cashadmin.cashadmin.Activities.Model.Expense;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.Activities.Model.Income;
@@ -94,8 +93,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         cursor.close();
-
-
+        
         return autoIncList;
     }
 }

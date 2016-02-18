@@ -76,13 +76,13 @@ public class TransactionHistoryAdapter extends ArrayAdapter<Transaction> {
                 Expense e = (Expense) t;
                 holder.mCategory.setText(e.getCategory().getLabel());
                 holder.mColorCategory.setBackgroundColor(e.getCategory().getColor());
-                holder.mAmount.setText("- " + String.valueOf(t.getTotal()) + " €");
+                holder.mAmount.setText(new StringBuilder("- ".concat(String.valueOf(t.getTotal())).concat(" €")));
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.red_dark));
                 break;
             case INCOME:
                 holder.mCategory.setText(this.getContext().getString(R.string.income));
                 holder.mColorCategory.setBackgroundResource(R.color.green);
-                holder.mAmount.setText("+ " + String.valueOf(t.getTotal()) + " €");
+                holder.mAmount.setText(new StringBuilder("+ ".concat(String.valueOf(t.getTotal())).concat(" €")));
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.green));
                 break;
         }

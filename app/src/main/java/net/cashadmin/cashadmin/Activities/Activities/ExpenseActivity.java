@@ -120,7 +120,7 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
         recurrenceMap.put(FrequencyEnum.MONTHLY.toString(), 3);
         recurrenceMap.put(FrequencyEnum.YEARLY.toString(), 4);
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listSpinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listSpinner);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(spinnerAdapter);
 
@@ -159,7 +159,7 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
                 }
                 List<String> listCatLabels = new ArrayList<>();
                 listCatLabels.addAll(catLabels.keySet());
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listCatLabels);
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listCatLabels);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 mCategorySpinner.setAdapter(dataAdapter);
                 mCategorySpinner.setSelection(catLabels.get(mCategory.getLabel()));
@@ -245,7 +245,7 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
     public void onClickAddExpenseButton() {
         String stringAmount = mAmount.getText().toString().trim();
         String label = mLabel.getText().toString().trim();
-        String frequency = FrequencyEnum.values()[0].toString();
+        FrequencyEnum frequency = FrequencyEnum.NEVER;
         Date dateFrequency = null;
         Date endDateFrequency = null;
         if (stringAmount.isEmpty()) {
@@ -255,18 +255,16 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
             float amount = Float.valueOf(stringAmount);
             if (mSwitch.isChecked()) {
                 int idEnum = (int) mSpinner.getSelectedItemId();
-                frequency = FrequencyEnum.values()[idEnum].toString();
-                String frequencyDate = mDateChoice.getText().toString().trim();
+                frequency = FrequencyEnum.values()[idEnum];
                 try {
-                    dateFrequency = date.parse(frequencyDate);
+                    dateFrequency = date.parse(mDateChoice.getText().toString().trim());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
             if (mEndDateSwitch.isChecked()) {
-                String frequencyEndDate = mEndDateChoice.getText().toString().trim();
                 try {
-                    endDateFrequency = date.parse(frequencyEndDate);
+                    endDateFrequency = date.parse(mEndDateChoice.getText().toString().trim());
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -284,13 +282,18 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
                 mExpense = new Expense(mDataManager.getNextId(Expense.class), amount, label, new Date(), mCategory);
                 if (newCategory)
                     mDataManager.insert(mCategory);
-                if (mSwitch.isChecked() && (!(frequency.equals(FrequencyEnum.values()[0].toString())))) {
-                    Frequency freq = new Frequency(mDataManager.getNextId(Frequency.class), TypeEnum.EXPENSE, mExpense.getTotal(), mExpense.getLabel(), FrequencyEnum.valueOf(frequency), dateFrequency, endDateFrequency, mExpense.getCategory());
+
+                if (mSwitch.isChecked() && (frequency != FrequencyEnum.NEVER)) {
+                    Frequency freq = new Frequency(mDataManager.getNextId(Frequency.class),
+                            TypeEnum.EXPENSE, mExpense.getTotal(), mExpense.getLabel(),
+                            frequency, dateFrequency, endDateFrequency, mExpense.getCategory());
                     mDataManager.insert(freq);
                 }
+
                 if (!mSwitch.isChecked()) {
                     mDataManager.insert(mExpense);
                 }
+
                 startActivity(new Intent(ExpenseActivity.this, MainActivity.class));
             }
         }

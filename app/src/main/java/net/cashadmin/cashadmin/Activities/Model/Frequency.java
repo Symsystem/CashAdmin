@@ -32,15 +32,15 @@ public class Frequency extends Entity {
                 TABLE_NAME + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TYPE_TRANSACTION + " VARCHAR(16) NOT NULL CHECK(" + COLUMN_TYPE_TRANSACTION + " in " +
-                "('" + TypeEnum.values()[1].toString() +
-                "','" + TypeEnum.values()[2].toString() + "')), " +
+                "('" + TypeEnum.INCOME.toString() +
+                "','" + TypeEnum.EXPENSE.toString() + "')), " +
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_LABEL + " VARCHAR(127), " +
                 COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL CHECK(" + COLUMN_FREQUENCY + " in " +
-                "('" + FrequencyEnum.values()[1].toString() +
-                "','" + FrequencyEnum.values()[2].toString() +
-                "','" + FrequencyEnum.values()[3].toString() +
-                "','" + FrequencyEnum.values()[4].toString() + "')), " +
+                "('" + FrequencyEnum.DAILY.toString() +
+                "','" + FrequencyEnum.WEEKLY.toString() +
+                "','" + FrequencyEnum.MONTHLY.toString() +
+                "','" + FrequencyEnum.YEARLY.toString() + "')), " +
                 COLUMN_DATE_FREQUENCY + " FLOAT NOT NULL, " +
                 COLUMN_END_DATE_FREQUENCY + " FLOAT, " +
                 COLUMN_CATEGORY + " INTEGER, " +
@@ -60,27 +60,27 @@ public class Frequency extends Entity {
     /**
      * @var float
      */
-    protected float total;
+    private float total;
 
     /**
      * @var String
      */
-    protected String label;
+    private String label;
 
     /**
      * @var FrequencyEnum
      */
-    protected FrequencyEnum frequency;
+    private FrequencyEnum frequency;
 
     /**
      * @var Date
      */
-    protected Date dateFrequency;
+    private Date dateFrequency;
 
     /**
      * @var Date
      */
-    protected Date endDateFrequency;
+    private Date endDateFrequency;
 
     /**
      * @var Category
@@ -153,7 +153,7 @@ public class Frequency extends Entity {
         values.put(COLUMN_FREQUENCY, frequency.toString());
         values.put(COLUMN_DATE_FREQUENCY, getStringSQLDate());
         values.put(COLUMN_END_DATE_FREQUENCY, getStringSQLEndDate());
-        if (transactionType.equals(TypeEnum.values()[2].toString())){
+        if (transactionType == TypeEnum.EXPENSE){
             values.put(COLUMN_CATEGORY, category.getId());
         }
         return values;
@@ -175,7 +175,9 @@ public class Frequency extends Entity {
                     FrequencyEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_FREQUENCY))),
                     new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_DATE_FREQUENCY))),
                     new java.util.Date(c.getLong(c.getColumnIndex(COLUMN_END_DATE_FREQUENCY))),
-                    (TypeEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_TYPE_TRANSACTION))) == TypeEnum.EXPENSE) ? (Category) DataManager.getDataManager().getById(Category.class, c.getInt(c.getColumnIndex(COLUMN_CATEGORY))) : new Category(0, "Revenu", R.color.green)
+                    (TypeEnum.valueOf(c.getString(c.getColumnIndex(COLUMN_TYPE_TRANSACTION))) == TypeEnum.EXPENSE) ?
+                            (Category) DataManager.getDataManager().getById(Category.class, c.getInt(c.getColumnIndex(COLUMN_CATEGORY))) :
+                            new Category(0, "Revenu", R.color.green)
             );
         } catch (DataNotFoundException e) {
             e.printStackTrace();
