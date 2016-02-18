@@ -113,12 +113,12 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
         listSpinner.add(getString(R.string.Months));
         listSpinner.add(getString(R.string.Years));
 
-        Map<String, Integer> recurrenceMap = new HashMap<>();
-        recurrenceMap.put(FrequencyEnum.NEVER.toString(), 0);
-        recurrenceMap.put(FrequencyEnum.DAILY.toString(), 1);
-        recurrenceMap.put(FrequencyEnum.WEEKLY.toString(), 2);
-        recurrenceMap.put(FrequencyEnum.MONTHLY.toString(), 3);
-        recurrenceMap.put(FrequencyEnum.YEARLY.toString(), 4);
+        Map<FrequencyEnum, Integer> recurrenceMap = new HashMap<>();
+        recurrenceMap.put(FrequencyEnum.NEVER, 0);
+        recurrenceMap.put(FrequencyEnum.DAILY, 1);
+        recurrenceMap.put(FrequencyEnum.WEEKLY, 2);
+        recurrenceMap.put(FrequencyEnum.MONTHLY, 3);
+        recurrenceMap.put(FrequencyEnum.YEARLY, 4);
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, listSpinner);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -129,12 +129,15 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
             mCategory = (Category) intent.getSerializableExtra("category");
         } else {
             try {
-                if(transactionEntry == TransactionEntryEnum.FrequencyEdit){
+                if (transactionEntry == TransactionEntryEnum.FrequencyEdit) {
                     mFrequency = (Frequency) mDataManager.getById(Frequency.class, intent.getIntExtra("frequencyId", 0));
                     mAmount.setText(String.valueOf(mFrequency.getTotal()));
                     mLabel.setText(mFrequency.getLabel());
                     mCategory = mFrequency.getCategory();
-                    mEndDateSwitchLayout.setVisibility(View.GONE);
+                    if (mFrequency.getEndDateFrequency() != null) {
+                        mEndDateSwitch.setChecked(true);
+                    }
+                    mEndDateSwitchLayout.setVisibility(View.VISIBLE);
                     mDateLayout.setVisibility(View.VISIBLE);
                     mDateChoice.setText(date.format(mFrequency.getDateFrequency()));
                     mSpinner.setSelection(recurrenceMap.get(mFrequency.getFrequency()));
@@ -277,6 +280,25 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
                 mExpense.setTotal(Float.valueOf(stringAmount));
                 mExpense.setCategory(categorySelected);
                 mDataManager.update(mExpense);
+                startActivity(new Intent(ExpenseActivity.this, MainActivity.class));
+            } else if (transactionEntry == TransactionEntryEnum.FrequencyEdit) {
+                Category categorySelected = (Category) mDataManager.getWhere(Category.class, Category.COLUMN_LABEL + " = '" + mCategorySpinner.getSelectedItem().toString() + "'").get(0);
+                int idEnum = (int) mSpinner.getSelectedItemId();
+                frequency = FrequencyEnum.values()[idEnum];
+                try {
+                    dateFrequency = date.parse(mDateChoice.getText().toString().trim());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                mFrequency.setTotal(Float.valueOf(stringAmount));
+                mFrequency.setLabel(label);
+                mFrequency.setCategory(categorySelected);
+                mFrequency.setDateFrequency(dateFrequency);
+                mFrequency.setFrenquency(frequency);
+                if (mEndDateSwitch.isChecked()) {
+                    mFrequency.setEndDateFrequency(endDateFrequency);
+                }
+                mDataManager.update(mFrequency);
                 startActivity(new Intent(ExpenseActivity.this, MainActivity.class));
             } else {
                 mExpense = new Expense(mDataManager.getNextId(Expense.class), amount, label, new Date(), mCategory);

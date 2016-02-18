@@ -83,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/frequency"
-            android:paddingBottom="8dp"
+            android:layout_marginBottom="8dp"
             tools:text="Frequence"
             android:layout_below="@+id/category"
             android:layout_alignLeft="@+id/category"
@@ -91,21 +91,20 @@
 
         <ImageView
             android:layout_width="20dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:src="@drawable/end_date"
             android:id="@+id/endDateIcon"
-            android:layout_below="@+id/category"
+            android:layout_alignTop="@+id/endDateFrequency"
             android:layout_toLeftOf="@+id/endDateFrequency"
-            android:layout_toStartOf="@+id/endDateFrequency"
-            android:layout_marginRight="8dp"/>
+            android:layout_toStartOf="@+id/endDateFrequency"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/endDateFrequency"
-            android:paddingBottom="8dp"
             tools:text="Date de fin"
-            android:layout_alignTop="@+id/frequency"
+            android:layout_marginLeft="4dp"
+            android:layout_below="@+id/category"
             android:layout_alignRight="@+id/amount"
             android:layout_alignEnd="@+id/amount"/>
 
@@ -114,6 +113,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/amount"
             tools:text="10 €"
+            android:textSize=""
+            android:textStyle="bold"
             android:layout_alignTop="@+id/category"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"

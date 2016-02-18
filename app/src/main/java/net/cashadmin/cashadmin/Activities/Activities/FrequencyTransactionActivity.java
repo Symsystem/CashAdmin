@@ -68,11 +68,11 @@ public class FrequencyTransactionActivity extends AppCompatActivity {
             switch (f.getTransactionType()) {
                 case EXPENSE :
                     intent = new Intent(FrequencyTransactionActivity.this, ExpenseActivity.class);
-                    intent.putExtra("expenseId", f.getId());
+                    intent.putExtra("frequencyId", f.getId());
                     break;
                 case INCOME :
                     intent = new Intent(FrequencyTransactionActivity.this, IncomeActivity.class);
-                    intent.putExtra("incomeId", f.getId());
+                    intent.putExtra("frequencyId", f.getId());
                     break;
             }
             TransactionEntryEnum.FrequencyEdit.attachTo(intent);
