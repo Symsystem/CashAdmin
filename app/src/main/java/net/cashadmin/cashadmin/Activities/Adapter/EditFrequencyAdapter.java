@@ -12,6 +12,8 @@ import com.daimajia.swipe.SwipeLayout;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,6 +68,9 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
         } else {
             holder = (Holder) convertView.getTag();
         }
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+
         final Frequency f = mFrequencies.get(position);
         switch (f.getTransactionType()){
             case EXPENSE:
@@ -74,7 +79,7 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
                 holder.mAmount.setText("- " + String.valueOf(f.getTotal()) + " €");
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.red_dark));
                 holder.mFrequency.setText(f.getFrequency().toString());
-                holder.mEndDate.setText(f.getEndDateFrequency().getDate());
+                holder.mEndDate.setText(dateFormat.format(f.getEndDateFrequency()));
                 break;
             case INCOME:
                 holder.mCategory.setText(this.getContext().getString(R.string.income));
@@ -82,7 +87,7 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
                 holder.mAmount.setText("+ " + String.valueOf(f.getTotal()) + " €");
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.green));
                 holder.mFrequency.setText(f.getFrequency().toString());
-                holder.mEndDate.setText(f.getEndDateFrequency().getDate());
+                holder.mEndDate.setText(dateFormat.format((f.getEndDateFrequency())));
                 break;
         }
         holder.mLabel.setText(f.getLabel());

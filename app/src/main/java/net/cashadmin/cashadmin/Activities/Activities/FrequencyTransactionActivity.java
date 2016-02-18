@@ -38,7 +38,8 @@ public class FrequencyTransactionActivity extends AppCompatActivity {
         mFrequencies = (ArrayList<Frequency>) (ArrayList<?>) mDataManager.getAll(Frequency.class);
 
         mAdapter = new EditFrequencyAdapter(FrequencyTransactionActivity.this, mFrequencies, mOnClickDeleteListener, mOnClickEditListener);
-        
+
+        mFrequencyList.setAdapter(mAdapter);
     }
 
     private View.OnClickListener mOnClickDeleteListener = new View.OnClickListener() {

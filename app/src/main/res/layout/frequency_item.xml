@@ -90,7 +90,7 @@
             android:layout_alignStart="@+id/category"/>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:src="@drawable/end_date"
             android:id="@+id/endDateIcon"
@@ -114,10 +114,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/amount"
             tools:text="10 €"
-            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/category"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="8dp"/>
+            android:layout_marginRight="8dp"/>
 
         <View
             android:id="@+id/divider"
