@@ -75,7 +75,7 @@ public class FrequencyTransactionActivity extends AppCompatActivity {
                     intent.putExtra("incomeId", f.getId());
                     break;
             }
-            TransactionEntryEnum.Edit.attachTo(intent);
+            TransactionEntryEnum.FrequencyEdit.attachTo(intent);
             startActivity(intent);
         }
     };

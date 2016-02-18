@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
+
+import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Frequency;
 import net.cashadmin.cashadmin.R;
 
@@ -16,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
 
@@ -70,23 +73,28 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
         }
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        Map<String, String> frequencyMap = new HashMap<>();
+        frequencyMap.put(FrequencyEnum.DAILY.toString(), "Tous les jours");
+        frequencyMap.put(FrequencyEnum.WEEKLY.toString(), "Toutes les semaines");
+        frequencyMap.put(FrequencyEnum.MONTHLY.toString(), "Tous les mois");
+        frequencyMap.put(FrequencyEnum.YEARLY.toString(), "Tous les ans");
 
         final Frequency f = mFrequencies.get(position);
         switch (f.getTransactionType()){
             case EXPENSE:
                 holder.mCategory.setText(f.getCategory().getLabel());
                 holder.mColorCategory.setBackgroundColor(f.getCategory().getColor());
-                holder.mAmount.setText("- " + String.valueOf(f.getTotal()) + " €");
+                holder.mAmount.setText(new StringBuilder("- " + String.valueOf(f.getTotal()) + " €"));
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.red_dark));
-                holder.mFrequency.setText(f.getFrequency().toString());
+                holder.mFrequency.setText(frequencyMap.get(f.getFrequency().toString()));
                 holder.mEndDate.setText(dateFormat.format(f.getEndDateFrequency()));
                 break;
             case INCOME:
                 holder.mCategory.setText(this.getContext().getString(R.string.income));
                 holder.mColorCategory.setBackgroundResource(R.color.green);
-                holder.mAmount.setText("+ " + String.valueOf(f.getTotal()) + " €");
+                holder.mAmount.setText(new StringBuilder("+ " + String.valueOf(f.getTotal()) + " €"));
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.green));
-                holder.mFrequency.setText(f.getFrequency().toString());
+                holder.mFrequency.setText(frequencyMap.get(f.getFrequency().toString()));
                 holder.mEndDate.setText(dateFormat.format((f.getEndDateFrequency())));
                 break;
         }
