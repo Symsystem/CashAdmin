@@ -134,16 +134,18 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
                     mAmount.setText(String.valueOf(mFrequency.getTotal()));
                     mLabel.setText(mFrequency.getLabel());
                     mCategory = mFrequency.getCategory();
-                    if (mFrequency.getEndDateFrequency() != null) {
+                    mEndDateChoice.setText(date.format(mFrequency.getEndDateFrequency()));
+                    if (!date.format(mFrequency.getEndDateFrequency()).equals("31/12/69")) {
                         mEndDateSwitch.setChecked(true);
+                        mEndDateLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        mEndDateChoice.setText(currentDate);
                     }
                     mEndDateSwitchLayout.setVisibility(View.VISIBLE);
                     mDateLayout.setVisibility(View.VISIBLE);
                     mDateChoice.setText(date.format(mFrequency.getDateFrequency()));
                     mSpinner.setSelection(recurrenceMap.get(mFrequency.getFrequency()));
-                    mEndDateChoice.setText(date.format(mFrequency.getEndDateFrequency()));
                     mWhichRecurrenceLayout.setVisibility(View.VISIBLE);
-                    mEndDateLayout.setVisibility(View.VISIBLE);
                 } else {
                     mExpense = (Expense) mDataManager.getById(Expense.class, intent.getIntExtra("expenseId", 0));
                     mAmount.setText(String.valueOf(mExpense.getTotal()));
@@ -305,17 +307,14 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
                 if (newCategory)
                     mDataManager.insert(mCategory);
 
-                if (mSwitch.isChecked() && (frequency != FrequencyEnum.NEVER)) {
+                if (mSwitch.isChecked()) {
                     Frequency freq = new Frequency(mDataManager.getNextId(Frequency.class),
                             TypeEnum.EXPENSE, mExpense.getTotal(), mExpense.getLabel(),
                             frequency, dateFrequency, endDateFrequency, mExpense.getCategory());
                     mDataManager.insert(freq);
-                }
-
-                if (!mSwitch.isChecked()) {
+                } else {
                     mDataManager.insert(mExpense);
                 }
-
                 startActivity(new Intent(ExpenseActivity.this, MainActivity.class));
             }
         }

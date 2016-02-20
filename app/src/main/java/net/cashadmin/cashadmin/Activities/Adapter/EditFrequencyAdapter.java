@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
@@ -27,9 +28,9 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
     View.OnClickListener mOnClickDeleteListener;
     View.OnClickListener mOnClickEditListener;
 
-    public EditFrequencyAdapter(Context context, ArrayList<Frequency> objects, View.OnClickListener onClickDeleteListener, View.OnClickListener onClickEditListener){
+    public EditFrequencyAdapter(Context context, ArrayList<Frequency> objects, View.OnClickListener onClickDeleteListener, View.OnClickListener onClickEditListener) {
         super(context, R.layout.frequency_item, objects);
-        for(int i = 0; i < objects.size(); ++i){
+        for (int i = 0; i < objects.size(); ++i) {
             mIdMap.put(objects.get(i), i);
         }
         mFrequencies = objects;
@@ -38,7 +39,7 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
     }
 
     @Override
-    public long getItemId(int position){
+    public long getItemId(int position) {
         Frequency item = getItem(position);
         return mIdMap.get(item);
     }
@@ -49,7 +50,7 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         Holder holder;
 
@@ -73,29 +74,51 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
         }
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat yearFormat = new SimpleDateFormat("dd MMMM", Locale.FRENCH);
+        DateFormat monthFormat = new SimpleDateFormat("dd");
+        DateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.FRENCH);
         Map<String, String> frequencyMap = new HashMap<>();
+        frequencyMap.put(FrequencyEnum.NEVER.toString(), "");
         frequencyMap.put(FrequencyEnum.DAILY.toString(), "Tous les jours");
         frequencyMap.put(FrequencyEnum.WEEKLY.toString(), "Toutes les semaines");
         frequencyMap.put(FrequencyEnum.MONTHLY.toString(), "Tous les mois");
         frequencyMap.put(FrequencyEnum.YEARLY.toString(), "Tous les ans");
 
         final Frequency f = mFrequencies.get(position);
-        switch (f.getTransactionType()){
+        switch (f.getTransactionType()) {
             case EXPENSE:
                 holder.mCategory.setText(f.getCategory().getLabel());
                 holder.mColorCategory.setBackgroundColor(f.getCategory().getColor());
                 holder.mAmount.setText(new StringBuilder("- " + String.valueOf(f.getTotal()) + " €"));
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.red_dark));
-                holder.mFrequency.setText(frequencyMap.get(f.getFrequency().toString()));
-                holder.mEndDate.setText(dateFormat.format(f.getEndDateFrequency()));
                 break;
             case INCOME:
                 holder.mCategory.setText(this.getContext().getString(R.string.income));
                 holder.mColorCategory.setBackgroundResource(R.color.green);
                 holder.mAmount.setText(new StringBuilder("+ " + String.valueOf(f.getTotal()) + " €"));
                 holder.mAmount.setTextColor(this.getContext().getResources().getColor(R.color.green));
+                break;
+        }
+        if (dateFormat.format(f.getEndDateFrequency()).equals("31/12/69")) {
+            holder.mEndDate.setText("...");
+        } else {
+            holder.mEndDate.setText(dateFormat.format(f.getEndDateFrequency()));
+        }
+        switch (f.getFrequency()){
+            case NEVER:
+                holder.mFrequency.setText(new StringBuilder("Le " + dateFormat.format(f.getDateFrequency())));
+                break;
+            case DAILY:
                 holder.mFrequency.setText(frequencyMap.get(f.getFrequency().toString()));
-                holder.mEndDate.setText(dateFormat.format((f.getEndDateFrequency())));
+                break;
+            case WEEKLY:
+                holder.mFrequency.setText(new StringBuilder(frequencyMap.get(f.getFrequency().toString()) + " (" + weekFormat.format(f.getDateFrequency()) + ")"));
+                break;
+            case MONTHLY:
+                holder.mFrequency.setText(new StringBuilder(frequencyMap.get(f.getFrequency().toString()) + " (" + monthFormat.format(f.getDateFrequency()) + ")"));
+                break;
+            case YEARLY:
+                holder.mFrequency.setText(new StringBuilder(frequencyMap.get(f.getFrequency().toString()) + " (" + yearFormat.format(f.getDateFrequency()) + ")"));
                 break;
         }
         holder.mLabel.setText(f.getLabel());
@@ -107,7 +130,7 @@ public class EditFrequencyAdapter extends ArrayAdapter<Frequency> {
         return convertView;
     }
 
-    public synchronized void refreshAdapter(ArrayList<Frequency> frequencies){
+    public synchronized void refreshAdapter(ArrayList<Frequency> frequencies) {
         mFrequencies.clear();
         mFrequencies.addAll(frequencies);
         notifyDataSetChanged();

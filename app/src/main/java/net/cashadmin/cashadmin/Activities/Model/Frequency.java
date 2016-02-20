@@ -37,7 +37,8 @@ public class Frequency extends Entity {
                 COLUMN_TOTAL + " INTEGER NOT NULL, " +
                 COLUMN_LABEL + " VARCHAR(127), " +
                 COLUMN_FREQUENCY + " VARCHAR(16) NOT NULL CHECK(" + COLUMN_FREQUENCY + " in " +
-                "('" + FrequencyEnum.DAILY.toString() +
+                "('" + FrequencyEnum.NEVER.toString() +
+                "','" + FrequencyEnum.DAILY.toString() +
                 "','" + FrequencyEnum.WEEKLY.toString() +
                 "','" + FrequencyEnum.MONTHLY.toString() +
                 "','" + FrequencyEnum.YEARLY.toString() + "')), " +
@@ -152,7 +153,7 @@ public class Frequency extends Entity {
         values.put(COLUMN_LABEL, label);
         values.put(COLUMN_FREQUENCY, frequency.toString());
         values.put(COLUMN_DATE_FREQUENCY, getStringSQLDate());
-        values.put(COLUMN_END_DATE_FREQUENCY, getStringSQLEndDate());
+        values.put(COLUMN_END_DATE_FREQUENCY, (endDateFrequency == null) ? null : getStringSQLEndDate());
         if (transactionType == TypeEnum.EXPENSE){
             values.put(COLUMN_CATEGORY, category.getId());
         }

@@ -113,7 +113,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/amount"
             tools:text="10 €"
-            android:textSize=""
             android:textStyle="bold"
             android:layout_alignTop="@+id/category"
             android:layout_alignParentRight="true"

@@ -31,7 +31,7 @@ public class SchedulingService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         mDataManager = DataManager.getDataManager(this);
-        List<Entity> transactions = new ArrayList<>();
+        List<Entity> transactions;
 
         transactions = mDataManager.getAll(Frequency.class);
         for (Entity entity : transactions) {
@@ -42,26 +42,40 @@ public class SchedulingService extends IntentService {
             frequencyDate.setTime(frequency.getDateFrequency());
             endFrequencyDate.setTime(frequency.getEndDateFrequency());
             switch (frequency.getFrequency()) {
+                case NEVER:
+                    if (currentDate.get(Calendar.DAY_OF_YEAR) == frequencyDate.get(Calendar.DAY_OF_YEAR)){
+                        handleFrequency(frequency);
+                        mDataManager.delete(frequency);
+                    }
                 case DAILY:
                     handleFrequency(frequency);
+                    if (currentDate.get(Calendar.DAY_OF_YEAR) == endFrequencyDate.get(Calendar.DAY_OF_YEAR)) {
+                        mDataManager.delete(frequency);
+                    }
                     break;
                 case WEEKLY:
                     if (currentDate.get(Calendar.DAY_OF_WEEK) == frequencyDate.get(Calendar.DAY_OF_WEEK)) {
                         handleFrequency(frequency);
+                        if (currentDate.get(Calendar.DAY_OF_YEAR) == endFrequencyDate.get(Calendar.DAY_OF_YEAR)) {
+                            mDataManager.delete(frequency);
+                        }
                     }
                 case MONTHLY:
                     if (currentDate.get(Calendar.DAY_OF_MONTH) == frequencyDate.get(Calendar.DAY_OF_MONTH)) {
                         handleFrequency(frequency);
+                        if (currentDate.get(Calendar.DAY_OF_YEAR) == endFrequencyDate.get(Calendar.DAY_OF_YEAR)) {
+                            mDataManager.delete(frequency);
+                        }
                     }
                     break;
                 case YEARLY:
                     if (currentDate.get(Calendar.DAY_OF_YEAR) == frequencyDate.get(Calendar.DAY_OF_YEAR)) {
                         handleFrequency(frequency);
+                        if (currentDate.get(Calendar.DAY_OF_YEAR) == endFrequencyDate.get(Calendar.DAY_OF_YEAR)) {
+                            mDataManager.delete(frequency);
+                        }
                     }
                     break;
-            }
-            if (currentDate.get(Calendar.DAY_OF_YEAR) == endFrequencyDate.get(Calendar.DAY_OF_YEAR)) {
-                mDataManager.delete(frequency);
             }
         }
 
