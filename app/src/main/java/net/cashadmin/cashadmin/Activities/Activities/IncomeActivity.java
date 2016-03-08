@@ -11,6 +11,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import net.cashadmin.cashadmin.Activities.Database.DataManager;
 import net.cashadmin.cashadmin.Activities.Exception.DataNotFoundException;
 import net.cashadmin.cashadmin.Activities.Model.Category;
+import net.cashadmin.cashadmin.Activities.Model.Entity;
 import net.cashadmin.cashadmin.Activities.Model.Enum.FrequencyEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TransactionEntryEnum;
 import net.cashadmin.cashadmin.Activities.Model.Enum.TypeEnum;
@@ -37,8 +39,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +55,7 @@ public class IncomeActivity extends AppCompatActivity implements AdapterView.OnI
     @InjectView(R.id.amount)
     EditText mAmount;
     @InjectView(R.id.label)
-    EditText mLabel;
+    AutoCompleteTextView mLabel;
     @InjectView(R.id.mySwitch)
     Switch mSwitch;
     @InjectView(R.id.amountLayout)
@@ -249,6 +253,17 @@ public class IncomeActivity extends AppCompatActivity implements AdapterView.OnI
                 e.printStackTrace();
             }
         }
+
+        List<Income> listIncome = (ArrayList<Income>) (ArrayList<?>)mDataManager.getAll(Income.class);
+        List<String> listLibelle = new ArrayList<>();
+        for (Income i : listIncome) {
+            listLibelle.add(i.getLabel());
+        }
+        String[] libelleArray = new String[listLibelle.size()];
+        listLibelle.toArray(libelleArray);
+
+        ArrayAdapter<String> libelleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, removeDuplicates(libelleArray));
+        mLabel.setAdapter(libelleAdapter);
     }
 
 
@@ -389,5 +404,9 @@ public class IncomeActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
+    }
+
+    public static String[] removeDuplicates(String[] s){
+        return new HashSet<String>(Arrays.asList(s)).toArray(new String[0]);
     }
 }

@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -34,8 +35,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +55,7 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
     @InjectView(R.id.addExpenseButton)
     Button mAddExpenseButton;
     @InjectView(R.id.label)
-    EditText mLabel;
+    AutoCompleteTextView mLabel;
     @InjectView(R.id.recurrenceLayout)
     LinearLayout mRecurrenceLayout;
     @InjectView(R.id.mySwitch)
@@ -244,6 +247,17 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
             }
         });
 
+        List<Expense> listIncome = (ArrayList<Expense>) (ArrayList<?>)mDataManager.getAll(Expense.class);
+        List<String> listLibelle = new ArrayList<>();
+        for (Expense i : listIncome) {
+            listLibelle.add(i.getLabel());
+        }
+        String[] libelleArray = new String[listLibelle.size()];
+        listLibelle.toArray(libelleArray);
+
+        ArrayAdapter<String> libelleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, removeDuplicates(libelleArray));
+        mLabel.setAdapter(libelleAdapter);
+
     }
 
     @OnClick(R.id.addExpenseButton)
@@ -377,5 +391,9 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
+    }
+
+    public static String[] removeDuplicates(String[] s){
+        return new HashSet<String>(Arrays.asList(s)).toArray(new String[0]);
     }
 }

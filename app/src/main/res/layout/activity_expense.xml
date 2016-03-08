@@ -106,7 +106,7 @@
                     android:textSize="14dp"
                     />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
