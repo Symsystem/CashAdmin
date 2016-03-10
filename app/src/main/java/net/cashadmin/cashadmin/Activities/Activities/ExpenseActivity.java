@@ -247,10 +247,10 @@ public class ExpenseActivity extends AppCompatActivity implements AdapterView.On
             }
         });
 
-        List<Expense> listIncome = (ArrayList<Expense>) (ArrayList<?>)mDataManager.getAll(Expense.class);
+        List<Expense> listExpense = (ArrayList<Expense>) (ArrayList<?>)mDataManager.getAll(Expense.class);
         List<String> listLibelle = new ArrayList<>();
-        for (Expense i : listIncome) {
-            listLibelle.add(i.getLabel());
+        for (Expense e : listExpense) {
+            listLibelle.add(e.getLabel());
         }
         String[] libelleArray = new String[listLibelle.size()];
         listLibelle.toArray(libelleArray);
